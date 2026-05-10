@@ -1,0 +1,33 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: cb3d0d5bd5ecb7b47bfabc05f5d480d7, type: 3}
+  m_Name: Wind Winter_Orge
+  m_EditorClassIdentifier: 
+  unitPrefab: {fileID: 117150395161187363, guid: 7ed77a921b083154cb0b1788c2cbbe13, type: 3}
+  unitIcon: {fileID: 1717006825701401578, guid: 1ce540f4804d25c49833071c7dd79486, type: 3}
+  unitName: "\uBD81\uD48D\uC758 \uC624\uC6B0\uAC70"
+  unitDescription: "\uD48D\uC18D\uC131 \uADFC\uAC70\uB9AC \uD0F1\uCEE4 \uC720\uB2DB\n\uBD81\uD48D\uC758
+    \uD55C\uAE30\uB97C \uB450\uB978 \uD5D8\uC545\uD55C \uC778\uC0C1\uC758 \uAC70\uB300
+    \uC624\uC6B0\uAC70. \uD53C\uB3C4 \uB208\uBB3C\uB3C4 \uC5C6\uC744 \uAC83 \uAC19\uC9C0\uB9CC
+    \uC218\uC871\uB0C9\uC99D\uC774 \uB9E4\uC6B0 \uC2EC\uD574\uC11C, \uACA8\uC6B8\uB9CC
+    \uB418\uBA74 \uD138\uC7A5\uAC11\uC744 \uB07C\uACE0 \uC804\uAE30\uC7A5\uD310 \uBC16\uC73C\uB85C
+    \uD55C \uBC1C\uC790\uAD6D\uB3C4 \uB098\uC624\uC9C0 \uC54A\uB294\uB2E4."
+  elementType: 1
+  spawnCost: 1200
+  spawnCoolTime: 13
+  maxHP: 10400
+  attackDamage: 680
+  firstAttackDelay: 0.19
+  attackInterval: 1.56
+  attackRange: 1.65
+  moveSpeed: 2.9
+  aoeRadius: 0

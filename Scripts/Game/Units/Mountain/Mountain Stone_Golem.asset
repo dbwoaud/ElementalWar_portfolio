@@ -1,0 +1,33 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: cb3d0d5bd5ecb7b47bfabc05f5d480d7, type: 3}
+  m_Name: Mountain Stone_Golem
+  m_EditorClassIdentifier: 
+  unitPrefab: {fileID: 1052317940946996, guid: 0ea4573fcd8a827489094453fe6b9121, type: 3}
+  unitIcon: {fileID: -1791962969310324200, guid: d48b2cb6ba6e10b489c5c817d3c4359e, type: 3}
+  unitName: "\uBC14\uC704 \uACE8\uB818"
+  unitDescription: "\uC0B0\uC18D\uC131 \uADFC\uC811\uAC70\uB9AC \uD0F1\uCEE4 \uC720\uB2DB\n\uC218\uB9CC
+    \uB144 \uB3D9\uC548 \uBB35\uBB35\uD788 \uC0B0\uC744 \uC9C0\uCF1C\uC628 \uAC70\uB300\uD55C
+    \uBC14\uC704 \uB369\uC5B4\uB9AC. \uC138\uC0C1\uC5D0\uC11C \uAC00\uC7A5 \uB2E8\uB2E8\uD55C
+    \uBAB8\uC744 \uAC00\uC84C\uB2E4\uACE0 \uC790\uBD80\uD558\uC9C0\uB9CC, \uC5B4\uC81C
+    \uC0B0\uAE38\uC744 \uAC77\uB2E4\uAC00 \uC0C8\uB07C\uBC1C\uAC00\uB77D \uBC14\uC704\uB97C
+    \uBAA8\uC11C\uB9AC\uC5D0 \uCC27\uC5C8\uB2E4\uACE0 \uD55C\uB2E4.\n"
+  elementType: 4
+  spawnCost: 1600
+  spawnCoolTime: 14.7
+  maxHP: 20150
+  attackDamage: 525
+  firstAttackDelay: 0.32
+  attackInterval: 2.68
+  attackRange: 1.65
+  moveSpeed: 1.4
+  aoeRadius: 0

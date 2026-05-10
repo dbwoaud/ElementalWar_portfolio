@@ -1,0 +1,32 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: cb3d0d5bd5ecb7b47bfabc05f5d480d7, type: 3}
+  m_Name: Fire Evil_Eye
+  m_EditorClassIdentifier: 
+  unitPrefab: {fileID: 5923401707093281111, guid: f02df56071fabe14d98e3f5eb236f3f1, type: 3}
+  unitIcon: {fileID: -6816637515082397234, guid: 5e399b5ed5fa0af419283c1948933ed9, type: 3}
+  unitName: "\uBD88\uBA74\uC99D \uC545\uB9C8\uB208"
+  unitDescription: "\uD654\uC18D\uC131 \uC6D0\uAC70\uB9AC \uACE0\uAE30\uBC29\uD328
+    \uC720\uB2DB\n\uC2EC\uC5F0\uC758 \uBD88\uAF43\uC744 \uD488\uACE0 \uC801\uC744
+    \uAFF0\uB6AB\uC5B4 \uBCF4\uB294 \uBD89\uC740 \uC545\uB9C8\uC758 \uB208. \uD558\uC9C0\uB9CC
+    \uC0AC\uC2E4 \uBC24\uC0C8 \uC2A4\uB9C8\uD2B8\uD3F0\uC744 \uD558\uB2E4\uAC00 \uCDA9\uD608\uB41C
+    \uAC83\uBFD0\uC774\uB2E4."
+  elementType: 3
+  spawnCost: 850
+  spawnCoolTime: 7
+  maxHP: 2660
+  attackDamage: 486
+  firstAttackDelay: 0.27
+  attackInterval: 4.2
+  attackRange: 3.9
+  moveSpeed: 2.4
+  aoeRadius: 0

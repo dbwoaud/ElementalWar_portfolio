@@ -1,0 +1,33 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: cb3d0d5bd5ecb7b47bfabc05f5d480d7, type: 3}
+  m_Name: Void Bat
+  m_EditorClassIdentifier: 
+  unitPrefab: {fileID: 5923401707093281111, guid: 20f0f40a7d5ad3046802841c584a1c35, type: 3}
+  unitIcon: {fileID: 3600283599656425866, guid: 70e20b59c511a8d439f99128a6cc3562, type: 3}
+  unitName: "\uACF5\uD5C8 \uBC15\uC950"
+  unitDescription: "\uBB34\uC18D\uC131 \uC6D0\uAC70\uB9AC \uACE0\uAE30\uBC29\uD328
+    \uC720\uB2DB\n\uACF5\uD5C8\uC758 \uD2C8\uC0C8\uC5D0\uC11C \uD0DC\uC5B4\uB0AC\uC9C0\uB9CC
+    \uC0AC\uC2E4 \uC5B4\uB460\uC744 \uADF9\uB3C4\uB85C \uBB34\uC11C\uC6CC\uD574\uC11C
+    \uC798 \uB54C\uB9C8\uB2E4 \uBB34\uB4DC\uB4F1\uC744 \uCF1C\uACE0 \uC794\uB2E4.
+    \uAC00\uC7A5 \uC88B\uC544\uD558\uB294 \uAC04\uC2DD\uC740 \uD3B8\uC758\uC810 \uD3EC\uB3C4\uB9DB
+    \uC824\uB9AC."
+  elementType: 0
+  spawnCost: 850
+  spawnCoolTime: 7
+  maxHP: 3800
+  attackDamage: 360
+  firstAttackDelay: 0.27
+  attackInterval: 1.23
+  attackRange: 3.9
+  moveSpeed: 2.4
+  aoeRadius: 0

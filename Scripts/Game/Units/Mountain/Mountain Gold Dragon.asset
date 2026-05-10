@@ -1,0 +1,33 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: cb3d0d5bd5ecb7b47bfabc05f5d480d7, type: 3}
+  m_Name: Mountain Gold Dragon
+  m_EditorClassIdentifier: 
+  unitPrefab: {fileID: 2069015975501184387, guid: d0b7e74a33d88944fa2e91d5162e5e98, type: 3}
+  unitIcon: {fileID: 5382217513820718410, guid: 1d188f3a23f5ee94da51ff85b2a71448, type: 3}
+  unitName: "\uACE8\uB4DC \uB4DC\uB798\uACE4"
+  unitDescription: "\uC0B0\uC18D\uC131 \uAD11\uC5ED\uC6D0\uAC70\uB9AC \uC720\uB2DB\n\uB300\uC9C0
+    \uC0B0\uB9E5\uC744 \uC9C0\uBC30\uD558\uB294 \uCC2C\uB780\uD55C \uD669\uAE08\uBE5B
+    \uBE44\uB8E1. \uC5C4\uCCAD\uB09C \uAE08\uC740\uBCF4\uD654\uB97C \uAE54\uACE0
+    \uC790\uB294 \uC5B5\uB9CC\uC7A5\uC790 \uAC19\uC9C0\uB9CC, \uC774\uBC88 \uB2EC
+    \uC6D4\uAE09\uC774 \uB2E4 \uB5A8\uC5B4\uC838\uC11C \uC694\uC998\uC740 \uCEF5\uB77C\uBA74\uC73C\uB85C
+    \uC5F0\uBA85\uD558\uACE0 \uC788\uB2E4.\n"
+  elementType: 4
+  spawnCost: 2700
+  spawnCoolTime: 24
+  maxHP: 10540
+  attackDamage: 1960
+  firstAttackDelay: 0.6
+  attackInterval: 6
+  attackRange: 4.2
+  moveSpeed: 1.3
+  aoeRadius: 2.1

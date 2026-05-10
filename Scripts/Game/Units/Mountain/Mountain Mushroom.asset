@@ -1,0 +1,33 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: cb3d0d5bd5ecb7b47bfabc05f5d480d7, type: 3}
+  m_Name: Mountain Mushroom
+  m_EditorClassIdentifier: 
+  unitPrefab: {fileID: 8177687174557151578, guid: 0b49d1dfb6633254ba9933d9ba827bbd, type: 3}
+  unitIcon: {fileID: 6794651820244182925, guid: 268077ac5c54ceb4d9093894b4b81315, type: 3}
+  unitName: "\uB545\uAF2C\uB9C8 \uBC84\uC12F"
+  unitDescription: "\uC0B0\uC18D\uC131 \uADFC\uAC70\uB9AC \uACE0\uAE30\uBC29\uD328
+    \uC720\uB2DB\n\uC694\uC815\uCC98\uB7FC \uC791\uACE0 \uADC0\uC5EC\uC6B4 \uC678\uBAA8\uB97C
+    \uAC00\uC84C\uC9C0\uB9CC, \uC785\uB9DB\uC740 \uC544\uC800\uC528\uC774\uB2E4.
+    \uC544\uC8FC \uAC04\uC774 \uC13C \uC9ED\uC9E4\uD55C \uBC11\uBC18\uCC2C\uC744
+    \uAC00\uC7A5 \uC88B\uC544\uD558\uBA70, \uBC25 \uD55C \uACF5\uAE30\uB97C \uB69D\uB531
+    \uBE44\uC6B0\uB294 \uAC8C \uC77C\uC0C1."
+  elementType: 4
+  spawnCost: 90
+  spawnCoolTime: 4
+  maxHP: 1550
+  attackDamage: 67
+  firstAttackDelay: 0.28
+  attackInterval: 1.48
+  attackRange: 1.5
+  moveSpeed: 1.7
+  aoeRadius: 0

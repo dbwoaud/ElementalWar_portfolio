@@ -1,0 +1,33 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: cb3d0d5bd5ecb7b47bfabc05f5d480d7, type: 3}
+  m_Name: Fire Magma_Turtle
+  m_EditorClassIdentifier: 
+  unitPrefab: {fileID: 1064137032449416, guid: 1d7c64b32537ded4ca821dcd6a8af477, type: 3}
+  unitIcon: {fileID: -1911495846100211878, guid: 6ee93807d11a59542aa63110e2002e9f, type: 3}
+  unitName: "\uBD88\uAC00\uB9C8 \uAC70\uBD81\uC774"
+  unitDescription: "\uD654\uC18D\uC131 \uADFC\uC811\uAC70\uB9AC \uD0F1\uCEE4 \uC720\uB2DB\n\uB4F1\uC5D0
+    \uD384\uD384 \uB053\uB294 \uD65C\uD654\uC0B0\uC744 \uC9CA\uC5B4\uC9C0\uACE0 \uB2E4\uB2C8\uB294
+    \uAC70\uBD81\uC774. \uCD5C\uADFC \uB4F1\uAECD\uC9C8 \uC628\uB3C4\uAC00 \uCC38\uC22F
+    \uAC00\uB9C8\uB85C \uC785\uC18C\uBB38\uC744 \uD0C0\uBA74\uC11C \uCC1C\uC9C8\uC744
+    \uD558\uB824\uB294 \uB3D9\uB124 \uC5B4\uB974\uC2E0\uB4E4\uC758 \uD56B\uD50C\uB808\uC774\uC2A4\uAC00
+    \uB418\uC5C8\uB2E4."
+  elementType: 3
+  spawnCost: 1100
+  spawnCoolTime: 14
+  maxHP: 9100
+  attackDamage: 1013
+  firstAttackDelay: 0.27
+  attackInterval: 2.23
+  attackRange: 1.65
+  moveSpeed: 2.2
+  aoeRadius: 0

@@ -1,0 +1,34 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: cb3d0d5bd5ecb7b47bfabc05f5d480d7, type: 3}
+  m_Name: Forest Flower
+  m_EditorClassIdentifier: 
+  unitPrefab: {fileID: 1292224030697910, guid: 508ccb3aee8c70f459d111b620bcaaa4, type: 3}
+  unitIcon: {fileID: 1680069614133557006, guid: d030fbe8e34f9264ba8fd768a2bdb4be, type: 3}
+  unitName: "\uD22C\uB35C\uC774 \uAF43"
+  unitDescription: "\uB9BC\uC18D\uC131 \uC6D0\uAC70\uB9AC \uACE0\uAE30\uBC29\uD328
+    \uC720\uB2DB\n\uBA38\uB9AC\uC5D0 \uD540 \uAC70\uB300\uD55C \uAF43\uC73C\uB85C
+    \uAD11\uD569\uC131\uC744 \uD558\uBA70 \uC0B4\uC544\uAC00\uB294 \uC2DD\uBB3C\uD615
+    \uBAAC\uC2A4\uD130. \uD558\uC9C0\uB9CC \uCE58\uBA85\uC801\uC778 \uC790\uC678\uC120
+    \uC54C\uB808\uB974\uAE30\uAC00 \uC788\uB2E4. \uC624\uB298 \uC544\uCE68\uC5D0\uB3C4
+    \uC120\uD06C\uB9BC \uBC14\uB974\uB294 \uAC78 \uAE5C\uBE61\uD574\uC11C \uAE30\uBD84\uC774
+    \uBAB9\uC2DC \uC5B8\uC9E2\uB2E4."
+  elementType: 2
+  spawnCost: 950
+  spawnCoolTime: 7
+  maxHP: 3420
+  attackDamage: 342
+  firstAttackDelay: 0.3
+  attackInterval: 4.62
+  attackRange: 5.3
+  moveSpeed: 2.2
+  aoeRadius: 0

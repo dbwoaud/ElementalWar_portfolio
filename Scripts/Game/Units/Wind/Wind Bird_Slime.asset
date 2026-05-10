@@ -1,0 +1,32 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: cb3d0d5bd5ecb7b47bfabc05f5d480d7, type: 3}
+  m_Name: Wind Bird_Slime
+  m_EditorClassIdentifier: 
+  unitPrefab: {fileID: 1041003650545240, guid: 3b5ae9b7c2b74714a897eed2845e697b, type: 3}
+  unitIcon: {fileID: 7734590258217852384, guid: 7b34d1c839196d440a33dd435139255d, type: 3}
+  unitName: "\uBC14\uB78C \uC2AC\uB77C\uC784"
+  unitDescription: "\uD48D\uC18D\uC131 \uADFC\uAC70\uB9AC \uACE0\uAE30\uBC29\uD328
+    \uC720\uB2DB\n\uD558\uB298\uC744 \uC790\uC720\uB86D\uAC8C \uB098\uB294 \uC0C8\uB4E4\uC744
+    \uB3D9\uACBD\uD574 \uC591\uC606\uC5D0 \uB2ED\uB0A0\uAC1C\uB97C \uBD99\uC600\uB2E4.
+    \uD558\uC9C0\uB9CC \uB9D0\uB791\uD55C \uBC43\uC0B4\uC774 \uB108\uBB34 \uBB34\uAC70\uC6CC
+    \uC9C0\uC0C1 10cm \uC774\uC0C1 \uB5A0\uC624\uB974\uC9C0 \uBABB\uD55C\uB2E4."
+  elementType: 1
+  spawnCost: 75
+  spawnCoolTime: 3.6
+  maxHP: 800
+  attackDamage: 85
+  firstAttackDelay: 0.16
+  attackInterval: 0.86
+  attackRange: 1.5
+  moveSpeed: 3.4
+  aoeRadius: 0

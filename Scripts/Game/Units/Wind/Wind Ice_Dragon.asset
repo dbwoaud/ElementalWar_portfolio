@@ -1,0 +1,32 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: cb3d0d5bd5ecb7b47bfabc05f5d480d7, type: 3}
+  m_Name: Wind Ice_Dragon
+  m_EditorClassIdentifier: 
+  unitPrefab: {fileID: 2069015975501184387, guid: 76a310022f88b0d4793fefd4d8f75158, type: 3}
+  unitIcon: {fileID: 7368716888879840395, guid: 58a7a4d3f5e817d4dac1bbfbd5bcaa84, type: 3}
+  unitName: "\uC544\uC774\uC2A4 \uB4DC\uB798\uACE4"
+  unitDescription: "\uD48D\uC18D\uC131 \uAD11\uC5ED \uC6D0\uAC70\uB9AC \uC720\uB2DB\n\uD0DC\uD48D\uACFC
+    \uB208\uBCF4\uB77C\uB97C \uC9C0\uBC30\uD55C\uB2E4\uB294 \uC804\uC124\uC758 \uD478\uB978
+    \uBE44\uB8E1. \uC785\uC5D0\uC11C \uC808\uB300\uC601\uB3C4\uC758 \uD3ED\uD48D\uC744
+    \uB0B4\uBFDC\uC9C0\uB9CC, \uC815\uC791 \uBCF8\uC778\uB3C4 \uC544\uC774\uC2A4\uD06C\uB9BC\uC744
+    \uC798 \uBA39\uC9C0\uB294 \uBABB\uD55C\uB2E4."
+  elementType: 1
+  spawnCost: 2400
+  spawnCoolTime: 21.5
+  maxHP: 5440
+  attackDamage: 2520
+  firstAttackDelay: 0.35
+  attackInterval: 3.5
+  attackRange: 4.2
+  moveSpeed: 2.6
+  aoeRadius: 2.1

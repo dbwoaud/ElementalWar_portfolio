@@ -1,0 +1,33 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: cb3d0d5bd5ecb7b47bfabc05f5d480d7, type: 3}
+  m_Name: Forest Green_Dragon
+  m_EditorClassIdentifier: 
+  unitPrefab: {fileID: 2069015975501184387, guid: 9fb560c4d76b6db449e3af531734cb3e, type: 3}
+  unitIcon: {fileID: 4359247653649351517, guid: dbb84de4d791ef746bb6c68ddea3a4ae, type: 3}
+  unitName: "\uC5D0\uBA54\uB784\uB4DC \uB4DC\uB798\uACE4"
+  unitDescription: "\uB9BC\uC18D\uC131 \uAD11\uC5ED \uC6D0\uAC70\uB9AC \uC720\uB2DB\n\uACE0\uB300
+    \uC232\uC758 \uAC00\uC7A5 \uAE4A\uC740 \uACF3\uC5D0\uC11C \uAE68\uC5B4\uB09C
+    \uB179\uC0C9 \uBE44\uB8E1. \uD749\uD3EC\uD574 \uBCF4\uC774\uB294 \uAC89\uBAA8\uC2B5\uACFC
+    \uB2EC\uB9AC \uCCA0\uC800\uD55C \uCC44\uC2DD\uC8FC\uC758\uC790\uB77C \uACE0\uAE30\uB294
+    \uC785\uC5D0\uB3C4 \uB300\uC9C0 \uC54A\uB294\uB2E4. \uB204\uAD70\uAC00 \uD5C8\uB77D
+    \uC5C6\uC774 \uC608\uC05C \uC794\uB514\uBC2D\uC744 \uBC1F\uC73C\uBA74 \uADF9\uB300\uB178\uD55C\uB2E4."
+  elementType: 2
+  spawnCost: 2800
+  spawnCoolTime: 23
+  maxHP: 6120
+  attackDamage: 2660
+  firstAttackDelay: 0.55
+  attackInterval: 5.5
+  attackRange: 5.7
+  moveSpeed: 1.8
+  aoeRadius: 2.94

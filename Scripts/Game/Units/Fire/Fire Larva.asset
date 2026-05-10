@@ -1,0 +1,33 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: cb3d0d5bd5ecb7b47bfabc05f5d480d7, type: 3}
+  m_Name: Fire Larva
+  m_EditorClassIdentifier: 
+  unitPrefab: {fileID: 5771025906570419322, guid: 9645770fc76c4604dbc666cd6595476f, type: 3}
+  unitIcon: {fileID: -346539985410689354, guid: 8cfb96cb5232e464994dbaccd1750b41, type: 3}
+  unitName: "\uBD88\uB2ED \uAD7C\uBCB5\uC774"
+  unitDescription: "\uD654\uC18D\uC131 \uADFC\uAC70\uB9AC \uACE0\uAE30\uBC29\uD328
+    \uC720\uB2DB\n\uB9E4\uC6B4\uB9DB\uC744 \uB108\uBB34 \uC0AC\uB791\uD574 \uBD89\uAC8C
+    \uB2EC\uC544\uC624\uB978 \uB3CC\uC5F0\uBCC0\uC774 \uAD7C\uBCB5\uC774. \uC5B8\uC820\uAC00
+    \uBD88\uAF43\uC744 \uBA38\uAE08\uC740 \uB098\uBE44\uAC00 \uB418\uAE30\uB97C \uAFC8\uAFB8\uC9C0\uB9CC,
+    \uC9C0\uB801\uC774\uB77C \uD3C9\uC0DD \uB0A0 \uC218 \uC5C6\uB2E4\uB294 \uAC74
+    \uBCF8\uC778\uB9CC \uBAA8\uB974\uB294 \uBE44\uBC00\uC774\uB2E4."
+  elementType: 3
+  spawnCost: 70
+  spawnCoolTime: 3.8
+  maxHP: 700
+  attackDamage: 128
+  firstAttackDelay: 0.23
+  attackInterval: 1.23
+  attackRange: 1.5
+  moveSpeed: 2.6
+  aoeRadius: 0

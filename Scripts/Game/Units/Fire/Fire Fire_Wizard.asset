@@ -1,0 +1,33 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: cb3d0d5bd5ecb7b47bfabc05f5d480d7, type: 3}
+  m_Name: Fire Fire_Wizard
+  m_EditorClassIdentifier: 
+  unitPrefab: {fileID: 5395835695609543332, guid: 2e4c37dd505831749a32db9a4b79de3f, type: 3}
+  unitIcon: {fileID: 1359573916890912395, guid: 3705150e53e02654d82b29e382c82794, type: 3}
+  unitName: "\uD64D\uC5FC\uC758 \uB9C8\uBC95\uC0AC"
+  unitDescription: "\uD654\uC18D\uC131 \uB9CC\uB2A5\uD615 \uC720\uB2DB\n\uC9C0\uC625\uC758
+    \uC5C5\uD654\uB97C \uB2E4\uB8E8\uB294 \uC5D8\uB9AC\uD2B8 \uD751\uB9C8\uBC95\uC0AC.
+    \uBFD4 \uB2EC\uB9B0 \uD22C\uAD6C\uC640 \uBD89\uC740 \uAC11\uC637\uC73C\uB85C
+    \uC704\uC5C4\uC744 \uBF50\uB0B4\uC9C0\uB9CC, \uACE0\uAE30 \uAD6C\uC6B8 \uB54C
+    \uBD88 \uC870\uC808\uC744 \uC798\uD574\uC11C \uB3D9\uB124 \uCEA0\uD551\uC7A5
+    \uBC14\uBCA0\uD050 \uD30C\uD2F0\uC5D0 \uB9E4\uC77C \uBD88\uB824 \uB2E4\uB2CC\uB2E4."
+  elementType: 3
+  spawnCost: 4300
+  spawnCoolTime: 33
+  maxHP: 19600
+  attackDamage: 5670
+  firstAttackDelay: 0.67
+  attackInterval: 4.3
+  attackRange: 2.8
+  moveSpeed: 2.4
+  aoeRadius: 1.7
