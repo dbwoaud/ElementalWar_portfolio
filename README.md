@@ -227,6 +227,6 @@ HeroEditor `Character`는 내부적으로 장비 레이어링을 위해 `SpriteM
 
 ## **🔗 참조**
 
-- **Notion**: [[엘리멘탈 워 Notion 링크]]()
+- **Notion**: [[엘리멘탈 워 Notion 링크]](https://www.notion.so/35cfaf7d496e801c870ece488cbb2c5c)
 - **YouTube**: [[기술 데모 영상 링크]]()
 - **GamePlay** [[엘리멘탈 워 게임 플레이링크]]()
