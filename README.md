@@ -178,6 +178,7 @@ https://github.com/dbwoaud/ElementalWar_portfolio/blob/0638aee21f53ed2cc79a7bf07
   https://github.com/dbwoaud/ElementalWar_portfolio/blob/0638aee21f53ed2cc79a7bf0713c79ff427f1a53/Scripts/Game/Units/Components/Unit%20Network%20Sync.cs#L89-L101
 - **방 속성(Custom Properties)**: 덱 정보, 준비 상태, 맵 인덱스를 Photon `CustomProperties`에 저장하고 `OnRoomPropertiesUpdate` 콜백으로 처리하여, 별도 서버 없이도 두 클라이언트 간 게임 시작 조건을 안전하게 동기화했습니다.
   https://github.com/dbwoaud/ElementalWar_portfolio/blob/0638aee21f53ed2cc79a7bf0713c79ff427f1a53/Scripts/Lobby/Network/Lobby%20Network%20Manager.cs#L48-L86
+ **설계 한계 및 개선 방향 (권한 모델)**: 본 프로젝트는 학습을 목적으로 한 클라이언트 권위 구조로, 각 클라이언트가 계산한 결과를 `PhotonView.RPC`로 전파합니다. 이 방식은 구현이 간결하지만 클라이언트가 보낸 값을 서버가 검증하지 않아 메모리 조작 등 치팅에 취약합니다. 상용 서비스 수준에서는 서버가 모든 판정을 수행하고 클라이언트는 입력만 전송하는 서버 권위 구조로 전환하여 데미지·상태 판정을 서버에서 검증해야 함을 인지하고 있습니다.
 
 ### **2. [인증] PlayFab 기반 회원가입 / 로그인 시스템**
 
