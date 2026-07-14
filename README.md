@@ -23,13 +23,15 @@
 
 ### **1. 씬 구조의 MVC 패턴 — `BaseSceneController` / `BaseUIManager` / `NetworkManager`**
 
-모든 씬(MainMenu, Lobby, Room, UnitSetting, Game)에 일관된 **MVC 아키텍처**를 적용했습니다.
+모든 씬(MainMenu, Lobby, Room, UnitSetting, Game)에 일관된 **MVC 아키텍처**를 적용했습니다. 이 구조를 통해 UI, 게임 로직, 네트워크의 책임을 완전히 분리했으며, `BaseSceneController`와 `BaseUIManager`의 추상 메서드를 통해 **Template Method 패턴**을 적용하여 각 씬의 초기화 흐름을 강제하고 코드 누락을 방지했습니다.
+
+**패턴 사용 이유**: UI, 게임 로직, 네트워크가 한 클래스에 뭉쳐 있으면 씬이 늘어날 때마다 수정 범위가 많아지기 때문에, 세 책임을 분리함으로써 각기 다른 책임의 이유로 발생하는 코드 변경을 최소화했습니다.
 
 - **Model(Network)**: 각 씬의 네트워크 매니저(`MainMenuNetworkManager`, `LobbyNetworkManager`, `RoomNetworkManager`, `UnitSettingNetworkManager`, `GameNetworkManager`)가 Photon PUN2 콜백을 수신하고, 직접적인 로직 처리 없이 이벤트를 발행하여 Controller에 상태를 전달합니다.
 - **View**: `BaseUIManager<T>`를 상속한 각 씬의 UI 매니저(`MainMenuUIManager`, `LobbyUIManager`, `RoomUIManager`, `UnitSettingUIManager`, `GameUIManager`)가 화면 출력만 담당하며, 직접적인 로직 처리 없이 이벤트를 발행하여 Controller에 상태를 전달합니다.
 - **Controller**: `BaseSceneController<T>`를 상속한 각 씬의 매니저(`MainMenuManager`, `LobbyManager`, `RoomManager`, `UnitSettingManager`, `GameManager`)가 게임 로직과 상태를 담당합니다.
 
-이 구조를 통해 UI, 게임 로직, 네트워크 로직의 책임을 완전히 분리했으며, `BaseSceneController`와 `BaseUIManager`의 추상 메서드를 통해 **Template Method 패턴**을 적용하여 각 씬의 초기화 흐름을 강제하고 코드 누락을 방지했습니다.
+
 https://github.com/dbwoaud/ElementalWar_portfolio/blob/0638aee21f53ed2cc79a7bf0713c79ff427f1a53/Scripts/Common/Abstractions/Base%20Classes/Base%20Scene%20Controller.cs#L3-L45
 https://github.com/dbwoaud/ElementalWar_portfolio/blob/0638aee21f53ed2cc79a7bf0713c79ff427f1a53/Scripts/Common/Abstractions/Base%20Classes/Base%20UI%20Manager.cs#L4-L43
 - [🔗 **LobbyNetworkManager.cs 코드 보기**](https://github.com/dbwoaud/ElementalWar_portfolio/blob/0638aee21f53ed2cc79a7bf0713c79ff427f1a53/Scripts/Lobby/Network/Lobby%20Network%20Manager.cs)
@@ -41,6 +43,8 @@ https://github.com/dbwoaud/ElementalWar_portfolio/blob/0638aee21f53ed2cc79a7bf07
 ### **2. UI 계층의 Composite 패턴 — `UIPanel` / `Container` / `Item`**
 
 UI 코드 전반에 Composite 패턴을 적용하여 단일 컴포넌트와 복합 컨테이너를 동일한 인터페이스로 다룰 수 있도록 설계했습니다. 이를 통해 UI 구조가 복잡해지더라도 관리 포인트를 최소화했습니다.
+
+**패턴 사용 이유**: 패널, 컨테이너, 아이템을 각각 다르게 다루면 UI가 복잡해질수록 관리도 복잡해집니다. 동일 인터페이스로 통일해, 슬롯의 개수와 관계없이 최상위 Manager 한 곳에서 일괄 제어하도록 만들었습니다.
 
 ```
 GameUIManager (최상위 조합자)
@@ -68,7 +72,10 @@ https://github.com/dbwoaud/ElementalWar_portfolio/blob/0638aee21f53ed2cc79a7bf07
 
 #### **3-1. Component 패턴 — `Unit` + `UnitStats` / `UnitMovement` / `UnitCombat` / `UnitStateMachine` / `UnitNetworkSync` / `IUnitAnimator`**
 
-`Unit` 클래스는 직접 로직을 구현하지 않습니다. 기능별로 분리된 컴포넌트들에 책임을 위임하고 외부에 프로퍼티로 노출하는 **퍼사드** 역할만 수행합니다. `[RequireComponent]` attribute를 통해 필수 컴포넌트 누락을 컴파일 타임에 방지하고, `[DisallowMultipleComponent]` attribute를 통해 중복 컴포넌트를 허용하지 않게 했습니다.
+`Unit` 클래스는 직접 로직을 구현하지 않으며, 기능별로 분리된 컴포넌트들에 책임을 위임하고 외부에 프로퍼티로 노출하는 **퍼사드** 역할만 수행합니다. `[RequireComponent]` attribute를 통해 필수 컴포넌트 누락을 컴파일 타임에 방지하고, `[DisallowMultipleComponent]` attribute를 통해 중복 컴포넌트를 허용하지 않게 했습니다.
+
+**패턴 사용 이유**: Unit 하나에 로직을 모두 넣으면 거대한 God Class가 되어 유지보수가 어려워집니다. 기능별 컴포넌트로 책임을 위임하고 Unit은 퍼사드 역할만 맡겨, 각 기능을 독립적으로 수정·테스트할 수 있게 했습니다.
+
 https://github.com/dbwoaud/ElementalWar_portfolio/blob/0638aee21f53ed2cc79a7bf0713c79ff427f1a53/Scripts/Game/Units/Unit.cs#L4-L54
 [🔗 **Unit.cs 전체 코드 보기**](https://github.com/dbwoaud/ElementalWar_portfolio/blob/0638aee21f53ed2cc79a7bf0713c79ff427f1a53/Scripts/Game/Units/Unit.cs)  
 [🔗 **UnitStats.cs 코드 보기**](https://github.com/dbwoaud/ElementalWar_portfolio/blob/0638aee21f53ed2cc79a7bf0713c79ff427f1a53/Scripts/Game/Units/Components/Unit%20Stats.cs)  
@@ -83,6 +90,9 @@ https://github.com/dbwoaud/ElementalWar_portfolio/blob/0638aee21f53ed2cc79a7bf07
 
 유닛의 행동(Idle, Move, Attack, Hit, Dead)을 `IUnitState` 인터페이스로 추상화하고, `UnitStateMachine`이 상태 전이를 관리합니다. 새로운 상태 추가 시 기존 코드를 수정할 필요가 없습니다.
 `UnitStateMachine`은 `Dictionary<UnitStateType, IUnitState>`로 상태를 관리하여 열거형으로 O(1) 조회가 가능하도록 최적화를 수행하였으며, 상태 전이 시 `OnStateChanged` 이벤트를 발행하여 네트워크 동기화와 느슨하게 결합됩니다.
+
+**패턴 사용 이유**: 유닛 행동을 if/switch로 처리하면 상태가 추가될 때마다 분기문 전체를 수정해야 합니다. 상태를 독립 클래스로 분리하여 새 상태 추가 시 기존 코드 수정 없이 클래스만 추가하면 되도록 했습니다.
+
 https://github.com/dbwoaud/ElementalWar_portfolio/blob/0638aee21f53ed2cc79a7bf0713c79ff427f1a53/Scripts/Game/Units/States/IUnitState.cs#L1-L8
 [🔗 **UnitStateIdle.cs 코드 보기**](https://github.com/dbwoaud/ElementalWar_portfolio/blob/0638aee21f53ed2cc79a7bf0713c79ff427f1a53/Scripts/Game/Units/States/Unit%20State%20Idle.cs)  
 [🔗 **UnitStateMove.cs 코드 보기**](https://github.com/dbwoaud/ElementalWar_portfolio/blob/0638aee21f53ed2cc79a7bf0713c79ff427f1a53/Scripts/Game/Units/States/Unit%20State%20Move.cs)  
@@ -95,9 +105,14 @@ https://github.com/dbwoaud/ElementalWar_portfolio/blob/0638aee21f53ed2cc79a7bf07
 
 `UnitStateMachine`의 `OnStateChanged` 이벤트를 `UnitNetworkSync`가 구독함으로써, 상태기계는 네트워크 존재를 알 필요 없이, 상태 변경만 발행하면 동기화가 자동으로 처리됩니다.
 
+**패턴 사용 이유**: 상태 머신이 네트워크 동기화를 직접 호출하면 두 시스템이 강하게 결합되기 때문에 상태 변경을 이벤트로 발행만 하도록 했습니다. 이를 통해 상태 머신은 네트워크의 존재을 알 필요 없이 동기화가 가능합니다.
+
 #### **3-4. Registry 패턴 — `UnitRegistry`**
 
-`HashSet<Unit>` 기반의 정적 레지스트리를 통해 씬 내 모든 활성 유닛을 O(1)로 등록/해제가 되도록 최적화를 수행하였으며, `IReadOnlyCollection`으로 외부 읽기 전용 노출하여 데이터 무결성을 보장합니다.  
+`HashSet<Unit>` 기반의 정적 레지스트리를 통해 씬 내 모든 활성 유닛을 O(1)로 등록/해제가 되도록 최적화를 수행하였으며, `IReadOnlyCollection`으로 외부 읽기 전용 노출하여 데이터 무결성을 보장합니다.
+
+**패턴 사용 이유**: 씬의 모든 활성 유닛을 매번 FindObjectsOfType으로 찾으면 유닛이 많아질수록 성능이 급격히 떨어집니다. HashSet 레지스트리로 등록/해제를 O(1)로 처리해 대량 유닛 상황의 조회 비용을 없앴습니다.
+
 [🔗 **UnitRegistry.cs 코드 보기**](https://github.com/dbwoaud/ElementalWar_portfolio/blob/0638aee21f53ed2cc79a7bf0713c79ff427f1a53/Scripts/Common/Singletons/Unit%20Registry.cs)
 
 ---
@@ -105,7 +120,10 @@ https://github.com/dbwoaud/ElementalWar_portfolio/blob/0638aee21f53ed2cc79a7bf07
 ### **4. Adapter 패턴 — `IUnitAnimator` / `BaseUnitAnimator` / 에셋별 Adapter**
  
 리소스 한계로 인해 서로 다른 구조를 가진 세 가지 유닛 에셋을 동시에 사용해야 했습니다. 각 에셋은 애니메이션 재생 방식과 내부 API가 완전히 달랐기 때문에, 유닛 시스템이 에셋 종류를 직접 알게 되면 코드가 에셋에 강하게 결합되는 문제가 발생합니다.  
-이를 해결하기 위해 **어댑터 패턴**을 적용했습니다.  
+이를 해결하기 위해 **어댑터 패턴**을 적용했습니다.
+
+**패턴 사용 이유**: 내부 API가 전혀 다른 세 종류 유닛 에셋을 그대로 쓰면 유닛 코드가 특정 에셋에 강하게 묶이기 때문에, 이를 공통 인터페이스로 변환하여 유닛 시스템이 에셋 종류를 몰라도 동작하고 새 에셋은 Adapter 하나만 추가하면 되도록 했습니다.
+
 - **Target Interface (`IUnitAnimator`)**: `PlayIdle()`, `PlayMove()`, `PlayAttack()`, `PlayHit()`, `PlayDead()`, `ResetForReuse()` 등 유닛 시스템이 요구하는 공통 인터페이스를 정의합니다.
 - **Base Adapter (`BaseUnitAnimator`)**: 피격 플래시, 페이드 아웃 코루틴 등 에셋 종류에 관계없이 공통으로 사용되는 로직을 구현하고, 에셋별 차이점은 추상 메서드로 위임합니다.
 - **Concrete Adapter**: 각 에셋의 실제 API를 공통 인터페이스로 변환합니다.
@@ -126,7 +144,10 @@ IUnitAnimator (Target)
 
 ### **5. 채팅 시스템의 Strategy 패턴 — `IChatTransport` / `LobbyChatTransport` / `RoomChatTransport`**
   
-로비와 방이라는 서로 다른 네트워크 환경에서 채팅을 동작시키기 위해 **Strategy 패턴**을 적용했습니다. 전송 방식을 `IChatTransport` 인터페이스로 추상화하여, `ChatController가 구체적인 전송 방식을 알지 못하더라도 동일하게 동작하도록 설계했습니다.  
+로비와 방이라는 서로 다른 네트워크 환경에서 채팅을 동작시키기 위해 **Strategy 패턴**을 적용했습니다. 전송 방식을 `IChatTransport` 인터페이스로 추상화하여, `ChatController가 구체적인 전송 방식을 알지 못하더라도 동일하게 동작하도록 설계했습니다.
+
+**패턴 사용 이유**: 로비 채팅(Photon Chat)과 방 채팅(RPC 브로드캐스트)은 전송 방식이 완전히 다르기 때문에, 전송 방식을 인터페이스로 추상화하여, ChatController가 구체 방식을 몰라도 동일하게 동작하고 씬에 따라 구현체만 교체하면 되도록 했습니다.
+
 - **`LobbyChatTransport`**: Photon Chat SDK를 사용해 글로벌 로비 채널에 접속합니다. 모든 로비 유저가 동일한 채널을 구독하여 메시지를 주고받습니다.
 - **`RoomChatTransport`** : 별도의 Chat 서버 연결 없이 `PhotonView.RPC(RpcTarget.All)`로 방 내 모든 플레이어에게 메시지를 브로드캐스트합니다. `RoomNetworkManager`의 입/퇴장 이벤트를 구독하여 시스템 메시지도 함께 처리합니다.
 - **`ChatController`**: `IChatTransport`(전송)와 `IChatView`(UI) 두 인터페이스만 바라봅니다. 씬에 어떤 Transport 구현체가 연결되든 코드 수정 없이 동일하게 동작하며, 메시지 수신 시 `ChatMessageFormatter`를 통해 발신자와 시스템 메시지를 색상 태그로 포맷하여 UI에 전달합니다.  
