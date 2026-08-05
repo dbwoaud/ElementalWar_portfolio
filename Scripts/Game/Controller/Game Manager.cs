@@ -111,6 +111,11 @@ public class GameManager : BaseSceneController<GameManager>
     {
         PopupPanelUIManager.instance?.ShowWaiting(PopupMessage.Waiting.RoomEntry, null);
         ResumeTime();
+        if (!PhotonNetwork.IsMasterClient)
+        {
+            gameNetworkManager?.RequestReturnToRoom();
+            return;
+        }
         ReopenRoom();
         PhotonNetwork.LoadLevel(SceneName.Room);
     }
@@ -137,9 +142,19 @@ public class GameManager : BaseSceneController<GameManager>
     private void HandleReturnToLobbyRequest() // 로비로 돌아가기 버튼 클릭 시 실행되는 함수
     {
         ResumeTime();
+        CleanUpNetworkObjects();
         ReopenRoom();
         if (PhotonNetwork.CurrentRoom != null)
             PhotonNetwork.LeaveRoom();
+    }
+
+    private void CleanUpNetworkObjects() // 룸의 네트워크 오브젝트와 캐시를 정리하는 함수
+    {
+        if (!PhotonNetwork.IsMasterClient)
+            return;
+
+        if (PhotonNetwork.CurrentRoom != null)
+            PhotonNetwork.DestroyAll();
     }
 
     private void HandleUnitSpawnRequest(int slotIndex, UnitStat spawnUnitStat) // 유닛 생성 요청을 처리하는 함수
@@ -384,6 +399,7 @@ public class GameManager : BaseSceneController<GameManager>
         }
         UnitRegistry.Clear();
     }
+
     private bool CanSpawnFromSlot(int slotIndex) // 슬롯에서 유닛을 소환할 수 있는지 확인하는 함수
     {
         return gameUIManager != null && gameUIManager.IsSlotSpawnable(slotIndex);

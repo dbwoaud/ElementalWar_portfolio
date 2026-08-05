@@ -65,7 +65,7 @@ public class Castle : MonoBehaviourPun, IDamagable, IPunInstantiateMagicCallback
     }
 
     public void OnPhotonInstantiate(PhotonMessageInfo info)
-    {
+    { 
         InitializeCastle();
     }
 

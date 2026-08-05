@@ -61,6 +61,11 @@ public class SpineMonsterAdapter : BaseUnitAnimator
 
     protected override void OnResetForReuseInternal() // 네트워크 풀 재사용 시 Idle 애니메이션으로 복귀하는 함수
     {
+        if (skeletonAnim != null && skeletonAnim.skeleton != null)
+        {
+            skeletonAnim.AnimationState.ClearTracks();
+            skeletonAnim.skeleton.SetToSetupPose();
+        }
         SetSpineAnim(idleAnim, loop: true);
     }
 

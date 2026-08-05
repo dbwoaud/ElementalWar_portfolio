@@ -12,10 +12,23 @@ public class NetworkPoolManager : Singleton<NetworkPoolManager>, IPunPrefabPool
     private readonly Dictionary<string, Queue<GameObject>> objectPool = new Dictionary<string, Queue<GameObject>>();
     private readonly HashSet<GameObject> pooledObjects = new();
 
+    [Header("사전 등록 프리팹")]
+    [SerializeField] private GameObject[] preRegisteredPrefabs;
+
     protected override void Awake()
     {
         base.Awake();
         PhotonNetwork.PrefabPool = this;
+        RegisterPreListedPrefabs();
+    }
+
+    private void RegisterPreListedPrefabs() // 인스펙터에 지정된 프리팹을 등록하는 함수
+    {
+        if (preRegisteredPrefabs == null)
+            return;
+
+        foreach (GameObject prefab in preRegisteredPrefabs)
+            RegisterNetworkPrefab(prefab);
     }
 
     public void RegisterNetworkPrefab(GameObject prefab) // 네트워크 프리팹에 오브젝트를 등록하는 함수
@@ -29,18 +42,22 @@ public class NetworkPoolManager : Singleton<NetworkPoolManager>, IPunPrefabPool
 
     public GameObject Instantiate(string prefabId, Vector3 position, Quaternion rotation) // 프리팹을 생성하는 함수
     {
-        if (prefabDict.TryGetValue(prefabId, out GameObject sourcePrefab))
+        if (!prefabDict.TryGetValue(prefabId, out GameObject sourcePrefab))
         {
-            Queue<GameObject> pool = objectPool[prefabId];
-
-            GameObject obj = pool.Count > 0
-                ? ReuseFromPool(pool, position, rotation)
-                : CreateNewInstance(sourcePrefab, position, rotation);
-
-            return obj;
+            Debug.LogWarning($"[NetworkPoolManager] 미등록 프리팹 생성 요청: {prefabId} " +
+                             $"/ scene={UnityEngine.SceneManagement.SceneManager.GetActiveScene().name}");
+            return new GameObject(prefabId);   // null 반환 시 PUN 내부에서 예외 발생
         }
 
-        return null;
+        if (!objectPool.TryGetValue(prefabId, out Queue<GameObject> pool))
+        {
+            pool = new Queue<GameObject>();
+            objectPool[prefabId] = pool;
+        }
+
+        return pool.Count > 0
+            ? ReuseFromPool(pool, position, rotation)
+            : CreateNewInstance(sourcePrefab, position, rotation);
     }
 
     public void Destroy(GameObject obj) // 프리팹을 파괴하는 함수
@@ -83,11 +100,9 @@ public class NetworkPoolManager : Singleton<NetworkPoolManager>, IPunPrefabPool
 
     protected override void OnDestroy()
     {
-        if (ReferenceEquals(PhotonNetwork.PrefabPool, this))
-            PhotonNetwork.PrefabPool = new DefaultPool();
+        foreach (Queue<GameObject> pool in objectPool.Values)
+            pool.Clear();
 
-        prefabDict.Clear();
-        objectPool.Clear();
         pooledObjects.Clear();
 
         base.OnDestroy();

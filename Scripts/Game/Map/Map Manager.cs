@@ -9,6 +9,11 @@ public class MapManager : BaseSceneController<MapManager>
     [SerializeField] private MapSpawner mapSpawner;
     [SerializeField] private CastleSpawner castleSpawner;
     [SerializeField] private Collider2D cachedGroundCollider;
+
+    [Header("환경 구성 상태")]
+    private bool isEnvironmentReady;
+    private int setupCallCount;
+
     public Collider2D GroundCollider => cachedGroundCollider;
 
     public event Action<MapData> OnMapSetupCompleted;
@@ -28,6 +33,11 @@ public class MapManager : BaseSceneController<MapManager>
 
     public void SetupGameEnvironment(int mapIndex) // 맵을 최종적으로 설정하는 함수
     {
+        if (isEnvironmentReady)
+            return;
+
+        isEnvironmentReady = true;
+        setupCallCount++;
         StartCoroutine(SetupGameEnvironmentCoroutine(mapIndex));
     }
 
@@ -50,7 +60,6 @@ public class MapManager : BaseSceneController<MapManager>
 
         OnMapSetupCompleted?.Invoke(spawnedMap);
     }
-
 
     private void SpawnPlayerCastle(MapData mapData) // 플레이어 성을 생성하는 함수
     {

@@ -106,6 +106,7 @@ public class Unit : MonoBehaviourPun, IDamagable, IPunInstantiateMagicCallback
     {
         if (!networkSync.IsOwnedByLocalPlayer)
             return;
+
         stateMachine.Tick();
     }
 
@@ -114,8 +115,8 @@ public class Unit : MonoBehaviourPun, IDamagable, IPunInstantiateMagicCallback
         stats.InitializeFromBaseStat();
         ResetTransform();
         movement.ResetForReuse();
-        networkSync.ConfigureNetworkRole();
         animator?.ResetForReuse();
+        networkSync.ConfigureNetworkRole();
         stateMachine.StartFromIdle();
     }
 
