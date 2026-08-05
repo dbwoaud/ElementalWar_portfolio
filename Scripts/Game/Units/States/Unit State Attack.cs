@@ -7,13 +7,13 @@ public class UnitStateAttack : IUnitState
 
     private enum AttackPhase { WaitingFirst, Attacking, Interval }
 
-    [Header("³»ºÎ »óÅÂ ÃßÀû")]
+    [Header("ë‚´ë¶€ ìƒíƒœ ì¶”ì ")]
     [SerializeField] private AttackPhase phase;
     [SerializeField] private float phaseTimer;
     [SerializeField] private float currentAnimDuration;
     [SerializeField] private Collider2D currentTarget;
 
-    public void EnterState(Unit unit) // À¯´ÖÀÌ °ø°İ »óÅÂ¿¡ µé¾î¿ÔÀ» ¶§ ½ÇÇàµÇ´Â ÇÔ¼ö
+    public void EnterState(Unit unit) // ìœ ë‹›ì´ ê³µê²© ìƒíƒœì— ë“¤ì–´ì™”ì„ ë•Œ ì‹¤í–‰ë˜ëŠ” í•¨ìˆ˜
     {
         if (unit == null)
             return;
@@ -27,7 +27,7 @@ public class UnitStateAttack : IUnitState
         unit.StopUnit();
     }
 
-    public void UpdateState(Unit unit) // À¯´ÖÀÌ °ø°İ »óÅÂ ÁßÀÏ ¶§ ½ÇÇàµÇ´Â ÇÔ¼ö
+    public void UpdateState(Unit unit) // ìœ ë‹›ì´ ê³µê²© ìƒíƒœ ì¤‘ì¼ ë•Œ ì‹¤í–‰ë˜ëŠ” í•¨ìˆ˜
     {
         if (unit == null) 
             return;
@@ -47,7 +47,7 @@ public class UnitStateAttack : IUnitState
         }
     }
 
-    private void TickWaitingFirst(Unit unit) // Àû ÀÎ½Ä ÈÄ Ã¹ °ø°İ±îÁöÀÇ µô·¹ÀÌ¸¦ Ã³¸®ÇÏ´Â ÇÔ¼ö
+    private void TickWaitingFirst(Unit unit) // ì  ì¸ì‹ í›„ ì²« ê³µê²©ê¹Œì§€ì˜ ë”œë ˆì´ë¥¼ ì²˜ë¦¬í•˜ëŠ” í•¨ìˆ˜
     {
         if (!unit.HasValidTarget())
         {
@@ -60,7 +60,7 @@ public class UnitStateAttack : IUnitState
             BeginAttackCycle(unit);
     }
 
-    private void BeginAttackCycle(Unit unit) // »õ·Î¿î °ø°İ »çÀÌÅ¬À» ½ÃÀÛÇÏ°í Å¸°ÙÀ» ÀúÀåÇÏ´Â ÇÔ¼ö
+    private void BeginAttackCycle(Unit unit) // ìƒˆë¡œìš´ ê³µê²© ì‚¬ì´í´ì„ ì‹œì‘í•˜ê³  íƒ€ê²Ÿì„ ì €ì¥í•˜ëŠ” í•¨ìˆ˜
     {
         if (!unit.IsAlive) 
             return;
@@ -77,7 +77,7 @@ public class UnitStateAttack : IUnitState
         currentAnimDuration = unit.PlayAttackAnimation();
     }
 
-    private void TickAttacking(Unit unit) // °ø°İ ¾Ö´Ï¸ŞÀÌ¼Ç ÁøÇàÀ» Ã³¸®ÇÏ´Â ÇÔ¼ö
+    private void TickAttacking(Unit unit) // ê³µê²© ì• ë‹ˆë©”ì´ì…˜ ì§„í–‰ì„ ì²˜ë¦¬í•˜ëŠ” í•¨ìˆ˜
     {
 
         phaseTimer += Time.deltaTime;
@@ -96,7 +96,7 @@ public class UnitStateAttack : IUnitState
         phaseTimer = 0f;
     }
 
-    private void TryApplyDamage(Unit unit) // °ø°İ ¾Ö´Ï¸ŞÀÌ¼Ç Á¾·á ½Ã µ¥¹ÌÁö Àû¿ë °¡´É ¿©ºÎ¸¦ °ËÁõÇÏ°í Àû¿ëÇÏ´Â ÇÔ¼ö
+    private void TryApplyDamage(Unit unit) // ê³µê²© ì• ë‹ˆë©”ì´ì…˜ ì¢…ë£Œ ì‹œ ë°ë¯¸ì§€ ì ìš© ê°€ëŠ¥ ì—¬ë¶€ë¥¼ ê²€ì¦í•˜ê³  ì ìš©í•˜ëŠ” í•¨ìˆ˜
     {
         if (currentTarget == null) 
             return;
@@ -107,7 +107,7 @@ public class UnitStateAttack : IUnitState
         unit.ApplyDamageFromAttack(currentTarget);
     }
 
-    private void TickInterval(Unit unit) // °ø°İ ¾Ö´Ï¸ŞÀÌ¼Ç Á¾·á ÈÄ ´ÙÀ½ °ø°İ±îÁöÀÇ µô·¹ÀÌ¸¦ Ã³¸®ÇÏ´Â ÇÔ¼ö
+    private void TickInterval(Unit unit) // ê³µê²© ì• ë‹ˆë©”ì´ì…˜ ì¢…ë£Œ í›„ ë‹¤ìŒ ê³µê²©ê¹Œì§€ì˜ ë”œë ˆì´ë¥¼ ì²˜ë¦¬í•˜ëŠ” í•¨ìˆ˜
     {
         if (!unit.HasValidTarget())
         {
@@ -122,7 +122,7 @@ public class UnitStateAttack : IUnitState
         BeginAttackCycle(unit);
     }
 
-    public void ExitState(Unit unit) // À¯´ÖÀÌ °ø°İ »óÅÂ°¡ ³¡³µÀ» ¶§ ½ÇÇàµÇ´Â ÇÔ¼ö
+    public void ExitState(Unit unit) // ìœ ë‹›ì´ ê³µê²© ìƒíƒœê°€ ëë‚¬ì„ ë•Œ ì‹¤í–‰ë˜ëŠ” í•¨ìˆ˜
     {
         currentTarget = null;
     }

@@ -4,16 +4,16 @@ using UnityEngine;
 [RequireComponent(typeof(CanvasGroup))]
 public abstract class UIPanel : MonoBehaviour
 {
-    [Header("¾Ö´Ï¸ŞÀÌ¼Ç ¼³Á¤")]
+    [Header("ì• ë‹ˆë©”ì´ì…˜ ì„¤ì •")]
     [SerializeField] private float animationDuration = 0.2f;
     [SerializeField] private Vector3 hiddenScale = new Vector3(0.8f, 0.8f, 0.8f);
     [SerializeField] private Coroutine animationCoroutine;
 
-    [Header("¾Ö´Ï¸ŞÀÌ¼Ç Å¸°Ù")]
+    [Header("ì• ë‹ˆë©”ì´ì…˜ íƒ€ê²Ÿ")]
     [SerializeField] protected Transform contentTransform;
     private Transform CotentTransform => contentTransform != null ? contentTransform : transform;
 
-    [Header("Äµ¹ö½º")]
+    [Header("ìº”ë²„ìŠ¤")]
     [SerializeField] protected CanvasGroup canvasGroup;
 
 
@@ -32,13 +32,13 @@ public abstract class UIPanel : MonoBehaviour
         UnregisterListener();
     }
 
-    protected abstract void InitializeListener(); // UI ¸®½º³Ê¸¦ ÃÊ±âÈ­ÇÏ´Â ÇÔ¼ö
+    protected abstract void InitializeListener(); // UI ë¦¬ìŠ¤ë„ˆë¥¼ ì´ˆê¸°í™”í•˜ëŠ” í•¨ìˆ˜
 
-    protected virtual void UnregisterListener() { } // UI ¸®½º³Ê¸¦ ÇØÁ¦ÇÏ´Â ÇÔ¼ö
+    protected virtual void UnregisterListener() { } // UI ë¦¬ìŠ¤ë„ˆë¥¼ í•´ì œí•˜ëŠ” í•¨ìˆ˜
 
-    protected abstract void ResetUI(); // UI¸¦ ¸®¼Â½ÃÅ°´Â ÇÔ¼ö
+    protected abstract void ResetUI(); // UIë¥¼ ë¦¬ì…‹ì‹œí‚¤ëŠ” í•¨ìˆ˜
 
-    public virtual void Show() // ÆĞ³ÎÀ» È°¼ºÈ­½ÃÅ°´Â ÇÔ¼ö
+    public virtual void Show() // íŒ¨ë„ì„ í™œì„±í™”ì‹œí‚¤ëŠ” í•¨ìˆ˜
     {
         if (!gameObject.activeInHierarchy)
         {
@@ -56,18 +56,18 @@ public abstract class UIPanel : MonoBehaviour
         RestartAnimationCoroutine(AnimateToVisible());
     }
 
-    private void RestartAnimationCoroutine(IEnumerator routine) // ÇöÀç ¾Ö´Ï¸ŞÀÌ¼Ç ÄÚ·çÆ¾À» Àç½ÃÀÛÇÏ´Â ÇÔ¼ö
+    private void RestartAnimationCoroutine(IEnumerator routine) // í˜„ì¬ ì• ë‹ˆë©”ì´ì…˜ ì½”ë£¨í‹´ì„ ì¬ì‹œì‘í•˜ëŠ” í•¨ìˆ˜
     {
         StopAnimationCoroutine();
         animationCoroutine = StartCoroutine(routine);
     }
 
-    private IEnumerator AnimateToVisible() // ÆĞ³ÎÀ» È°¼ºÈ­½ÃÅ°´Â ÄÚ·çÆ¾
+    private IEnumerator AnimateToVisible() // íŒ¨ë„ì„ í™œì„±í™”ì‹œí‚¤ëŠ” ì½”ë£¨í‹´
     {
         yield return Animate(1f, Vector3.one);
     }
 
-    private IEnumerator Animate(float targetAlpha, Vector3 targetScale) // ¾Ö´Ï¸ŞÀÌ¼ÇÀ» Àç»ıÇÏ´Â ÄÚ·çÆ¾
+    private IEnumerator Animate(float targetAlpha, Vector3 targetScale) // ì• ë‹ˆë©”ì´ì…˜ì„ ì¬ìƒí•˜ëŠ” ì½”ë£¨í‹´
     {
         float elapsed = 0f;
         float startAlpha = canvasGroup.alpha;
@@ -88,7 +88,7 @@ public abstract class UIPanel : MonoBehaviour
         CotentTransform.localScale = targetScale;
     }
 
-    public virtual void Hide() // ÆĞ³ÎÀ» ºñÈ°¼ºÈ­½ÃÅ°´Â ÇÔ¼ö
+    public virtual void Hide() // íŒ¨ë„ì„ ë¹„í™œì„±í™”ì‹œí‚¤ëŠ” í•¨ìˆ˜
     {
         if (!gameObject.activeInHierarchy) 
             return;
@@ -97,13 +97,13 @@ public abstract class UIPanel : MonoBehaviour
         RestartAnimationCoroutine(AnimateToHidden());
     }
 
-    private IEnumerator AnimateToHidden() // ÆĞ³ÎÀ» ¼û±âµµ·Ï ÇÏ´Â ÄÚ·çÆ¾
+    private IEnumerator AnimateToHidden() // íŒ¨ë„ì„ ìˆ¨ê¸°ë„ë¡ í•˜ëŠ” ì½”ë£¨í‹´
     {
         yield return Animate(0f, hiddenScale);
         gameObject.SetActive(false);
     }
 
-    public virtual void HideImmediate() // ÆĞ³ÎÀ» Áï½Ã ºñÈ°¼ºÈ­½ÃÅ°´Â ÇÔ¼ö
+    public virtual void HideImmediate() // íŒ¨ë„ì„ ì¦‰ì‹œ ë¹„í™œì„±í™”ì‹œí‚¤ëŠ” í•¨ìˆ˜
     {
         if (canvasGroup == null)
             canvasGroup = GetComponent<CanvasGroup>();
@@ -116,13 +116,13 @@ public abstract class UIPanel : MonoBehaviour
         gameObject.SetActive(false);
     }
 
-    private void StopAnimationCoroutine() // ¾Ö´Ï¸ŞÀÌ¼Ç ÄÚ·çÆ¾À» ÁßÁöÇÏ´Â ÇÔ¼ö
+    private void StopAnimationCoroutine() // ì• ë‹ˆë©”ì´ì…˜ ì½”ë£¨í‹´ì„ ì¤‘ì§€í•˜ëŠ” í•¨ìˆ˜
     {
         if (animationCoroutine != null)
             StopCoroutine(animationCoroutine);
     }
 
-    private static float EaseOut(float t)  // ºÎµå·¯¿î °¨¼Ó °î¼±À» ³ªÅ¸³»´Â ÇÔ¼ö
+    private static float EaseOut(float t)  // ë¶€ë“œëŸ¬ìš´ ê°ì† ê³¡ì„ ì„ ë‚˜íƒ€ë‚´ëŠ” í•¨ìˆ˜
     {
         return 1f - Mathf.Pow(1f - t, 3f);
     }

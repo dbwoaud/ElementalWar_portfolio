@@ -4,14 +4,14 @@ using UnityEngine;
 
 public abstract class BaseUnitAnimator : MonoBehaviour, IUnitAnimator
 {
-    [Header("ÇÇ°İ ¿¬Ãâ ¼³Á¤")]
+    [Header("í”¼ê²© ì—°ì¶œ ì„¤ì •")]
     [SerializeField] protected Color flashColor = Color.red;
     [SerializeField] protected float flashDuration = 0.1f;
 
     protected Coroutine hitCoroutine;
     protected Coroutine dieCoroutine;
 
-    [Header("Ä³½Ì º¯¼ö")]
+    [Header("ìºì‹± ë³€ìˆ˜")]
     [SerializeField] private readonly Dictionary<string, float> animationDurationCache = new Dictionary<string, float>(8);
 
     protected virtual void Awake()
@@ -19,13 +19,13 @@ public abstract class BaseUnitAnimator : MonoBehaviour, IUnitAnimator
         CacheRenderers();
     }
 
-    protected abstract void CacheRenderers(); // ¿øº» »ö»ó°ú ¸ÓÅÍ¸®¾óÀ» ÀúÀåÇÏ´Â ÇÔ¼ö
+    protected abstract void CacheRenderers(); // ì›ë³¸ ìƒ‰ìƒê³¼ ë¨¸í„°ë¦¬ì–¼ì„ ì €ì¥í•˜ëŠ” í•¨ìˆ˜
 
-    protected abstract void ApplyFlashColor(Color color); // ¿øº» »ö»ó°ú ¸ÓÅÍ¸®¾ó¿¡ Æ¯Á¤ »öÀ» ÀÔÈ÷´Â ÇÔ¼ö
+    protected abstract void ApplyFlashColor(Color color); // ì›ë³¸ ìƒ‰ìƒê³¼ ë¨¸í„°ë¦¬ì–¼ì— íŠ¹ì • ìƒ‰ì„ ì…íˆëŠ” í•¨ìˆ˜
 
-    protected abstract void RestoreOriginalColors(); // ¿øº» »ö»ó°ú ¸ÓÅÍ¸®¾óÀ» ¿ø·¡´ë·Î º¹±¸ÇÏ´Â ÇÔ¼ö
+    protected abstract void RestoreOriginalColors(); // ì›ë³¸ ìƒ‰ìƒê³¼ ë¨¸í„°ë¦¬ì–¼ì„ ì›ë˜ëŒ€ë¡œ ë³µêµ¬í•˜ëŠ” í•¨ìˆ˜
 
-    protected abstract void ApplyAlpha(float alpha); // ¸ğµç »ö»ó°ú ¸ÓÅÍ¸®¾ó¿¡ ¾ËÆÄ °ªÀ» Àû¿ëÇÏ´Â ÇÔ¼ö
+    protected abstract void ApplyAlpha(float alpha); // ëª¨ë“  ìƒ‰ìƒê³¼ ë¨¸í„°ë¦¬ì–¼ì— ì•ŒíŒŒ ê°’ì„ ì ìš©í•˜ëŠ” í•¨ìˆ˜
 
     public abstract void PlayIdle();
 
@@ -35,20 +35,20 @@ public abstract class BaseUnitAnimator : MonoBehaviour, IUnitAnimator
 
     public abstract void SetDirection(bool lookLeft);
 
-    protected virtual void OnPlayHitInternal() { } // ³Ë¹é ¿¬ÃâÀ» Ã³¸®ÇÏ´Â ÇÔ¼ö
+    protected virtual void OnPlayHitInternal() { } // ë„‰ë°± ì—°ì¶œì„ ì²˜ë¦¬í•˜ëŠ” í•¨ìˆ˜
 
-    protected virtual void OnPlayDeadInternal() { } // À¯´ÖÀÇ Á×À½À» Ã³¸®ÇÏ´Â ÇÔ¼ö
+    protected virtual void OnPlayDeadInternal() { } // ìœ ë‹›ì˜ ì£½ìŒì„ ì²˜ë¦¬í•˜ëŠ” í•¨ìˆ˜
 
-    protected virtual void OnResetForReuseInternal() { } // À¯´ÖÀÇ Àç»ç¿ëÀ» À§ÇØ ÃÊ±âÈ­ÇÏ´Â ÇÔ¼ö
+    protected virtual void OnResetForReuseInternal() { } // ìœ ë‹›ì˜ ì¬ì‚¬ìš©ì„ ìœ„í•´ ì´ˆê¸°í™”í•˜ëŠ” í•¨ìˆ˜
 
-    public virtual void PlayHit() // À¯´ÖÀ» ÇÇ°İ »óÅÂ·Î ¸¸µå´Â ÇÔ¼ö
+    public virtual void PlayHit() // ìœ ë‹›ì„ í”¼ê²© ìƒíƒœë¡œ ë§Œë“œëŠ” í•¨ìˆ˜
     {
         StopHitCoroutine();
         OnPlayHitInternal();
         hitCoroutine = StartCoroutine(FlashRedCoroutine());
     }
 
-    protected void StopHitCoroutine() // Hit ÄÚ·çÆ¾À» ¾ÈÀüÇÏ°Ô Á¾·áÇÏ´Â ÇÔ¼ö
+    protected void StopHitCoroutine() // Hit ì½”ë£¨í‹´ì„ ì•ˆì „í•˜ê²Œ ì¢…ë£Œí•˜ëŠ” í•¨ìˆ˜
     {
         if (hitCoroutine == null) return;
 
@@ -57,7 +57,7 @@ public abstract class BaseUnitAnimator : MonoBehaviour, IUnitAnimator
         RestoreOriginalColors();
     }
 
-    private IEnumerator FlashRedCoroutine() // FlashRed È¿°ú¸¦ Ã³¸®ÇÏ´Â ÄÚ·çÆ¾
+    private IEnumerator FlashRedCoroutine() // FlashRed íš¨ê³¼ë¥¼ ì²˜ë¦¬í•˜ëŠ” ì½”ë£¨í‹´
     {
         ApplyFlashColor(flashColor);
         yield return new WaitForSeconds(flashDuration);
@@ -65,20 +65,20 @@ public abstract class BaseUnitAnimator : MonoBehaviour, IUnitAnimator
         hitCoroutine = null;
     }
 
-    public virtual void PlayDead() // À¯´ÖÀ» Á×À½ »óÅÂ·Î ¸¸µå´Â ÇÔ¼ö
+    public virtual void PlayDead() // ìœ ë‹›ì„ ì£½ìŒ ìƒíƒœë¡œ ë§Œë“œëŠ” í•¨ìˆ˜
     {
         StopHitCoroutine();
         RestoreOriginalColors();
         OnPlayDeadInternal();
     }
 
-    public virtual void StartFadeOut(float duration) // ÆäÀÌµå ¾Æ¿ô ÄÚ·çÆ¾À» ½ÃÀÛÇÏ´Â ÇÔ¼ö
+    public virtual void StartFadeOut(float duration) // í˜ì´ë“œ ì•„ì›ƒ ì½”ë£¨í‹´ì„ ì‹œì‘í•˜ëŠ” í•¨ìˆ˜
     {
         StopDieCoroutine();
         dieCoroutine = StartCoroutine(FadeOutCoroutine(duration));
     }
 
-    protected virtual IEnumerator FadeOutCoroutine(float duration) // ÆäÀÌµå ¾Æ¿ô È¿°ú¸¦ Ã³¸®ÇÏ´Â ÄÚ·çÆ¾
+    protected virtual IEnumerator FadeOutCoroutine(float duration) // í˜ì´ë“œ ì•„ì›ƒ íš¨ê³¼ë¥¼ ì²˜ë¦¬í•˜ëŠ” ì½”ë£¨í‹´
     {
         float elapsed = 0f;
         while (elapsed < duration)
@@ -91,7 +91,7 @@ public abstract class BaseUnitAnimator : MonoBehaviour, IUnitAnimator
         dieCoroutine = null;
     }
 
-    public virtual void ResetForReuse() // ³×Æ®¿öÅ© ¿ÀºêÁ§Æ® Ç®¿¡¼­ Àç»ç¿ë ½Ã ¸ğµç ½Ã°¢ »óÅÂ¸¦ ÃÊ±âÈ­ÇÏ´Â ÇÔ¼ö
+    public virtual void ResetForReuse() // ë„¤íŠ¸ì›Œí¬ ì˜¤ë¸Œì íŠ¸ í’€ì—ì„œ ì¬ì‚¬ìš© ì‹œ ëª¨ë“  ì‹œê° ìƒíƒœë¥¼ ì´ˆê¸°í™”í•˜ëŠ” í•¨ìˆ˜
     {
         StopAllAnimatorCoroutines();
         ApplyAlpha(1f);
@@ -100,7 +100,7 @@ public abstract class BaseUnitAnimator : MonoBehaviour, IUnitAnimator
         PlayIdle();
     }
 
-    protected void StopDieCoroutine() // Á×À½ ÄÚ·çÆ¾À» ¾ÈÀüÇÏ°Ô Á¾·áÇÏ´Â ÇÔ¼ö
+    protected void StopDieCoroutine() // ì£½ìŒ ì½”ë£¨í‹´ì„ ì•ˆì „í•˜ê²Œ ì¢…ë£Œí•˜ëŠ” í•¨ìˆ˜
     {
         if (dieCoroutine == null) 
             return;
@@ -109,13 +109,13 @@ public abstract class BaseUnitAnimator : MonoBehaviour, IUnitAnimator
         dieCoroutine = null;
     }
 
-    protected void StopAllAnimatorCoroutines() // ¸ğµç ¾Ö´Ï¸ŞÀÌÅÍ ÄÚ·çÆ¾À» Á¾·áÇÏ´Â ÇÔ¼ö
+    protected void StopAllAnimatorCoroutines() // ëª¨ë“  ì• ë‹ˆë©”ì´í„° ì½”ë£¨í‹´ì„ ì¢…ë£Œí•˜ëŠ” í•¨ìˆ˜
     {
         StopHitCoroutine();
         StopDieCoroutine();
     }
 
-    protected float GetAnimationClipDuration(Animator animator, string clipNameKeyword, float fallback = 0.5f) // ¾Ö´Ï¸ŞÀÌ¼Ç Å¬¸³ÀÇ ±æÀÌ¸¦ ¹İÈ¯ÇÏ´Â ÇÔ¼ö
+    protected float GetAnimationClipDuration(Animator animator, string clipNameKeyword, float fallback = 0.5f) // ì• ë‹ˆë©”ì´ì…˜ í´ë¦½ì˜ ê¸¸ì´ë¥¼ ë°˜í™˜í•˜ëŠ” í•¨ìˆ˜
     {
         if (animator == null || animator.runtimeAnimatorController == null) 
             return fallback;

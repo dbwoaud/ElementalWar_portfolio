@@ -2,13 +2,13 @@ using System;
 using UnityEngine;
 
 [DisallowMultipleComponent]
-public class UnitStats : MonoBehaviour, IDamagable
+public class UnitStats : MonoBehaviour
 {
-    [Header("±âº» µ¥ÀÌÅÍ")]
+    [Header("ê¸°ë³¸ ë°ì´í„°")]
     [SerializeField] private UnitStat baseStat;
     public UnitStat BaseStat => baseStat;
 
-    [Header("À¯´Ö ´É·ÂÄ¡")]
+    [Header("ìœ ë‹› ëŠ¥ë ¥ì¹˜")]
     [SerializeField] private float maxHP;
     [SerializeField] private float currentHP;
     [SerializeField] private float attackDamage;
@@ -20,7 +20,7 @@ public class UnitStats : MonoBehaviour, IDamagable
     [SerializeField] private float spawnCost;
     [SerializeField] private ElementType elementType;
 
-    [Header("³Ë¹é ÇÃ·¡±×")]
+    [Header("ë„‰ë°± í”Œë˜ê·¸")]
     [SerializeField] private bool hasTriggeredHalfHPHit;
     [SerializeField] private bool hasTriggeredQuarterHPHit;
 
@@ -51,7 +51,7 @@ public class UnitStats : MonoBehaviour, IDamagable
     public event Action OnHpThresholdCrossed;
 
 
-    public void InitializeFromBaseStat() // À¯´Ö µ¥ÀÌÅÍ¿¡¼­ ÀüÅõ ´É·ÂÄ¡¸¦ ÃÊ±âÈ­ÇÏ´Â ÇÔ¼ö
+    public void InitializeFromBaseStat() // ìœ ë‹› ë°ì´í„°ì—ì„œ ì „íˆ¬ ëŠ¥ë ¥ì¹˜ë¥¼ ì´ˆê¸°í™”í•˜ëŠ” í•¨ìˆ˜
     {
         if (baseStat == null)
             return;
@@ -70,13 +70,13 @@ public class UnitStats : MonoBehaviour, IDamagable
         ResetKnockbackFlags();
     }
 
-    public void ResetKnockbackFlags() // ³Ë¹é ÇÃ·¡±×¸¦ ÃÊ±âÈ­ÇÏ´Â ÇÔ¼ö
+    public void ResetKnockbackFlags() // ë„‰ë°± í”Œë˜ê·¸ë¥¼ ì´ˆê¸°í™”í•˜ëŠ” í•¨ìˆ˜
     {
         hasTriggeredHalfHPHit = false;
         hasTriggeredQuarterHPHit = false;
     }
 
-    public void ApplyDamage(float damage) // µ¥¹ÌÁö¸¦ Àû¿ëÇÏ°í ÀÌº¥Æ®¸¦ ½ÇÇàÇÏ´Â ÇÔ¼ö
+    public void ApplyDamage(float damage) // ë°ë¯¸ì§€ë¥¼ ì ìš©í•˜ê³  ì´ë²¤íŠ¸ë¥¼ ì‹¤í–‰í•˜ëŠ” í•¨ìˆ˜
     {
         if (currentHP <= 0)
             return;
@@ -93,7 +93,7 @@ public class UnitStats : MonoBehaviour, IDamagable
         TryTriggerKnockback();
     }
 
-    private void TryTriggerKnockback() // ³Ë¹é Æ®¸®°Å ¹ßµ¿ ½Ã ÀÌº¥Æ®¸¦ ½ÇÇàÇÏ´Â ÇÔ¼ö
+    private void TryTriggerKnockback() // ë„‰ë°± íŠ¸ë¦¬ê±° ë°œë™ ì‹œ ì´ë²¤íŠ¸ë¥¼ ì‹¤í–‰í•˜ëŠ” í•¨ìˆ˜
     {
         float ratio = currentHP / maxHP;
 
@@ -109,7 +109,7 @@ public class UnitStats : MonoBehaviour, IDamagable
         }
     }
 
-    public float CalculateDamageAgainst(ElementType defenderElement) // ¼Ó¼º »ó¼ºÀ» Àû¿ëÇÑ µ¥¹ÌÁö¸¦ °è»êÇÏ´Â ÇÔ¼ö
+    public float CalculateDamageAgainst(ElementType defenderElement) // ì†ì„± ìƒì„±ì„ ì ìš©í•œ ë°ë¯¸ì§€ë¥¼ ê³„ì‚°í•˜ëŠ” í•¨ìˆ˜
     {
         if (baseStat == null)
             return attackDamage;

@@ -11,24 +11,24 @@ public class PlayFabAuthManager : MonoBehaviour
     public event Action<string> OnRegisterErrorEvent;
 
 
-    public void PlayFabLogin(string email, string password) // ÇÃ·¹ÀÌÆÕ¿¡ ·Î±×ÀÎÇÏ´Â ÇÔ¼ö
+    public void PlayFabLogin(string email, string password) // í”Œë ˆì´íŒ¹ì— ë¡œê·¸ì¸í•˜ëŠ” í•¨ìˆ˜
     {
         var request = new LoginWithEmailAddressRequest { Email = email, Password = password };
         PlayFabClientAPI.LoginWithEmailAddress(request, OnPlayFabLoginSuccess, OnPlayFabLoginError);
     }
 
-    private void OnPlayFabLoginSuccess(LoginResult result) // ·Î±×ÀÎ ¼º°ø ½Ã ½ÇÇàµÇ´Â ÇÔ¼ö
+    private void OnPlayFabLoginSuccess(LoginResult result) // ë¡œê·¸ì¸ ì„±ê³µ ì‹œ ì‹¤í–‰ë˜ëŠ” í•¨ìˆ˜
     {
         PlayFabClientAPI.GetAccountInfo(new GetAccountInfoRequest(), OnGetAccountInfoSuccess, OnPlayFabLoginError);
     }
 
-    private void OnPlayFabLoginError(PlayFabError error) // ·Î±×ÀÎ ½ÇÆĞ ½Ã ½ÇÇàµÇ´Â ÇÔ¼ö
+    private void OnPlayFabLoginError(PlayFabError error) // ë¡œê·¸ì¸ ì‹¤íŒ¨ ì‹œ ì‹¤í–‰ë˜ëŠ” í•¨ìˆ˜
     {
         string translatedError = ErrorTranslator.GetPlayFabErrorMessage(error.Error);
         OnLoginErrorEvent?.Invoke(translatedError);
     }
 
-    private void OnGetAccountInfoSuccess(GetAccountInfoResult infoResult) // ÀÌ¸ŞÀÏ°ú ºñ¹Ğ¹øÈ£¸¦ ÅëÇØ ´Ğ³×ÀÓÀ» ºÒ·¯¿À´Â ÇÔ¼ö 
+    private void OnGetAccountInfoSuccess(GetAccountInfoResult infoResult) // ì´ë©”ì¼ê³¼ ë¹„ë°€ë²ˆí˜¸ë¥¼ í†µí•´ ë‹‰ë„¤ì„ì„ ë¶ˆëŸ¬ì˜¤ëŠ” í•¨ìˆ˜ 
     {
         string nickname = PlayerConstants.Default.Nickname;
         if (infoResult.AccountInfo != null && infoResult.AccountInfo.Username != null)
@@ -39,7 +39,7 @@ public class PlayFabAuthManager : MonoBehaviour
         OnLoginSuccessEvent?.Invoke(nickname);
     }
 
-    public void PlayFabRegister(string email, string password, string nickname) // ÇÃ·¹ÀÌÆÕ¿¡ È¸¿ø°¡ÀÔÇÏ´Â ÇÔ¼ö
+    public void PlayFabRegister(string email, string password, string nickname) // í”Œë ˆì´íŒ¹ì— íšŒì›ê°€ì…í•˜ëŠ” í•¨ìˆ˜
     {
         var request = new RegisterPlayFabUserRequest
         {
@@ -52,12 +52,12 @@ public class PlayFabAuthManager : MonoBehaviour
         PlayFabClientAPI.RegisterPlayFabUser(request, OnPlayFabRegisterSuccess, OnPlayFabRegisterError);
     }
 
-    private void OnPlayFabRegisterSuccess(RegisterPlayFabUserResult result) // È¸¿ø°¡ÀÔ ¼º°ø ½Ã ½ÇÇàµÇ´Â ÇÔ¼ö
+    private void OnPlayFabRegisterSuccess(RegisterPlayFabUserResult result) // íšŒì›ê°€ì… ì„±ê³µ ì‹œ ì‹¤í–‰ë˜ëŠ” í•¨ìˆ˜
     {
        OnRegisterSuccessEvent?.Invoke();
     }
 
-    private void OnPlayFabRegisterError(PlayFabError error) // È¸¿ø°¡ÀÔ ½ÇÆĞ ½Ã ½ÇÇàµÇ´Â ÇÔ¼ö
+    private void OnPlayFabRegisterError(PlayFabError error) // íšŒì›ê°€ì… ì‹¤íŒ¨ ì‹œ ì‹¤í–‰ë˜ëŠ” í•¨ìˆ˜
     {
         string translatedError = ErrorTranslator.GetPlayFabErrorMessage(error.Error);
         OnRegisterErrorEvent?.Invoke(translatedError);

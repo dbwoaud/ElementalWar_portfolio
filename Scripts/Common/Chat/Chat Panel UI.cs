@@ -1,10 +1,11 @@
 using System;
+using System.Collections;
 using UnityEngine;
 using UnityEngine.UI;
 
 public class ChatPanelUI : MonoBehaviour, IChatView
 {
-    [Header("´ëÈ­Ã¢ UI")]
+    [Header("ëŒ€í™”ì°½ UI")]
     [SerializeField] private InputField chatInputField;
     [SerializeField] private ScrollRect chatView;
     [SerializeField] private Transform contentParent;
@@ -25,17 +26,26 @@ public class ChatPanelUI : MonoBehaviour, IChatView
             chatInputField.onSubmit.RemoveListener(HandleInputSubmit);
     }
 
-    private void HandleInputSubmit(string inputContent) // Ã¤ÆÃÀÌ ÀÔ·ÂµÉ ¶§ ½ÇÇàµÇ´Â ÇÔ¼ö
+    private void HandleInputSubmit(string inputContent) // ì±„íŒ…ì´ ì…ë ¥ë  ë•Œ ì‹¤í–‰ë˜ëŠ” í•¨ìˆ˜
     {
         if (string.IsNullOrWhiteSpace(inputContent))
             return;
 
         OnSendMessageRequest?.Invoke(inputContent);
         chatInputField.text = string.Empty;
-        chatInputField.ActivateInputField();
+        StartCoroutine(ResetInputField());
     }
 
-    public void AppendMessage(string formattedMessage) // ¸Ş½ÃÁö¸¦ È­¸é¿¡ ÇÑ ÁÙ Ãß°¡ÇÏ´Â ÇÔ¼ö
+    private IEnumerator ResetInputField() // ì±„íŒ… ì…ë ¥ì„ ì´ˆê¸°í™”í•˜ëŠ” í•¨ìˆ˜
+    {
+        yield return null;
+        chatInputField.ActivateInputField(); 
+        yield return null;
+        chatInputField.text = string.Empty;       
+        chatInputField.MoveTextEnd(false);
+    }
+
+    public void AppendMessage(string formattedMessage) // ë©”ì‹œì§€ë¥¼ í™”ë©´ì— í•œ ì¤„ ì¶”ê°€í•˜ëŠ” í•¨ìˆ˜
     {
         if (chatTextPrefab == null || contentParent == null)
             return;
@@ -48,7 +58,7 @@ public class ChatPanelUI : MonoBehaviour, IChatView
         UpdateScrollPosition();
     }
 
-    private void UpdateScrollPosition() // ½ºÅ©·ÑÀ» °¡Àå ¾Æ·¡·Î ÀÌµ¿½ÃÅ°´Â ÇÔ¼ö
+    private void UpdateScrollPosition() // ìŠ¤í¬ë¡¤ì„ ê°€ì¥ ì•„ë˜ë¡œ ì´ë™ì‹œí‚¤ëŠ” í•¨ìˆ˜
     {
         Canvas.ForceUpdateCanvases();
         if (chatView != null)

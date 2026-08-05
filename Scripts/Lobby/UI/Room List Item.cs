@@ -5,14 +5,14 @@ using System;
 
 public class RoomListItem : MonoBehaviour
 {
-    [Header("UI ¿ä¼Ò")]
+    [Header("UI ìš”ì†Œ")]
     [SerializeField] private Button joinButton;
     [SerializeField] private Text roomNameText;
     [SerializeField] private Text gameStatusText;
     [SerializeField] private GameObject lockIcon;
     [SerializeField] private Text playerCountText;
 
-    [Header("¹æ Á¤º¸")]
+    [Header("ë°© ì •ë³´")]
     [SerializeField] private RoomInfo roomData;
     public RoomInfo RoomData => roomData;
 
@@ -24,7 +24,7 @@ public class RoomListItem : MonoBehaviour
         InitializeListener();
     }
 
-    private void InitializeListener() // UI ¸®½º³Ê¸¦ ¼³Á¤ÇÏ´Â ÇÔ¼ö
+    private void InitializeListener() // UI ë¦¬ìŠ¤ë„ˆë¥¼ ì„¤ì •í•˜ëŠ” í•¨ìˆ˜
     {
         joinButton?.onClick.AddListener(OnClickEntryButton);
     }
@@ -34,13 +34,13 @@ public class RoomListItem : MonoBehaviour
         joinButton?.onClick.RemoveListener(OnClickEntryButton);
     }
 
-    private void OnClickEntryButton() // ¹æ ¹öÆ° Å¬¸¯ ½Ã ½ÇÇàµÇ´Â ÇÔ¼ö
+    private void OnClickEntryButton() // ë°© ë²„íŠ¼ í´ë¦­ ì‹œ ì‹¤í–‰ë˜ëŠ” í•¨ìˆ˜
     {
         SoundManager.instance?.Play(SoundKey.ButtonClick);
         OnRoomItemClicked?.Invoke(roomData);
     }
 
-    public void Setup(RoomInfo roominfo) // ¹æ Á¤º¸¸¦ UI¿¡ ¼¼ÆÃÇÏ´Â ÇÔ¼ö
+    public void Setup(RoomInfo roominfo) // ë°© ì •ë³´ë¥¼ UIì— ì„¸íŒ…í•˜ëŠ” í•¨ìˆ˜
     {
         if (roominfo == null)
             return;
@@ -49,7 +49,7 @@ public class RoomListItem : MonoBehaviour
         DisplayRoomInfo();
     }
 
-    private void DisplayRoomInfo() // ¹æ Á¤º¸¸¦ Ç¥½ÃÇÏ´Â ÇÔ¼ö
+    private void DisplayRoomInfo() // ë°© ì •ë³´ë¥¼ í‘œì‹œí•˜ëŠ” í•¨ìˆ˜
     {
         SetRoomNameText();
         SetPlayerCountText();
@@ -57,7 +57,7 @@ public class RoomListItem : MonoBehaviour
         SetRoomStatusText();
     }
 
-    private void SetRoomNameText() // ¹æ ÀÌ¸§À» ¼³Á¤ÇÏ´Â ÇÔ¼ö
+    private void SetRoomNameText() // ë°© ì´ë¦„ì„ ì„¤ì •í•˜ëŠ” í•¨ìˆ˜
     {
         if (roomData.CustomProperties.ContainsKey(RoomConstants.Properties.RoomNumber) && 
             roomData.CustomProperties.ContainsKey(RoomConstants.Properties.RoomName))
@@ -68,12 +68,12 @@ public class RoomListItem : MonoBehaviour
         }
     }
 
-    private void SetPlayerCountText() // ¹æÀÇ ÇÃ·¹ÀÌ¾î ¼ö¸¦ ¼³Á¤ÇÏ´Â ÇÔ¼ö
+    private void SetPlayerCountText() // ë°©ì˜ í”Œë ˆì´ì–´ ìˆ˜ë¥¼ ì„¤ì •í•˜ëŠ” í•¨ìˆ˜
     {
         playerCountText.text = $"{roomData.PlayerCount}/{roomData.MaxPlayers}";
     }
 
-    private void SetRoomVisibility() // ¹æÀÇ °ø°³/ºñ°ø°³ ¿©ºÎ¸¦ ¼³Á¤ÇÏ´Â ÇÔ¼ö
+    private void SetRoomVisibility() // ë°©ì˜ ê³µê°œ/ë¹„ê³µê°œ ì—¬ë¶€ë¥¼ ì„¤ì •í•˜ëŠ” í•¨ìˆ˜
     {
         if (roomData.CustomProperties.ContainsKey(RoomConstants.Properties.PublicOrPrivate))
         {
@@ -82,7 +82,7 @@ public class RoomListItem : MonoBehaviour
         }
     }
 
-    private void SetRoomStatusText() // ¹æÀÇ °ÔÀÓ ÁøÇà »óÅÂ¸¦ ¼³Á¤ÇÏ´Â ÇÔ¼ö
+    private void SetRoomStatusText() // ë°©ì˜ ê²Œì„ ì§„í–‰ ìƒíƒœë¥¼ ì„¤ì •í•˜ëŠ” í•¨ìˆ˜
     {
         if (roomData.CustomProperties.ContainsKey(RoomConstants.Properties.GameStart))
         {

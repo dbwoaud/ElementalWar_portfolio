@@ -9,7 +9,7 @@ public class UnitSettingNetworkManager : MonoBehaviourPunCallbacks
     public event Action<Player> OnOpponentLeftRoom;
 
 
-    public void SetPlayerReadyState(string[] deckUnitNames) // ÇÃ·¹ÀÌ¾îÀÇ µ¦°ú ÁØºñ »óÅÂ¸¦ ¼³Á¤ÇÏ´Â ÇÔ¼ö
+    public void SetPlayerReadyState(string[] deckUnitNames) // í”Œë ˆì´ì–´ì˜ ë±ê³¼ ì¤€ë¹„ ìƒíƒœë¥¼ ì„¤ì •í•˜ëŠ” í•¨ìˆ˜
     {
         Hashtable props = new Hashtable
         {
@@ -19,7 +19,7 @@ public class UnitSettingNetworkManager : MonoBehaviourPunCallbacks
         PhotonNetwork.LocalPlayer.SetCustomProperties(props);
     }
 
-    public void ResetPlayerReadyState() // ÇÃ·¹ÀÌ¾îÀÇ µ¦°ú ÁØºñ »óÅÂ¸¦ ¸®¼ÂÇÏ´Â ÇÔ¼ö
+    public void ResetPlayerReadyState() // í”Œë ˆì´ì–´ì˜ ë±ê³¼ ì¤€ë¹„ ìƒíƒœë¥¼ ë¦¬ì…‹í•˜ëŠ” í•¨ìˆ˜
     {
         Hashtable props = new Hashtable
         {
@@ -30,13 +30,13 @@ public class UnitSettingNetworkManager : MonoBehaviourPunCallbacks
         PhotonNetwork.LocalPlayer.SetCustomProperties(props);
     }
 
-    public override void OnPlayerPropertiesUpdate(Player targetPlayer, Hashtable changedProps) // ÁØºñ ¿Ï·á ¹öÆ°À» ´­·¶À» ¶§ ½ÇÇàµÇ´Â ÇÔ¼ö
+    public override void OnPlayerPropertiesUpdate(Player targetPlayer, Hashtable changedProps) // ì¤€ë¹„ ì™„ë£Œ ë²„íŠ¼ì„ ëˆŒë €ì„ ë•Œ ì‹¤í–‰ë˜ëŠ” í•¨ìˆ˜
     {
         if (CheckAllPlayersReady())
             OnBothPlayersReady?.Invoke();     
     }
 
-    private bool CheckAllPlayersReady() // µÎ ÇÃ·¹ÀÌ¾î°¡ ¸ğµÎ ÁØºñ ¿Ï·á »óÅÂÀÎÁö °Ë»çÇÏ´Â ÇÔ¼ö
+    private bool CheckAllPlayersReady() // ë‘ í”Œë ˆì´ì–´ê°€ ëª¨ë‘ ì¤€ë¹„ ì™„ë£Œ ìƒíƒœì¸ì§€ ê²€ì‚¬í•˜ëŠ” í•¨ìˆ˜
     {
         if (PhotonNetwork.CurrentRoom.PlayerCount < 2)
             return false;
@@ -49,12 +49,12 @@ public class UnitSettingNetworkManager : MonoBehaviourPunCallbacks
         return true;
     }
 
-    private bool IsPlayerReady(Player p) // ÇÃ·¹ÀÌ¾îÀÇ ÁØºñ »óÅÂ¸¦ È®ÀÎÇÏ´Â ÇÔ¼ö
+    private bool IsPlayerReady(Player p) // í”Œë ˆì´ì–´ì˜ ì¤€ë¹„ ìƒíƒœë¥¼ í™•ì¸í•˜ëŠ” í•¨ìˆ˜
     {
         return p.CustomProperties.ContainsKey(PlayerConstants.Properties.DeckReady) && (bool)p.CustomProperties[PlayerConstants.Properties.DeckReady];
     }
 
-    public override void OnPlayerLeftRoom(Player otherPlayer) // »ó´ë ÇÃ·¹ÀÌ¾î°¡ ³ª°¬À» ¶§ ½ÇÇàµÇ´Â ÇÔ¼ö
+    public override void OnPlayerLeftRoom(Player otherPlayer) // ìƒëŒ€ í”Œë ˆì´ì–´ê°€ ë‚˜ê°”ì„ ë•Œ ì‹¤í–‰ë˜ëŠ” í•¨ìˆ˜
     {
         OnOpponentLeftRoom?.Invoke(otherPlayer);
     }

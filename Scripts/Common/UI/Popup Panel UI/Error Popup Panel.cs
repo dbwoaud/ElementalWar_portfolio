@@ -4,10 +4,10 @@ using UnityEngine.UI;
 
 public class ErrorPopupPanel : BasePopupPanel
 {
-    [Header("UI ¿ä¼Ò")]
+    [Header("UI ìš”ì†Œ")]
     [SerializeField] private Button closeButton;
 
-    [Header("¹öÆ° Å¬¸¯ ÀÌº¥Æ®")]
+    [Header("ë²„íŠ¼ í´ë¦­ ì´ë²¤íŠ¸")]
     private Action onCloseAction;
 
 
@@ -26,14 +26,14 @@ public class ErrorPopupPanel : BasePopupPanel
         messageText.text = "";
     }
 
-    private void OnClickCloseButton() // ´İ±â ¹öÆ° Å¬¸¯ ½Ã ½ÇÇàµÇ´Â ÇÔ¼ö
+    private void OnClickCloseButton() // ë‹«ê¸° ë²„íŠ¼ í´ë¦­ ì‹œ ì‹¤í–‰ë˜ëŠ” í•¨ìˆ˜
     {
         SoundManager.instance?.Play(SoundKey.ButtonClick);
         onCloseAction?.Invoke();
         Hide();
     }
 
-    public void Setup(string message, Action onClose = null) // ¿¡·¯ ÆË¾÷ ÆĞ³ÎÀ» È°¼ºÈ­ÇÏ´Â ÇÔ¼ö
+    public void Setup(string message, Action onClose = null) // ì—ëŸ¬ íŒì—… íŒ¨ë„ì„ í™œì„±í™”í•˜ëŠ” í•¨ìˆ˜
     {
         onCloseAction = onClose;
         ShowPopup(message);

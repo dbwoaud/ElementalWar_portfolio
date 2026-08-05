@@ -4,13 +4,13 @@ using UnityEngine;
 
 public class MainMenuManager : BaseSceneController<MainMenuManager>
 {
-    [Header("Ä³½Ì º¯¼ö")]
+    [Header("ìºì‹± ë³€ìˆ˜")]
     [SerializeField] private MainMenuUIManager mainMenuUIManager;
     [SerializeField] private MainMenuNetworkManager mainMenuNetworkManager;
     [SerializeField] private PlayFabAuthManager playFabManager;
 
 
-    protected override void SetUIManager() // UI Manager¸¦ ¼³Á¤ÇÏ´Â ÇÔ¼ö
+    protected override void SetUIManager() // UI Managerë¥¼ ì„¤ì •í•˜ëŠ” í•¨ìˆ˜
     {
         if (MainMenuUIManager.instance != null)
         {
@@ -20,7 +20,7 @@ public class MainMenuManager : BaseSceneController<MainMenuManager>
         }
     }
 
-    protected override void SetNetworkManager() // NetworkManager¸¦ ¼³Á¤ÇÏ´Â ÇÔ¼ö
+    protected override void SetNetworkManager() // NetworkManagerë¥¼ ì„¤ì •í•˜ëŠ” í•¨ìˆ˜
     {
         if (playFabManager != null)
         {
@@ -36,7 +36,7 @@ public class MainMenuManager : BaseSceneController<MainMenuManager>
         }
     }
 
-    protected override void PlayBGM() // ¾ÀÀÇ ¹è°æÀ½¾ÇÀ» Àç»ıÇÏ´Â ÇÔ¼ö
+    protected override void PlayBGM() // ì”¬ì˜ ë°°ê²½ìŒì•…ì„ ì¬ìƒí•˜ëŠ” í•¨ìˆ˜
     {
         SoundManager.instance?.StopAll();
         SoundManager.instance?.Play(SoundKey.MainMenuBGM);
@@ -72,26 +72,26 @@ public class MainMenuManager : BaseSceneController<MainMenuManager>
         }
     }
 
-    private void HandleLogin(string email, string password) // ·Î±×ÀÎÀ» Ã³¸®ÇÏ´Â ÇÔ¼ö
+    private void HandleLogin(string email, string password) // ë¡œê·¸ì¸ì„ ì²˜ë¦¬í•˜ëŠ” í•¨ìˆ˜
     {
         PopupPanelUIManager.instance?.ShowWaiting(PopupMessage.Waiting.Login, null);
         playFabManager?.PlayFabLogin(email, password);
     }
 
-    private void OnLoginSuccess(string nickname) // ·Î±×ÀÎ ¼º°ø ½Ã ½ÇÇàµÇ´Â ÇÔ¼ö
+    private void OnLoginSuccess(string nickname) // ë¡œê·¸ì¸ ì„±ê³µ ì‹œ ì‹¤í–‰ë˜ëŠ” í•¨ìˆ˜
     {
         mainMenuUIManager?.HideLoginPanel();
         PopupPanelUIManager.instance?.ShowWaiting(PopupMessage.Waiting.ServerConnection, null);
         mainMenuNetworkManager?.ConnectToPhoton(nickname);
     }
 
-    private void OnLoginFailure(string errorMsg) // ·Î±×ÀÎ ½ÇÆĞ ½Ã ½ÇÇàµÇ´Â ÇÔ¼ö
+    private void OnLoginFailure(string errorMsg) // ë¡œê·¸ì¸ ì‹¤íŒ¨ ì‹œ ì‹¤í–‰ë˜ëŠ” í•¨ìˆ˜
     {
         PopupPanelUIManager.instance?.HideWaiting();
         PopupPanelUIManager.instance?.ShowError(errorMsg);
     }
 
-    private void HandleRegister(string nickname, string email, string password) // È¸¿ø°¡ÀÔÀ» Ã³¸®ÇÏ´Â ÇÔ¼ö
+    private void HandleRegister(string nickname, string email, string password) // íšŒì›ê°€ì…ì„ ì²˜ë¦¬í•˜ëŠ” í•¨ìˆ˜
     {
         if (!CheckValidNickname(nickname))
         {
@@ -101,7 +101,7 @@ public class MainMenuManager : BaseSceneController<MainMenuManager>
         playFabManager?.PlayFabRegister(email, password, nickname);
     }
 
-    private bool CheckValidNickname(string nickname) // À¯È¿ ´Ğ³×ÀÓÀ» °Ë»çÇÏ´Â ÇÔ¼ö
+    private bool CheckValidNickname(string nickname) // ìœ íš¨ ë‹‰ë„¤ì„ì„ ê²€ì‚¬í•˜ëŠ” í•¨ìˆ˜
     {
         if (string.IsNullOrWhiteSpace(nickname))
             return false;
@@ -110,7 +110,7 @@ public class MainMenuManager : BaseSceneController<MainMenuManager>
         return regex.IsMatch(nickname);
     }
 
-    private void OnRegisterSuccess() // È¸¿ø°¡ÀÔ ¼º°ø ½Ã ½ÇÇàµÇ´Â ÇÔ¼ö
+    private void OnRegisterSuccess() // íšŒì›ê°€ì… ì„±ê³µ ì‹œ ì‹¤í–‰ë˜ëŠ” í•¨ìˆ˜
     {
         PopupPanelUIManager.instance?.ShowConfirm
         (
@@ -119,22 +119,22 @@ public class MainMenuManager : BaseSceneController<MainMenuManager>
         );   
     }
 
-    private void HandleRegisterSuccess() // È¸¿ø°¡ÀÔ ¼º°øÀ» Ã³¸®ÇÏ´Â ÇÔ¼ö
+    private void HandleRegisterSuccess() // íšŒì›ê°€ì… ì„±ê³µì„ ì²˜ë¦¬í•˜ëŠ” í•¨ìˆ˜
     {
         mainMenuUIManager?.SetUIRegisterSuccess();
     }
 
-    private void OnRegisterFailure(string errorMsg) // È¸¿ø°¡ÀÔ ½ÇÆĞ ½Ã ½ÇÇàµÇ´Â ÇÔ¼ö
+    private void OnRegisterFailure(string errorMsg) // íšŒì›ê°€ì… ì‹¤íŒ¨ ì‹œ ì‹¤í–‰ë˜ëŠ” í•¨ìˆ˜
     {
         PopupPanelUIManager.instance?.ShowError(errorMsg);
     }
 
-    private void HandleConnectedToMaster() // ¸¶½ºÅÍ ¼­¹ö ¿¬°áÀ» Ã³¸®ÇÏ´Â ÇÔ¼ö
+    private void HandleConnectedToMaster() // ë§ˆìŠ¤í„° ì„œë²„ ì—°ê²°ì„ ì²˜ë¦¬í•˜ëŠ” í•¨ìˆ˜
     {
         PopupPanelUIManager.instance?.ShowWaiting(PopupMessage.Waiting.LobbyConnection, null);
     }
 
-    private void HandleJoinedLobby() // ·Îºñ ÀÔÀå ½Ã ½ÇÇàµÇ´Â ÇÔ¼ö
+    private void HandleJoinedLobby() // ë¡œë¹„ ì…ì¥ ì‹œ ì‹¤í–‰ë˜ëŠ” í•¨ìˆ˜
     {
         PopupPanelUIManager.instance?.HideWaiting();
         PhotonNetwork.LoadLevel(SceneName.Lobby);

@@ -5,18 +5,18 @@ public class UnitStateIdle : IUnitState
 {
     public UnitStateType Type => UnitStateType.Idle;
 
-    [Header("½ºÄµ º¯¼ö")]
-    [SerializeField] private const float ScanInterval = 0.1f;
+    [Header("ìŠ¤ìº” ë³€ìˆ˜")]
+    private const float ScanInterval = 0.1f;
     [SerializeField] private float lastScanTime;
 
-    public void EnterState(Unit unit) // À¯´ÖÀÌ ´ë±â »óÅÂ¿¡ µé¾î¿ÔÀ» ¶§ ½ÇÇàµÇ´Â ÇÔ¼ö
+    public void EnterState(Unit unit) // ìœ ë‹›ì´ ëŒ€ê¸° ìƒíƒœì— ë“¤ì–´ì™”ì„ ë•Œ ì‹¤í–‰ë˜ëŠ” í•¨ìˆ˜
     {
         unit?.Animator.PlayIdle();
         unit?.StopUnit();
         lastScanTime = -ScanInterval;
     }
 
-    public void UpdateState(Unit unit) // À¯´ÖÀÌ ´ë±â »óÅÂ ÁßÀÏ ¶§ ½ÇÇàµÇ´Â ÇÔ¼ö
+    public void UpdateState(Unit unit) // ìœ ë‹›ì´ ëŒ€ê¸° ìƒíƒœ ì¤‘ì¼ ë•Œ ì‹¤í–‰ë˜ëŠ” í•¨ìˆ˜
     {
         if (unit == null) 
             return;
@@ -32,5 +32,5 @@ public class UnitStateIdle : IUnitState
             unit.ChangeState(unit.StateMove);
     }
 
-    public void ExitState(Unit unit) { } // À¯´ÖÀÌ ´ë±â »óÅÂ°¡ ³¡³µÀ» ¶§ ½ÇÇàµÇ´Â ÇÔ¼ö
+    public void ExitState(Unit unit) { } // ìœ ë‹›ì´ ëŒ€ê¸° ìƒíƒœê°€ ëë‚¬ì„ ë•Œ ì‹¤í–‰ë˜ëŠ” í•¨ìˆ˜
 }

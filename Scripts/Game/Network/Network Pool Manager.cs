@@ -5,12 +5,12 @@ using System.Collections.Generic;
 
 public class NetworkPoolManager : Singleton<NetworkPoolManager>, IPunPrefabPool
 {
-    [Header("ÇÁ¸®ÆÕ µñ¼Å³Ê¸®")]
+    [Header("í”„ë¦¬íŒ¹ ë”•ì…”ë„ˆë¦¬")]
     private readonly Dictionary<string, GameObject> prefabDict = new Dictionary<string, GameObject>();
 
-    [Header("¿ÀºêÁ§Æ® Ç®")]
+    [Header("ì˜¤ë¸Œì íŠ¸ í’€")]
     private readonly Dictionary<string, Queue<GameObject>> objectPool = new Dictionary<string, Queue<GameObject>>();
-
+    private readonly HashSet<GameObject> pooledObjects = new();
 
     protected override void Awake()
     {
@@ -18,7 +18,7 @@ public class NetworkPoolManager : Singleton<NetworkPoolManager>, IPunPrefabPool
         PhotonNetwork.PrefabPool = this;
     }
 
-    public void RegisterNetworkPrefab(GameObject prefab) // ³×Æ®¿öÅ© ÇÁ¸®ÆÕ¿¡ ¿ÀºêÁ§Æ®¸¦ µî·ÏÇÏ´Â ÇÔ¼ö
+    public void RegisterNetworkPrefab(GameObject prefab) // ë„¤íŠ¸ì›Œí¬ í”„ë¦¬íŒ¹ì— ì˜¤ë¸Œì íŠ¸ë¥¼ ë“±ë¡í•˜ëŠ” í•¨ìˆ˜
     {
         if (prefab == null || prefabDict.ContainsKey(prefab.name)) 
             return;
@@ -27,7 +27,7 @@ public class NetworkPoolManager : Singleton<NetworkPoolManager>, IPunPrefabPool
         objectPool.Add(prefab.name, new Queue<GameObject>());
     }
 
-    public GameObject Instantiate(string prefabId, Vector3 position, Quaternion rotation) // ÇÁ¸®ÆÕÀ» »ı¼ºÇÏ´Â ÇÔ¼ö
+    public GameObject Instantiate(string prefabId, Vector3 position, Quaternion rotation) // í”„ë¦¬íŒ¹ì„ ìƒì„±í•˜ëŠ” í•¨ìˆ˜
     {
         if (prefabDict.TryGetValue(prefabId, out GameObject sourcePrefab))
         {
@@ -43,33 +43,53 @@ public class NetworkPoolManager : Singleton<NetworkPoolManager>, IPunPrefabPool
         return null;
     }
 
-    public void Destroy(GameObject obj) // ÇÁ¸®ÆÕÀ» ÆÄ±«ÇÏ´Â ÇÔ¼ö
+    public void Destroy(GameObject obj) // í”„ë¦¬íŒ¹ì„ íŒŒê´´í•˜ëŠ” í•¨ìˆ˜
     {
+        if (obj == null)
+            return;
+
         obj.SetActive(false);
         ReturnToPool(obj);
     }
 
-    private GameObject ReuseFromPool(Queue<GameObject> pool, Vector3 position, Quaternion rotation) // ¿ÀºêÁ§Æ® Ç®¿¡¼­ ÇÁ¸®ÆÕÀ» ºÒ·¯¿À´Â ÇÔ¼ö
+    private GameObject ReuseFromPool(Queue<GameObject> pool, Vector3 position, Quaternion rotation) // ì˜¤ë¸Œì íŠ¸ í’€ì—ì„œ í”„ë¦¬íŒ¹ì„ ë¶ˆëŸ¬ì˜¤ëŠ” í•¨ìˆ˜
     {
         GameObject obj = pool.Dequeue();
+        pooledObjects.Remove(obj);
         obj.transform.SetPositionAndRotation(position, rotation);
         return obj;
     }
 
-    private GameObject CreateNewInstance(GameObject prefab, Vector3 position, Quaternion rotation) // »õ·Î¿î ÇÁ¸®ÆÕ ÀÎ½ºÅÏ½º¸¦ »ı¼ºÇÏ´Â ÇÔ¼ö
+    private GameObject CreateNewInstance(GameObject prefab, Vector3 position, Quaternion rotation) // ìƒˆë¡œìš´ í”„ë¦¬íŒ¹ ì¸ìŠ¤í„´ìŠ¤ë¥¼ ìƒì„±í•˜ëŠ” í•¨ìˆ˜
     {
         GameObject obj = UnityEngine.Object.Instantiate(prefab, position, rotation);
         obj.SetActive(false);
         return obj;
     }
 
-    private void ReturnToPool(GameObject obj) // ÇÁ¸®ÆÕÀ» ¿ÀºêÁ§Æ® Ç®¿¡ ¹İÈ¯ÇÏ´Â ÇÔ¼ö
+    private void ReturnToPool(GameObject obj) // í”„ë¦¬íŒ¹ì„ ì˜¤ë¸Œì íŠ¸ í’€ì— ë°˜í™˜í•˜ëŠ” í•¨ìˆ˜
     {
+        if (pooledObjects.Contains(obj))
+            return;
+
         string prefabId = obj.name.Replace("(Clone)", "").Trim();
 
-        if (objectPool.TryGetValue(prefabId, out Queue<GameObject> pool))
-        {
-            pool.Enqueue(obj);
-        }
+        if (!objectPool.TryGetValue(prefabId, out Queue<GameObject> pool))
+            return;
+
+        pool.Enqueue(obj);
+        pooledObjects.Add(obj);
+    }
+
+    protected override void OnDestroy()
+    {
+        if (ReferenceEquals(PhotonNetwork.PrefabPool, this))
+            PhotonNetwork.PrefabPool = new DefaultPool();
+
+        prefabDict.Clear();
+        objectPool.Clear();
+        pooledObjects.Clear();
+
+        base.OnDestroy();
     }
 }

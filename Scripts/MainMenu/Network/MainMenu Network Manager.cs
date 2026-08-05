@@ -4,14 +4,14 @@ using System;
 
 public class MainMenuNetworkManager  : MonoBehaviourPunCallbacks
 {
-    [Header("Æ÷Åæ ³×Æ®¿öÅ© ¼³Á¤")]
+    [Header("í¬í†¤ ë„¤íŠ¸ì›Œí¬ ì„¤ì •")]
     [SerializeField] private string gameVersion = "1.0";
 
     public event Action OnConnectedToMasterEvent;
     public event Action OnJoinedLobbyEvent;
 
 
-    public void ConnectToPhoton(string nickname) // Æ÷Åæ ³×Æ®¿öÅ© ¼­¹ö¿¡ ¿¬°áÇÏ´Â ÇÔ¼ö
+    public void ConnectToPhoton(string nickname) // í¬í†¤ ë„¤íŠ¸ì›Œí¬ ì„œë²„ì— ì—°ê²°í•˜ëŠ” í•¨ìˆ˜
     {
         PhotonNetwork.AutomaticallySyncScene = false;
         PhotonNetwork.GameVersion = gameVersion;
@@ -19,13 +19,13 @@ public class MainMenuNetworkManager  : MonoBehaviourPunCallbacks
         PhotonNetwork.ConnectUsingSettings();
     }
 
-    public override void OnConnectedToMaster() // Æ÷Åæ ³×Æ®¿öÅ© ¸¶½ºÅÍ ¼­¹ö¿¡ ¿¬°áÇÏ´Â ÇÔ¼ö
+    public override void OnConnectedToMaster() // í¬í†¤ ë„¤íŠ¸ì›Œí¬ ë§ˆìŠ¤í„° ì„œë²„ì— ì—°ê²°í•˜ëŠ” í•¨ìˆ˜
     {
         OnConnectedToMasterEvent?.Invoke();
         PhotonNetwork.JoinLobby();
     }
 
-    public override void OnJoinedLobby() // ·Î±×ÀÎ ÈÄ ·Îºñ·Î ÁøÀÔÇÏ´Â ÇÔ¼ö
+    public override void OnJoinedLobby() // ë¡œê·¸ì¸ í›„ ë¡œë¹„ë¡œ ì§„ì…í•˜ëŠ” í•¨ìˆ˜
     {
         OnJoinedLobbyEvent?.Invoke();
     }

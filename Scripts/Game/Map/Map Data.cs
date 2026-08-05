@@ -2,19 +2,19 @@ using UnityEngine;
 
 public class MapData : MonoBehaviour
 {
-    [Header("¸Ê ¸ÞÅ¸µ¥ÀÌÅÍ")]
+    [Header("ë§µ ë©”íƒ€ë°ì´í„°")]
     [SerializeField] private ElementType mapType;
     [SerializeField] private AudioClip mapBGM;
 
-    [Header("½ºÆù Æ÷ÀÎÆ® ¼³Á¤")]
+    [Header("ìŠ¤í° í¬ì¸íŠ¸ ì„¤ì •")]
     [SerializeField] private Transform player1CastlePoint;
     [SerializeField] private Transform player2CastlePoint;
 
-    [Header("Ä«¸Þ¶ó ¹× ÁöÇü ¼³Á¤")]
+    [Header("ì¹´ë©”ë¼ ë° ì§€í˜• ì„¤ì •")]
     [SerializeField] private PolygonCollider2D cameraBounds;
     [SerializeField] private BoxCollider2D groundCollider;
 
-    [Header("ÆíÀÇ ÇÁ·ÎÆÛÆ¼")]
+    [Header("íŽ¸ì˜ í”„ë¡œí¼í‹°")]
     public ElementType MapType => mapType;
     public AudioClip MapBGM => mapBGM;
     public Transform Player1CastlePoint => player1CastlePoint;

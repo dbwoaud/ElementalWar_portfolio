@@ -4,13 +4,13 @@ using UnityEngine.UI;
 
 public class RoomUIManager : BaseUIManager<RoomUIManager>
 {
-    [Header("UI ¿ä¼Ò")]
+    [Header("UI ìš”ì†Œ")]
     [SerializeField] private Text roomNameText;
     [SerializeField] private Button exitButton;
     [SerializeField] private Button actionButton;
     [SerializeField] private Text actionButtonText;
 
-    [Header("ÇÏÀ§ ÄÁÅ×ÀÌ³Ê")]
+    [Header("í•˜ìœ„ ì»¨í…Œì´ë„ˆ")]
     [SerializeField] private PlayerSlotContainer playerSlotContainer;
 
     public event Action OnClickExitRequest;
@@ -36,39 +36,39 @@ public class RoomUIManager : BaseUIManager<RoomUIManager>
         actionButton?.onClick.RemoveListener(OnActionButtonClicked);
     }
 
-    private void OnExitButtonClicked() // ³ª°¡±â ¹öÆ° Å¬¸¯ ½Ã ½ÇÇàµÇ´Â ÇÔ¼ö
+    private void OnExitButtonClicked() // ë‚˜ê°€ê¸° ë²„íŠ¼ í´ë¦­ ì‹œ ì‹¤í–‰ë˜ëŠ” í•¨ìˆ˜
     {
         PlayButtonSound();
         OnClickExitRequest?.Invoke();
     }
 
-    private void OnActionButtonClicked() // °ÔÀÓ ½ÃÀÛ ¹öÆ° Å¬¸¯ ½Ã ½ÇÇàµÇ´Â ÇÔ¼ö
+    private void OnActionButtonClicked() // ê²Œì„ ì‹œì‘ ë²„íŠ¼ í´ë¦­ ì‹œ ì‹¤í–‰ë˜ëŠ” í•¨ìˆ˜
     {
         PlayButtonSound();
         OnClickActionRequest?.Invoke();
     }
 
-    public void SetRoomNameUI(string roomName) // ¹æ ÀÌ¸§À» Ãâ·ÂÇÏ´Â ÇÔ¼ö
+    public void SetRoomNameUI(string roomName) // ë°© ì´ë¦„ì„ ì¶œë ¥í•˜ëŠ” í•¨ìˆ˜
     {
         roomNameText.text = roomName;
     }
 
-    public void SetActionButtonText(string text) // °ÔÀÓ ½ÃÀÛ ¹öÆ° ÅØ½ºÆ®¸¦ ¼³Á¤ÇÏ´Â ÇÔ¼ö
+    public void SetActionButtonText(string text) // ê²Œì„ ì‹œì‘ ë²„íŠ¼ í…ìŠ¤íŠ¸ë¥¼ ì„¤ì •í•˜ëŠ” í•¨ìˆ˜
     {
         actionButtonText.text = text;
     }
 
-    public void ClearSlot(int slotIndex) // Æ¯Á¤ ÇÃ·¹ÀÌ¾î ½½·Ô UI¸¦ ÃÊ±âÈ­ÇÏ´Â ÇÔ¼ö
+    public void ClearSlot(int slotIndex) // íŠ¹ì • í”Œë ˆì´ì–´ ìŠ¬ë¡¯ UIë¥¼ ì´ˆê¸°í™”í•˜ëŠ” í•¨ìˆ˜
     {
         playerSlotContainer?.ClearSlot(slotIndex);
     }
 
-    public void ClearAllSlots() // ¸ğµç ÇÃ·¹ÀÌ¾î ½½·Ô UI¸¦ ÃÊ±âÈ­ÇÏ´Â ÇÔ¼ö
+    public void ClearAllSlots() // ëª¨ë“  í”Œë ˆì´ì–´ ìŠ¬ë¡¯ UIë¥¼ ì´ˆê¸°í™”í•˜ëŠ” í•¨ìˆ˜
     {
         playerSlotContainer?.ClearAllSlots();
     }
 
-    public void UpdatePlayerSlot(int slotIndex, string name, bool isMaster, bool isReady) // Æ¯Á¤ ÇÃ·¹ÀÌ¾î ½½·Ô UI¸¦ ¾÷µ¥ÀÌÆ®ÇÏ´Â ÇÔ¼ö
+    public void UpdatePlayerSlot(int slotIndex, string name, bool isMaster, bool isReady) // íŠ¹ì • í”Œë ˆì´ì–´ ìŠ¬ë¡¯ UIë¥¼ ì—…ë°ì´íŠ¸í•˜ëŠ” í•¨ìˆ˜
     {
         playerSlotContainer?.UpdatePlayerSlot(slotIndex, name, isMaster, isReady);
     }

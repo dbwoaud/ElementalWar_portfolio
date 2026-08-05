@@ -9,13 +9,20 @@ using UnityEngine;
 [RequireComponent(typeof(UnitNetworkSync))]
 public class Unit : MonoBehaviourPun, IDamagable, IPunInstantiateMagicCallback
 {
-    [Header("À¯´Ö °ü·Ã º¯¼ö")]
+    [Header("ìœ ë‹› ê´€ë ¨ ë³€ìˆ˜")]
     [SerializeField] private UnitStats stats;
     [SerializeField] private UnitMovement movement;
     [SerializeField] private UnitCombat combat;
     [SerializeField] private UnitStateMachine stateMachine;
     [SerializeField] private UnitNetworkSync networkSync;
     [SerializeField] private IUnitAnimator animator;
+
+    [Header("ì†Œí™˜ ìœ„ì¹˜ ë¶„ì‚° ì„¤ì •")]
+    private const int ZOffsetSlotCount = 200;
+    private const float ZOffsetRange = 1f;
+
+    [Header("ì—ë„ˆì§€ íšŒìˆ˜ ë¹„ìœ¨")]
+    private const float KillEnergyRefundRate = 0.25f;
 
     public UnitStats Stats => stats;
 
@@ -59,7 +66,7 @@ public class Unit : MonoBehaviourPun, IDamagable, IPunInstantiateMagicCallback
         ResolveComponents();
     }
 
-    private void ResolveComponents() // ¸ğµç À¯´Ö °ü·Ã º¯¼ö¸¦ ÀúÀåÇÏ´Â ÇÔ¼ö
+    private void ResolveComponents() // ëª¨ë“  ìœ ë‹› ê´€ë ¨ ë³€ìˆ˜ë¥¼ ì €ì¥í•˜ëŠ” í•¨ìˆ˜
     {
         if (stats == null) 
             stats = GetComponent<UnitStats>();
@@ -102,103 +109,107 @@ public class Unit : MonoBehaviourPun, IDamagable, IPunInstantiateMagicCallback
         stateMachine.Tick();
     }
 
-    public void OnPhotonInstantiate(PhotonMessageInfo info) // ³×Æ®¿öÅ© Ç®¿¡¼­ ²¨³¾ ¶§¸¶´Ù È£ÃâµÇ´Â ÇÔ¼ö
+    public void OnPhotonInstantiate(PhotonMessageInfo info) // ë„¤íŠ¸ì›Œí¬ í’€ì—ì„œ êº¼ë‚¼ ë•Œë§ˆë‹¤ í˜¸ì¶œë˜ëŠ” í•¨ìˆ˜
     {
         stats.InitializeFromBaseStat();
         ResetTransform();
-        networkSync.ConfigureNetworkRole();
         movement.ResetForReuse();
+        networkSync.ConfigureNetworkRole();
         animator?.ResetForReuse();
         stateMachine.StartFromIdle();
     }
 
-    private void ResetTransform() // À¯´Ö ¼ÒÈ¯ À§Ä¡¸¦ ÃÊ±âÈ­ÇÏ´Â ÇÔ¼ö
+    private void ResetTransform() // ìœ ë‹› ì†Œí™˜ ìœ„ì¹˜ë¥¼ ì´ˆê¸°í™”í•˜ëŠ” í•¨ìˆ˜
     {
         Vector3 pos = transform.position;
-        pos.z = Random.Range(-1f, 1f);
+        int slot = Mathf.Abs(photonView.ViewID) % ZOffsetSlotCount;
+        pos.z = (slot / (float)(ZOffsetSlotCount - 1)) * (ZOffsetRange * 2f) - ZOffsetRange;
         transform.position = pos;
     }
 
-    public void ChangeState(IUnitState nextState, bool isSync = false) // »óÅÂ¸¦ ÀÌµ¿ÇÏ´Â ÇÔ¼ö
+    public void ChangeState(IUnitState nextState, bool isSync = false) // ìƒíƒœë¥¼ ì´ë™í•˜ëŠ” í•¨ìˆ˜
     {
         stateMachine.ChangeState(nextState, isSync);
     }
 
-    public bool HasValidTarget() // »ç°Å¸® ¾È¿¡ °ø°İ °¡´ÉÇÑ ÀûÀÌ ÀÖ´ÂÁö È®ÀÎÇÏ´Â ÇÔ¼ö
+    public bool HasValidTarget() // ì‚¬ê±°ë¦¬ ì•ˆì— ê³µê²© ê°€ëŠ¥í•œ ì ì´ ìˆëŠ”ì§€ í™•ì¸í•˜ëŠ” í•¨ìˆ˜
     {
        return combat.HasValidTarget();
     }
 
-    public Collider2D AcquirePrimaryTarget() // »ç°Å¸® ¾ÈÀÇ ¿ì¼± ÀûÀ» ¹İÈ¯ÇÏ´Â ÇÔ¼ö
+    public Collider2D AcquirePrimaryTarget() // ì‚¬ê±°ë¦¬ ì•ˆì˜ ìš°ì„  ì ì„ ë°˜í™˜í•˜ëŠ” í•¨ìˆ˜
     {
         return combat.AcquirePrimaryTarget();
     }
 
-    public bool IsTargetInRange(Collider2D target) // ÁöÁ¤µÈ Å¸°ÙÀÌ ÇöÀç »ç°Å¸® ³»¿¡ ÀÖ´ÂÁö È®ÀÎÇÏ´Â ÇÔ¼ö
+    public bool IsTargetInRange(Collider2D target) // ì§€ì •ëœ íƒ€ê²Ÿì´ í˜„ì¬ ì‚¬ê±°ë¦¬ ë‚´ì— ìˆëŠ”ì§€ í™•ì¸í•˜ëŠ” í•¨ìˆ˜
     {
         return combat.IsTargetInRange(target);
     }
 
-    public bool IsColliderTargetable(Collider2D col) // ÇöÀç Å¸°ÙÀÇ Äİ¶óÀÌ´õ°¡ µ¥¹ÌÁö¸¦ ¹ŞÀ» ¼ö ÀÖ´Â »óÅÂÀÎÁö È®ÀÎÇÏ´Â ÇÔ¼ö
+    public bool IsColliderTargetable(Collider2D col) // í˜„ì¬ íƒ€ê²Ÿì˜ ì½œë¼ì´ë”ê°€ ë°ë¯¸ì§€ë¥¼ ë°›ì„ ìˆ˜ ìˆëŠ” ìƒíƒœì¸ì§€ í™•ì¸í•˜ëŠ” í•¨ìˆ˜
     {
         return combat.IsColliderTargetable(col);
     }
 
-    public void ApplyDamageFromAttack(Collider2D origin) // °ø°İÀ¸·ÎºÎÅÍ ½ÇÁ¦ µ¥¹ÌÁö¸¦ Àû¿ëÇÏ´Â ÇÔ¼ö
+    public void ApplyDamageFromAttack(Collider2D origin) // ê³µê²©ìœ¼ë¡œë¶€í„° ì‹¤ì œ ë°ë¯¸ì§€ë¥¼ ì ìš©í•˜ëŠ” í•¨ìˆ˜
     {
         combat.ApplyDamageFromAttack(origin);
     }
 
-    public void MoveUnit() // À¯´ÖÀ» ¾ÕÀ¸·Î ÀÌµ¿½ÃÅ°´Â ÇÔ¼ö
+    public void MoveUnit() // ìœ ë‹›ì„ ì•ìœ¼ë¡œ ì´ë™ì‹œí‚¤ëŠ” í•¨ìˆ˜
     {
         movement.MoveForward();
     }
 
-    public void StopUnit() // À¯´ÖÀ» Á¤Áö½ÃÅ°´Â ÇÔ¼ö
+    public void StopUnit() // ìœ ë‹›ì„ ì •ì§€ì‹œí‚¤ëŠ” í•¨ìˆ˜
     {
         movement.Stop();
     }
 
-    public void ApplyKnockback() // À¯´Ö¿¡°Ô ³Ë¹é È¿°ú¸¦ Àû¿ëÇÏ´Â ÇÔ¼ö
+    public void ApplyKnockback() // ìœ ë‹›ì—ê²Œ ë„‰ë°± íš¨ê³¼ë¥¼ ì ìš©í•˜ëŠ” í•¨ìˆ˜
     {
         movement.ApplyKnockback();
     }
 
-    public void DisableAllPhysics() // À¯´Ö »ç¸Á ½Ã ¹°¸® »óÅÂ¸¦ Â÷´ÜÇÏ´Â ÇÔ¼ö
+    public void DisableAllPhysics() // ìœ ë‹› ì‚¬ë§ ì‹œ ë¬¼ë¦¬ ìƒíƒœë¥¼ ì°¨ë‹¨í•˜ëŠ” í•¨ìˆ˜
     {
         movement.DisableAllPhysics();
     }
 
-    public void ScheduleDestruction(float delay) // ÀÏÁ¤ µô·¹ÀÌ ÈÄ ¿ÀºêÁ§Æ® ÆÄ±«¸¦ ¿¹¾àÇÏ´Â ÇÔ¼ö
+    public void ScheduleDestruction(float delay) // ì¼ì • ë”œë ˆì´ í›„ ì˜¤ë¸Œì íŠ¸ íŒŒê´´ë¥¼ ì˜ˆì•½í•˜ëŠ” í•¨ìˆ˜
     {
         networkSync.ScheduleDestruction(delay);
     }
 
-    public float PlayAttackAnimation() // °ø°İ ¾Ö´Ï¸ŞÀÌ¼ÇÀ» Àç»ıÇÏ°í ´Ù¸¥ ÇÃ·¹ÀÌ¾î¿Í µ¿±âÈ­ÇÏ´Â ÇÔ¼ö
+    public float PlayAttackAnimation() // ê³µê²© ì• ë‹ˆë©”ì´ì…˜ì„ ì¬ìƒí•˜ê³  ë‹¤ë¥¸ í”Œë ˆì´ì–´ì™€ ë™ê¸°í™”í•˜ëŠ” í•¨ìˆ˜
     {
         networkSync.BroadcastAttackAnimation();
         SoundManager.instance?.Play(SoundKey.UnitAttack);
         return animator?.PlayAttack() ?? 0.5f;
     }
 
-    private void HandleDied() // À¯´ÖÀÇ Á×À½À» Ã³¸®ÇÏ´Â ÇÔ¼ö
+    private void HandleDied() // ìœ ë‹›ì˜ ì£½ìŒì„ ì²˜ë¦¬í•˜ëŠ” í•¨ìˆ˜
     {
         if (!networkSync.IsOwnedByLocalPlayer)
-            EnergyManager.instance?.AddEnergy(stats.SpawnCost * 0.25f);
+            EnergyManager.instance?.AddEnergy(stats.SpawnCost * KillEnergyRefundRate);
 
         stateMachine.ChangeState(stateMachine.StateDead);
     }
 
-    private void HandleKnockbackHPCrossed() // ³Ë¹é Á¶°Ç µµ´Ş ½Ã ÇÇ°İ »óÅÂ·Î ÀüÀÌÇÏ´Â ÇÔ¼ö
+    private void HandleKnockbackHPCrossed() // ë„‰ë°± ì¡°ê±´ ë„ë‹¬ ì‹œ í”¼ê²© ìƒíƒœë¡œ ì „ì´í•˜ëŠ” í•¨ìˆ˜
     {
         if (stateMachine.CurrentState == stateMachine.StateHit)
+            return;
+
+        if (stateMachine.CurrentState == stateMachine.StateDead)
             return;
 
         stateMachine.ChangeState(stateMachine.StateHit);
     }
 
     [PunRPC]
-    public void RPC_SyncAnimation(int stateTypeInt) // À¯´ÖÀÇ »óÅÂ¸¦ ´Ù¸¥ ÇÃ·¹ÀÌ¾î¿Í µ¿±âÈ­ÇÏ´Â ÇÔ¼ö
+    public void RPC_SyncAnimation(int stateTypeInt) // ìœ ë‹›ì˜ ìƒíƒœë¥¼ ë‹¤ë¥¸ í”Œë ˆì´ì–´ì™€ ë™ê¸°í™”í•˜ëŠ” í•¨ìˆ˜
     {
         var targetType = (UnitStateType)stateTypeInt;
         if (!stateMachine.TryGetStateByType(targetType, out IUnitState targetState))
@@ -211,7 +222,7 @@ public class Unit : MonoBehaviourPun, IDamagable, IPunInstantiateMagicCallback
             stateMachine.ChangeState(targetState, isSync: true);
     }
 
-    private void PlayAnimationByType(UnitStateType type) // ¿­°ÅÇü¿¡ ¿¬°áµÈ ¾Ö´Ï¸ŞÀÌ¼ÇÀ» Àç»ıÇÏ´Â ÇÔ¼ö
+    private void PlayAnimationByType(UnitStateType type) // ì—´ê±°í˜•ì— ì—°ê²°ëœ ì• ë‹ˆë©”ì´ì…˜ì„ ì¬ìƒí•˜ëŠ” í•¨ìˆ˜
     {
         if (animator == null)
             return;
@@ -227,9 +238,9 @@ public class Unit : MonoBehaviourPun, IDamagable, IPunInstantiateMagicCallback
     }
 
     [PunRPC]
-    public void RPC_TakeDamage(float damage) // À¯´Ö¿¡°Ô Àû¿ëµÈ µ¥¹ÌÁö¸¦ µ¿±âÈ­ÇÏ´Â ÇÔ¼ö
+    public void RPC_TakeDamage(float damage) // ìœ ë‹›ì—ê²Œ ì ìš©ëœ ë°ë¯¸ì§€ë¥¼ ë™ê¸°í™”í•˜ëŠ” í•¨ìˆ˜
     {
-        if (!IsTargetable)
+        if (!stats.IsAlive)
             return;
 
         stats.ApplyDamage(damage);

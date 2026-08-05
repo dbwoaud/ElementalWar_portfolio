@@ -38,16 +38,16 @@ public enum SoundChannel
 [Serializable]
 public struct SoundEntry
 {
-    [Tooltip("»ç¿îµå ½Äº°ÀÚ")]
+    [Tooltip("ì‚¬ìš´ë“œ ì‹ë³„ì")]
     public SoundKey key;
 
-    [Tooltip("Àç»ıÇÒ ¿Àµğ¿À Å¬¸³")]
+    [Tooltip("ì¬ìƒí•  ì˜¤ë””ì˜¤ í´ë¦½")]
     public AudioClip clip;
 
-    [Tooltip("Àç»ıÇÒ ¿Àµğ¿À ¼Ò½º")]
+    [Tooltip("ì¬ìƒí•  ì˜¤ë””ì˜¤ ì†ŒìŠ¤")]
     public SoundChannel channel;
 
-    [Tooltip("±âº» º¼·ı")]
+    [Tooltip("ê¸°ë³¸ ë³¼ë¥¨")]
     [Range(0f, 4f)]
     public float defaultVolume;
 }

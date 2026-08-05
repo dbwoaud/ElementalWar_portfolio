@@ -5,10 +5,10 @@ using UnityEngine;
 [DisallowMultipleComponent]
 public class UnitStateMachine : MonoBehaviour
 {
-    [Header("À¯´Ö °ü·Ã º¯¼ö")]
+    [Header("ìœ ë‹› ê´€ë ¨ ë³€ìˆ˜")]
     [SerializeField] private Unit unit;
 
-    [Header("»óÅÂ º¯¼ö")]
+    [Header("ìƒíƒœ ë³€ìˆ˜")]
     [SerializeField] private UnitStateIdle stateIdle = new UnitStateIdle();
     [SerializeField] private UnitStateMove stateMove = new UnitStateMove();
     [SerializeField] private UnitStateAttack stateAttack = new UnitStateAttack();
@@ -41,7 +41,7 @@ public class UnitStateMachine : MonoBehaviour
         BuildDictionary();
     }
 
-    private void BuildDictionary() // »óÅÂ ¿­°ÅÇü°ú »óÅÂ º¯¼ö¸¦ ¿¬°áÇÏ´Â ÇÔ¼ö
+    private void BuildDictionary() // ìƒíƒœ ì—´ê±°í˜•ê³¼ ìƒíƒœ ë³€ìˆ˜ë¥¼ ì—°ê²°í•˜ëŠ” í•¨ìˆ˜
     {
         stateDictionary = new Dictionary<UnitStateType, IUnitState>(5)
         {
@@ -53,18 +53,18 @@ public class UnitStateMachine : MonoBehaviour
         };
     }
 
-    public void StartFromIdle() // À¯´Ö »ı¼º ÈÄ »óÅÂ¸¦ ´ë±â »óÅÂ·Î ¼³Á¤ÇÏ´Â ÇÔ¼ö
+    public void StartFromIdle() // ìœ ë‹› ìƒì„± í›„ ìƒíƒœë¥¼ ëŒ€ê¸° ìƒíƒœë¡œ ì„¤ì •í•˜ëŠ” í•¨ìˆ˜
     {
         currentState = null;
         ChangeState(stateIdle);
     }
 
-    public void Tick() // ¸Å ÇÁ·¹ÀÓ¸¶´Ù »óÅÂ¸¦ ¾÷µ¥ÀÌÆ®ÇÏ´Â ÇÔ¼ö
+    public void Tick() // ë§¤ í”„ë ˆì„ë§ˆë‹¤ ìƒíƒœë¥¼ ì—…ë°ì´íŠ¸í•˜ëŠ” í•¨ìˆ˜
     {
         currentState?.UpdateState(unit);
     }
 
-    public void ChangeState(IUnitState nextState, bool isSync = false) // »óÅÂ¸¦ ÀüÀÌ½ÃÅ°´Â ÇÔ¼ö
+    public void ChangeState(IUnitState nextState, bool isSync = false) // ìƒíƒœë¥¼ ì „ì´ì‹œí‚¤ëŠ” í•¨ìˆ˜
     {
         if (currentState == nextState)
             return;
@@ -77,7 +77,7 @@ public class UnitStateMachine : MonoBehaviour
             OnStateChanged?.Invoke(nextState);
     }
 
-    public bool TryGetStateByType(UnitStateType type, out IUnitState state) // »óÅÂ ¿­°ÅÇüÀ¸·Î »óÅÂ º¯¼ö¸¦ Á¶È¸ÇÏ´Â ÇÔ¼ö
+    public bool TryGetStateByType(UnitStateType type, out IUnitState state) // ìƒíƒœ ì—´ê±°í˜•ìœ¼ë¡œ ìƒíƒœ ë³€ìˆ˜ë¥¼ ì¡°íšŒí•˜ëŠ” í•¨ìˆ˜
     {
         return stateDictionary.TryGetValue(type, out state);
     }

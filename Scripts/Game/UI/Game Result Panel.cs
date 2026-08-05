@@ -4,7 +4,7 @@ using System;
 
 public class GameResultPanel : UIPanel
 {
-    [Header("UI ¿ä¼Ò")]
+    [Header("UI ìš”ì†Œ")]
     [SerializeField] private Text resultText;           
     [SerializeField] private Button goToRoomButton;
     [SerializeField] private Button goToLobbyButton;
@@ -25,12 +25,12 @@ public class GameResultPanel : UIPanel
         goToLobbyButton?.onClick.RemoveListener(HandleReturnToLobbyRequest);
     }
 
-    private void HandleReturnToRoomRequest() // ¹æÀ¸·Î µ¹¾Æ°¡±â ¹öÆ° Å¬¸¯ ½Ã ½ÇÇàµÇ´Â ÇÔ¼ö
+    private void HandleReturnToRoomRequest() // ë°©ìœ¼ë¡œ ëŒì•„ê°€ê¸° ë²„íŠ¼ í´ë¦­ ì‹œ ì‹¤í–‰ë˜ëŠ” í•¨ìˆ˜
     {
         OnReturnToRoomRequested?.Invoke();
     }
 
-    private void HandleReturnToLobbyRequest() // ·Îºñ·Î µ¹¾Æ°¡±â ¹öÆ° Å¬¸¯ ½Ã ½ÇÇàµÇ´Â ÇÔ¼ö
+    private void HandleReturnToLobbyRequest() // ë¡œë¹„ë¡œ ëŒì•„ê°€ê¸° ë²„íŠ¼ í´ë¦­ ì‹œ ì‹¤í–‰ë˜ëŠ” í•¨ìˆ˜
     {
         OnReturnToLobbyRequested?.Invoke();
     }
@@ -41,7 +41,7 @@ public class GameResultPanel : UIPanel
             resultText.text = "";
     }
 
-    public void DisplayResult(string playerName, bool isWinner) // °ÔÀÓÀÇ °á°ú¸¦ Ãâ·ÂÇÏ´Â ÇÔ¼ö
+    public void DisplayResult(string playerName, bool isWinner) // ê²Œì„ì˜ ê²°ê³¼ë¥¼ ì¶œë ¥í•˜ëŠ” í•¨ìˆ˜
     {
         if (resultText != null)
             resultText.text = GameSystem.Gameresult.GetGameResultText(playerName, isWinner);

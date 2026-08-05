@@ -3,7 +3,7 @@ using UnityEngine.UI;
 
 public class GameStartPanel : UIPanel
 {
-    [Header("UI ¿ä¼Ò")]
+    [Header("UI ìš”ì†Œ")]
     [SerializeField] private Text player1NameText;
     [SerializeField] private Text player2NameText;
 
@@ -12,7 +12,7 @@ public class GameStartPanel : UIPanel
 
     protected override void ResetUI() { }
 
-    public void SetPlayerNames(string p1Name, string p2Name) // ÇÃ·¹ÀÌ¾î ÀÌ¸§À» ¼³Á¤ÇÏ´Â ÇÔ¼ö
+    public void SetPlayerNames(string p1Name, string p2Name) // í”Œë ˆì´ì–´ ì´ë¦„ì„ ì„¤ì •í•˜ëŠ” í•¨ìˆ˜
     {
         player1NameText.text = p1Name;
         player2NameText.text = p2Name;

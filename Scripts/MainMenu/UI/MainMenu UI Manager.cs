@@ -5,12 +5,12 @@ using UnityEngine.UI;
 
 public class MainMenuUIManager : BaseUIManager<MainMenuUIManager>
 {
-    [Header("UI ¼³Á¤")]
+    [Header("UI ì„¤ì •")]
     [SerializeField] private Button startButton;
     [SerializeField] private Button descriptionButton;
     [SerializeField] private Button exitButton;
 
-    [Header("ÇÏÀ§ ÆĞ³Î °ü¸®")]
+    [Header("í•˜ìœ„ íŒ¨ë„ ê´€ë¦¬")]
     [SerializeField] private DescriptionPanel descriptionPanel;
     [SerializeField] private LoginPanel loginPanel;
     [SerializeField] private RegisterPanel registerPanel;
@@ -29,7 +29,7 @@ public class MainMenuUIManager : BaseUIManager<MainMenuUIManager>
         HideAllPanelsImmediate();
     }
 
-    private void HideAllPanelsImmediate() // ¸ğµç ÇÏÀ§ ÆĞ³ÎÀ» Áï½Ã ºñÈ°¼ºÈ­½ÃÅ°´Â ÇÔ¼ö
+    private void HideAllPanelsImmediate() // ëª¨ë“  í•˜ìœ„ íŒ¨ë„ì„ ì¦‰ì‹œ ë¹„í™œì„±í™”ì‹œí‚¤ëŠ” í•¨ìˆ˜
     {
         foreach(var panel in uiPanels)
         {
@@ -80,34 +80,34 @@ public class MainMenuUIManager : BaseUIManager<MainMenuUIManager>
     }
 
 
-    private void HandleSignUpClicked() // È¸¿ø°¡ÀÔ ¹öÆ° Å¬¸¯ ½Ã ½ÇÇàµÇ´Â ÇÔ¼ö
+    private void HandleSignUpClicked() // íšŒì›ê°€ì… ë²„íŠ¼ í´ë¦­ ì‹œ ì‹¤í–‰ë˜ëŠ” í•¨ìˆ˜
     {
         registerPanel.Show();
     }
 
-    private void HandleLoginSubmit(string email, string pw) // ·Î±×ÀÎ ¹öÆ° Å¬¸¯ ½Ã ½ÇÇàµÇ´Â ÇÔ¼ö
+    private void HandleLoginSubmit(string email, string pw) // ë¡œê·¸ì¸ ë²„íŠ¼ í´ë¦­ ì‹œ ì‹¤í–‰ë˜ëŠ” í•¨ìˆ˜
     {
         OnLoginRequest?.Invoke(email, pw);
     }
 
-    private void HandleRegisterSubmit(string nick, string email, string pw) // È¸¿ø µî·Ï ¹öÆ° Å¬¸¯ ½Ã ½ÇÇàµÇ´Â ÇÔ¼ö
+    private void HandleRegisterSubmit(string nick, string email, string pw) // íšŒì› ë“±ë¡ ë²„íŠ¼ í´ë¦­ ì‹œ ì‹¤í–‰ë˜ëŠ” í•¨ìˆ˜
     {
         OnRegisterRequest?.Invoke(nick, email, pw);
     }
 
-    private void OnClickStartButton() // °ÔÀÓ ½ÃÀÛ ¹öÆ° Å¬¸¯ ½Ã ½ÇÇàµÇ´Â ÇÔ¼ö
+    private void OnClickStartButton() // ê²Œì„ ì‹œì‘ ë²„íŠ¼ í´ë¦­ ì‹œ ì‹¤í–‰ë˜ëŠ” í•¨ìˆ˜
     {
         PlayButtonSound();
         loginPanel.Show();
     }
 
-    private void OnClickDescriptionButton() // °ÔÀÓ ¼³¸í ¹öÆ° Å¬¸¯ ½Ã ½ÇÇàµÇ´Â ÇÔ¼ö
+    private void OnClickDescriptionButton() // ê²Œì„ ì„¤ëª… ë²„íŠ¼ í´ë¦­ ì‹œ ì‹¤í–‰ë˜ëŠ” í•¨ìˆ˜
     {
         PlayButtonSound();
         descriptionPanel.Show();
     }
 
-    private void OnClickExitButton() // °ÔÀÓ ³ª°¡±â ¹öÆ° Å¬¸¯ ½Ã ½ÇÇàµÇ´Â ÇÔ¼ö
+    private void OnClickExitButton() // ê²Œì„ ë‚˜ê°€ê¸° ë²„íŠ¼ í´ë¦­ ì‹œ ì‹¤í–‰ë˜ëŠ” í•¨ìˆ˜
     {
         PlayButtonSound();
         PopupPanelUIManager.instance?.ShowSelection
@@ -118,18 +118,18 @@ public class MainMenuUIManager : BaseUIManager<MainMenuUIManager>
         );
     }
 
-    private void ExitGame() // °ÔÀÓÀ» Á¾·á½ÃÅ°´Â ÇÔ¼ö
+    private void ExitGame() // ê²Œì„ì„ ì¢…ë£Œì‹œí‚¤ëŠ” í•¨ìˆ˜
     {
         Application.Quit();
     }
 
-    public void SetUIRegisterSuccess() // È¸¿ø°¡ÀÔ ¼º°ø ½Ã UI¸¦ ¼³Á¤ÇÏ´Â ÇÔ¼ö
+    public void SetUIRegisterSuccess() // íšŒì›ê°€ì… ì„±ê³µ ì‹œ UIë¥¼ ì„¤ì •í•˜ëŠ” í•¨ìˆ˜
     {
         PlayButtonSound();
         registerPanel.Hide();
     }
 
-    public void HideLoginPanel() // ·Î±×ÀÎ ÆĞ³ÎÀ» ¼û±â´Â ÇÔ¼ö
+    public void HideLoginPanel() // ë¡œê·¸ì¸ íŒ¨ë„ì„ ìˆ¨ê¸°ëŠ” í•¨ìˆ˜
     {
         loginPanel.Hide();
     }

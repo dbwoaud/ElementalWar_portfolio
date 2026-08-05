@@ -14,12 +14,12 @@ public class DeckModel
         myDeck = new UnitStat[InputBindings.DeckSize];
     }
 
-    public UnitStat GetUnit(int index) // Æ¯Á¤ ÀÎµ¦½ºÀÇ À¯´Ö Á¤º¸¸¦ Á¶È¸ÇÏ´Â ÇÔ¼ö
+    public UnitStat GetUnit(int index) // íŠ¹ì • ì¸ë±ìŠ¤ì˜ ìœ ë‹› ì •ë³´ë¥¼ ì¡°íšŒí•˜ëŠ” í•¨ìˆ˜
     {
         return IsValidIndex(index) ? myDeck[index] : null;
     }
 
-    public void SetUnit(int index, UnitStat stat) // Æ¯Á¤ ÀÎµ¦½º¿¡ À¯´ÖÀ» ¹èÄ¡ÇÏ´Â ÇÔ¼ö
+    public void SetUnit(int index, UnitStat stat) // íŠ¹ì • ì¸ë±ìŠ¤ì— ìœ ë‹›ì„ ë°°ì¹˜í•˜ëŠ” í•¨ìˆ˜
     {
         if (!IsValidIndex(index))
             return;
@@ -28,12 +28,12 @@ public class DeckModel
         OnSlotChanged?.Invoke(index, stat);
     }
 
-    public void RemoveUnit(int index) // Æ¯Á¤ ÀÎµ¦½ºÀÇ À¯´ÖÀ» Á¦°ÅÇÏ´Â ÇÔ¼ö
+    public void RemoveUnit(int index) // íŠ¹ì • ì¸ë±ìŠ¤ì˜ ìœ ë‹›ì„ ì œê±°í•˜ëŠ” í•¨ìˆ˜
     {
         SetUnit(index, null);
     }
 
-    public void SwapUnits(int from, int to) // µ¦¿¡ À¯´ÖÀ» ½º¿ÒÇÏ´Â ÇÔ¼ö
+    public void SwapUnits(int from, int to) // ë±ì— ìœ ë‹›ì„ ìŠ¤ì™‘í•˜ëŠ” í•¨ìˆ˜
     {
         if (!IsValidIndex(from) || !IsValidIndex(to))
             return;
@@ -43,17 +43,17 @@ public class DeckModel
         OnSlotChanged?.Invoke(to, myDeck[to]);
     }
 
-    private bool IsValidIndex(int index) // À¯È¿ÇÑ ÀÎµ¦½ºÀÎÁö È®ÀÎÇÏ´Â ÇÔ¼ö
+    private bool IsValidIndex(int index) // ìœ íš¨í•œ ì¸ë±ìŠ¤ì¸ì§€ í™•ì¸í•˜ëŠ” í•¨ìˆ˜
     {
         return index >= 0 && index < myDeck.Length;
     }
 
-    public bool IsFull() // µ¦ÀÇ ¸ğµç À¯´ÖÀÌ ¼³Á¤µÇ¾îÀÖ´ÂÁö °Ë»çÇÏ´Â ÇÔ¼ö
+    public bool IsFull() // ë±ì˜ ëª¨ë“  ìœ ë‹›ì´ ì„¤ì •ë˜ì–´ìˆëŠ”ì§€ ê²€ì‚¬í•˜ëŠ” í•¨ìˆ˜
     {
         return myDeck.All(unit => unit != null);
     }
 
-    public int FindUnitIndex(UnitStat stat) // À¯´ÖÀÌ À§Ä¡ÇÑ ÀÎµ¦½º¸¦ °Ë»öÇÏ´Â ÇÔ¼ö
+    public int FindUnitIndex(UnitStat stat) // ìœ ë‹›ì´ ìœ„ì¹˜í•œ ì¸ë±ìŠ¤ë¥¼ ê²€ìƒ‰í•˜ëŠ” í•¨ìˆ˜
     {
         if (stat == null)
             return -1;
@@ -66,12 +66,12 @@ public class DeckModel
         return -1;
     }
 
-    public string[] GetUnitNames() //µ¦ÀÇ ¸ğµç À¯´Ö ÀÌ¸§À» ¹è¿­·Î ¹İÈ¯ÇÏ´Â ÇÔ¼ö
+    public string[] GetUnitNames() //ë±ì˜ ëª¨ë“  ìœ ë‹› ì´ë¦„ì„ ë°°ì—´ë¡œ ë°˜í™˜í•˜ëŠ” í•¨ìˆ˜
     {
         return myDeck.Select(s => s != null ? s.unitName : string.Empty).ToArray();
     }
 
-    public UnitStat[] GetSnapshot() // µ¦ÀÇ º¹»çº»À» ¹İÈ¯ÇÏ´Â ÇÔ¼ö
+    public UnitStat[] GetSnapshot() // ë±ì˜ ë³µì‚¬ë³¸ì„ ë°˜í™˜í•˜ëŠ” í•¨ìˆ˜
     {
         return (UnitStat[])myDeck.Clone();
     }

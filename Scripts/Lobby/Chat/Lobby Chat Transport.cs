@@ -6,7 +6,7 @@ using UnityEngine;
 
 public class LobbyChatTransport : MonoBehaviour, IChatTransport, IChatClientListener
 {
-    [Header("Ã¤ÆÃ ¼³Á¤")]
+    [Header("ì±„íŒ… ì„¤ì •")]
     [SerializeField] private string chatRegion = "kr";
     private ChatClient chatClient;
 
@@ -24,7 +24,7 @@ public class LobbyChatTransport : MonoBehaviour, IChatTransport, IChatClientList
         Disconnect();
     }
 
-    public void Connect() // Æ÷Åæ Ã¤ÆÃ ¼­¹ö¿¡ ¿¬°áÇÏ´Â ÇÔ¼ö
+    public void Connect() // í¬í†¤ ì±„íŒ… ì„œë²„ì— ì—°ê²°í•˜ëŠ” í•¨ìˆ˜
     {
         chatClient = new ChatClient(this) { ChatRegion = chatRegion };
         chatClient.Connect
@@ -35,12 +35,12 @@ public class LobbyChatTransport : MonoBehaviour, IChatTransport, IChatClientList
         );
     }
 
-    public void Disconnect() // Æ÷Åæ Ã¤ÆÃ ¼­¹ö ¿¬°áÀ» ÇØÁ¦ÇÏ´Â ÇÔ¼ö
+    public void Disconnect() // í¬í†¤ ì±„íŒ… ì„œë²„ ì—°ê²°ì„ í•´ì œí•˜ëŠ” í•¨ìˆ˜
     {
         chatClient?.Disconnect();
     }
 
-    public void Send(string message) // ¸Ş½ÃÁö¸¦ ±Û·Î¹ú ·Îºñ Ã¤³Î¿¡ ¼Û½ÅÇÏ´Â ÇÔ¼ö
+    public void Send(string message) // ë©”ì‹œì§€ë¥¼ ê¸€ë¡œë²Œ ë¡œë¹„ ì±„ë„ì— ì†¡ì‹ í•˜ëŠ” í•¨ìˆ˜
     {
         if (chatClient != null && chatClient.CanChat)
             chatClient.PublishMessage(ChattingSystem.Lobby.ChannelName, message);
@@ -48,12 +48,12 @@ public class LobbyChatTransport : MonoBehaviour, IChatTransport, IChatClientList
 
     #region IChatClientListener Callbacks
 
-    public void OnConnected() // Ã¤ÆÃ ¼­¹ö Á¢¼Ó ½Ã ½ÇÇàµÇ´Â ÇÔ¼ö
+    public void OnConnected() // ì±„íŒ… ì„œë²„ ì ‘ì† ì‹œ ì‹¤í–‰ë˜ëŠ” í•¨ìˆ˜
     {
         chatClient.Subscribe(new[] { ChattingSystem.Lobby.ChannelName });
     }
 
-    public void OnGetMessages(string channelName, string[] senders, object[] messages) // ¸Ş½ÃÁö ¼ö½Å ½Ã ½ÇÇàµÇ´Â ÇÔ¼ö
+    public void OnGetMessages(string channelName, string[] senders, object[] messages) // ë©”ì‹œì§€ ìˆ˜ì‹  ì‹œ ì‹¤í–‰ë˜ëŠ” í•¨ìˆ˜
     {
         for (int i = 0; i < senders.Length; i++)
         {

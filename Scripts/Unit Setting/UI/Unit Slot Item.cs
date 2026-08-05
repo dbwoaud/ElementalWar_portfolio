@@ -5,7 +5,7 @@ using System;
 
 public class UnitSlotItem : MonoBehaviour, IPointerClickHandler, IBeginDragHandler, IDragHandler, IEndDragHandler
 {
-    [Header("UI ¿ä¼Ò")]
+    [Header("UI ìš”ì†Œ")]
     [SerializeField] private Image unitIconImage;
     [SerializeField] private Text unitCostText;
     [SerializeField] private Text unitNameText;
@@ -14,7 +14,7 @@ public class UnitSlotItem : MonoBehaviour, IPointerClickHandler, IBeginDragHandl
     [SerializeField] private Text descriptionText;
     [SerializeField] private GameObject unitSelectionPanel;
 
-    [Header("ÀúÀå ÁßÀÎ À¯´Ö Á¤º¸")]
+    [Header("ì €ì¥ ì¤‘ì¸ ìœ ë‹› ì •ë³´")]
     [SerializeField] private UnitStat assignedUnit;
     public UnitStat AssignedUnit => assignedUnit;
 
@@ -24,7 +24,7 @@ public class UnitSlotItem : MonoBehaviour, IPointerClickHandler, IBeginDragHandl
     public event Action OnEndDragEvent;
 
 
-    public void Setup(UnitStat stat) // À¯´Ö Á¤º¸¸¦ À¯´Ö ½½·Ô ¾ÆÀÌÅÛ¿¡ ¼³Á¤ÇÏ´Â ÇÔ¼ö
+    public void Setup(UnitStat stat) // ìœ ë‹› ì •ë³´ë¥¼ ìœ ë‹› ìŠ¬ë¡¯ ì•„ì´í…œì— ì„¤ì •í•˜ëŠ” í•¨ìˆ˜
     {
         SetupUI(stat);
         SetEquippedState(false);
@@ -32,7 +32,7 @@ public class UnitSlotItem : MonoBehaviour, IPointerClickHandler, IBeginDragHandl
         gameObject?.SetActive(true);
     }
 
-    private void SetupUI(UnitStat stat) // À¯´Ö Á¤º¸¸¦ UI¿¡ Ãâ·ÂÇÏ´Â ÇÔ¼ö
+    private void SetupUI(UnitStat stat) // ìœ ë‹› ì •ë³´ë¥¼ UIì— ì¶œë ¥í•˜ëŠ” í•¨ìˆ˜
     {
         if (stat == null)
             return;
@@ -51,17 +51,17 @@ public class UnitSlotItem : MonoBehaviour, IPointerClickHandler, IBeginDragHandl
         unitDescriptionObj?.SetActive(false);
     }
 
-    public void SetEquippedState(bool isEquipped) // À¯´ÖÀÇ ÀåÂø »óÅÂ¸¦ ¼³Á¤ÇÏ´Â ÇÔ¼ö
+    public void SetEquippedState(bool isEquipped) // ìœ ë‹›ì˜ ì¥ì°© ìƒíƒœë¥¼ ì„¤ì •í•˜ëŠ” í•¨ìˆ˜
     {
         enterText?.gameObject.SetActive(isEquipped);
     }
 
-    public void SetSelectedState(bool isSelected) // ¼±ÅÃµÈ À¯´Ö ½½·Ô »óÅÂ¸¦ ¼³Á¤ÇÏ´Â ÇÔ¼ö
+    public void SetSelectedState(bool isSelected) // ì„ íƒëœ ìœ ë‹› ìŠ¬ë¡¯ ìƒíƒœë¥¼ ì„¤ì •í•˜ëŠ” í•¨ìˆ˜
     {
         unitSelectionPanel?.SetActive(isSelected);
     }
 
-    public void OnPointerClick(PointerEventData eventData) // ¸¶¿ì½º Å¬¸¯ ½Ã ½ÇÇàµÇ´Â ÇÔ¼ö
+    public void OnPointerClick(PointerEventData eventData) // ë§ˆìš°ìŠ¤ í´ë¦­ ì‹œ ì‹¤í–‰ë˜ëŠ” í•¨ìˆ˜
     {
         if (assignedUnit == null)
             return;
@@ -73,13 +73,13 @@ public class UnitSlotItem : MonoBehaviour, IPointerClickHandler, IBeginDragHandl
             ToggleLocalDescription();
     }
 
-    private void ToggleLocalDescription() // À¯´Ö ¼³¸í ÆĞ³ÎÀ» Åä±ÛÇÏ´Â ÇÔ¼ö
+    private void ToggleLocalDescription() // ìœ ë‹› ì„¤ëª… íŒ¨ë„ì„ í† ê¸€í•˜ëŠ” í•¨ìˆ˜
     {
         bool isActive = unitDescriptionObj.activeSelf;
         unitDescriptionObj?.SetActive(!isActive);
     }
 
-    public void OnBeginDrag(PointerEventData eventData) // À¯´Ö ½½·Ô ¾ÆÀÌÅÛÀ» µå·¡±× ½ÃÀÛ ½Ã ½ÇÇàµÇ´Â ÇÔ¼ö
+    public void OnBeginDrag(PointerEventData eventData) // ìœ ë‹› ìŠ¬ë¡¯ ì•„ì´í…œì„ ë“œë˜ê·¸ ì‹œì‘ ì‹œ ì‹¤í–‰ë˜ëŠ” í•¨ìˆ˜
     {
         if (assignedUnit == null) 
             return;
@@ -87,7 +87,7 @@ public class UnitSlotItem : MonoBehaviour, IPointerClickHandler, IBeginDragHandl
         OnBeginDragEvent?.Invoke(this);
     }
 
-    public void OnDrag(PointerEventData eventData) // À¯´Ö ½½·Ô ¾ÆÀÌÅÛÀ» µå·¡±× ÁøÇà ½Ã ½ÇÇàµÇ´Â ÇÔ¼ö
+    public void OnDrag(PointerEventData eventData) // ìœ ë‹› ìŠ¬ë¡¯ ì•„ì´í…œì„ ë“œë˜ê·¸ ì§„í–‰ ì‹œ ì‹¤í–‰ë˜ëŠ” í•¨ìˆ˜
     {
         if (assignedUnit == null) 
             return;
@@ -95,7 +95,7 @@ public class UnitSlotItem : MonoBehaviour, IPointerClickHandler, IBeginDragHandl
         OnDragEvent?.Invoke(eventData);
     }
 
-    public void OnEndDrag(PointerEventData eventData) // À¯´Ö ½½·Ô ¾ÆÀÌÅÛÀ» µå·¡±× ¿Ï·á ½Ã ½ÇÇàµÇ´Â ÇÔ¼ö
+    public void OnEndDrag(PointerEventData eventData) // ìœ ë‹› ìŠ¬ë¡¯ ì•„ì´í…œì„ ë“œë˜ê·¸ ì™„ë£Œ ì‹œ ì‹¤í–‰ë˜ëŠ” í•¨ìˆ˜
     {
         if (assignedUnit == null)
             return;

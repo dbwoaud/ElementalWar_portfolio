@@ -4,7 +4,7 @@ using System;
 
 public class PasswordInputPanel : UIPanel
 {
-    [Header("UI ¿ä¼Ò")]
+    [Header("UI ìš”ì†Œ")]
     [SerializeField] private InputField roomPasswordInputField;
     [SerializeField] private Button confirmButton;
     [SerializeField] private Button cancelButton;
@@ -25,13 +25,13 @@ public class PasswordInputPanel : UIPanel
         cancelButton?.onClick.RemoveListener(OnClickCancelButton);
     }
 
-    private void OnClickConfirmButton() // È®ÀÎ ¹öÆ° Å¬¸¯ ½Ã ½ÇÇàµÇ´Â ÇÔ¼ö
+    private void OnClickConfirmButton() // í™•ì¸ ë²„íŠ¼ í´ë¦­ ì‹œ ì‹¤í–‰ë˜ëŠ” í•¨ìˆ˜
     {
         SoundManager.instance?.Play(SoundKey.ButtonClick);
         OnSubmitPassword?.Invoke(roomPasswordInputField.text);
     }
 
-    private void OnClickCancelButton() // Ãë¼Ò ¹öÆ° Å¬¸¯ ½Ã ½ÇÇàµÇ´Â ÇÔ¼ö
+    private void OnClickCancelButton() // ì·¨ì†Œ ë²„íŠ¼ í´ë¦­ ì‹œ ì‹¤í–‰ë˜ëŠ” í•¨ìˆ˜
     {
         SoundManager.instance?.Play(SoundKey.ButtonClick);
         OnCancelClicked?.Invoke();

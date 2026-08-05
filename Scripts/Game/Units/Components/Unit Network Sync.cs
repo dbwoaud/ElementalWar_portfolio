@@ -6,7 +6,7 @@ using UnityEngine;
 [RequireComponent(typeof(PhotonView))]
 public class UnitNetworkSync : MonoBehaviour
 {
-    [Header("À¯´Ö °ü·Ã º¯¼ö")]
+    [Header("ìœ ë‹› ê´€ë ¨ ë³€ìˆ˜")]
     [SerializeField] private Unit unit;
     [SerializeField] private UnitStateMachine stateMachine;
     [SerializeField] private UnitMovement movement;
@@ -49,13 +49,14 @@ public class UnitNetworkSync : MonoBehaviour
             stateMachine.OnStateChanged -= BroadcastStateChange;
     }
 
-    public void ConfigureNetworkRole() // ³×Æ®¿öÅ© Ç®¿¡¼­ »ı¼ºµÈ ÀÌÈÄ ¹æÇâ°ú ·¹ÀÌ¾î¸¦ ¼³Á¤ÇÏ´Â ÇÔ¼ö
+    public void ConfigureNetworkRole() // ë„¤íŠ¸ì›Œí¬ í’€ì—ì„œ ìƒì„±ëœ ì´í›„ ë°©í–¥ê³¼ ë ˆì´ì–´ë¥¼ ì„¤ì •í•˜ëŠ” í•¨ìˆ˜
     {
         SetDirection();
         SetLayer();
+        SetPhysicsRole();
     }
 
-    private void SetDirection() // ÇÃ·¹ÀÌ¾î À¯´ÖÀÇ ÁøÇà ¹æÇâ°ú Ä³¸¯ÅÍ ÁÂ¿ì¹İÀüÀ» ¼³Á¤ÇÏ´Â ÇÔ¼ö
+    private void SetDirection() // í”Œë ˆì´ì–´ ìœ ë‹›ì˜ ì§„í–‰ ë°©í–¥ê³¼ ìºë¦­í„° ì¢Œìš°ë°˜ì „ì„ ì„¤ì •í•˜ëŠ” í•¨ìˆ˜
     {
         bool ownerIsMaster = PhotonView.Owner.IsMasterClient;
         float dir = ownerIsMaster ? 1f : -1f;
@@ -65,50 +66,51 @@ public class UnitNetworkSync : MonoBehaviour
         unitAnimator?.SetDirection(unitFacesLeft);
     }
 
-    private void SetLayer() // ÇÃ·¹ÀÌ¾î À¯´ÖÀÇ ·¹ÀÌ¾î¸¦ ¼³Á¤ÇÏ´Â ÇÔ¼ö
+    private void SetLayer() // í”Œë ˆì´ì–´ ìœ ë‹›ì˜ ë ˆì´ì–´ë¥¼ ì„¤ì •í•˜ëŠ” í•¨ìˆ˜
     {
         if (IsOwnedByLocalPlayer)
         {
             OwnLayerMask = LayerMask.NameToLayer(GameSystem.UnitConstants.PlayerLayer);
             TargetLayerMask = LayerMask.GetMask(GameSystem.UnitConstants.EnemyLayer, GameSystem.CastleConstants.EnemyLayer);
-            if (movement.Body != null)
-                movement.Body.simulated = true;
         }
         else
         {
             OwnLayerMask = LayerMask.NameToLayer(GameSystem.UnitConstants.EnemyLayer);
             TargetLayerMask = LayerMask.GetMask(GameSystem.UnitConstants.PlayerLayer, GameSystem.CastleConstants.PlayerLayer);
-            if (movement.Body != null)
-                movement.Body.bodyType = RigidbodyType2D.Kinematic;
         }
 
         gameObject.layer = OwnLayerMask;
         combat.TargetLayerMask = TargetLayerMask;
     }
 
-    public void BroadcastAttackAnimation() // °ø°İ ¾Ö´Ï¸ŞÀÌ¼Ç Àç»ıÀ» ´Ù¸¥ ÇÃ·¹ÀÌ¾î¿¡ µ¿±âÈ­ÇÏ´Â ÇÔ¼ö
+    public void BroadcastAttackAnimation() // ê³µê²© ì• ë‹ˆë©”ì´ì…˜ ì¬ìƒì„ ë‹¤ë¥¸ í”Œë ˆì´ì–´ì— ë™ê¸°í™”í•˜ëŠ” í•¨ìˆ˜
     {
         if (!IsOwnedByLocalPlayer)
             return;
         PhotonView.RPC(nameof(Unit.RPC_SyncAnimation), RpcTarget.Others, (int)UnitStateType.Attack);
     }
 
-    private void BroadcastStateChange(IUnitState nextState) // »óÅÂ ÀüÀÌ¸¦ ´Ù¸¥ ÇÃ·¹ÀÌ¾î¿¡ µ¿±âÈ­ÇÏ´Â ÇÔ¼ö
+    private void BroadcastStateChange(IUnitState nextState) // ìƒíƒœ ì „ì´ë¥¼ ë‹¤ë¥¸ í”Œë ˆì´ì–´ì— ë™ê¸°í™”í•˜ëŠ” í•¨ìˆ˜
     {
         if (!IsOwnedByLocalPlayer || nextState == null)
             return;
         PhotonView.RPC(nameof(Unit.RPC_SyncAnimation), RpcTarget.Others, (int)nextState.Type);
     }
 
-    public void ScheduleDestruction(float delay) // ÀÏÁ¤ µô·¹ÀÌ ÈÄ ¿ÀºêÁ§Æ® ÆÄ±«¸¦ ¿¹¾àÇÏ´Â ÇÔ¼ö
+    public void ScheduleDestruction(float delay) // ì¼ì • ë”œë ˆì´ í›„ ì˜¤ë¸Œì íŠ¸ íŒŒê´´ë¥¼ ì˜ˆì•½í•˜ëŠ” í•¨ìˆ˜
     {
         if (IsOwnedByLocalPlayer)
             StartCoroutine(DestroyAfterDelay(delay));
     }
 
-    private IEnumerator DestroyAfterDelay(float delay) // ÀÏÁ¤ µô·¹ÀÌ ÈÄ ¿ÀºêÁ§Æ® ÆÄ±«¸¦ ¿¹¾àÇÏ´Â ÄÚ·çÆ¾
+    private IEnumerator DestroyAfterDelay(float delay) // ì¼ì • ë”œë ˆì´ í›„ ì˜¤ë¸Œì íŠ¸ íŒŒê´´ë¥¼ ì˜ˆì•½í•˜ëŠ” ì½”ë£¨í‹´
     {
         yield return new WaitForSeconds(delay);
         PhotonNetwork.Destroy(gameObject);
+    }
+
+    private void SetPhysicsRole() // ë¬¼ë¦¬ ì—­í• ì„ ì„¤ì •í•˜ëŠ” í•¨ìˆ˜
+    {
+        movement.SetPhysicsRole(IsOwnedByLocalPlayer);
     }
 }

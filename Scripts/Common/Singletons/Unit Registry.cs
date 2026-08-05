@@ -5,7 +5,7 @@ public static class UnitRegistry
     private static readonly HashSet<Unit> activeUnits = new HashSet<Unit>();
     public static IReadOnlyCollection<Unit> ActiveUnits => activeUnits;
 
-    public static void Register(Unit unit) // À¯´ÖÀ» È°¼º ¸ñ·Ï¿¡ µî·ÏÇÏ´Â ÇÔ¼ö
+    public static void Register(Unit unit) // ìœ ë‹›ì„ í™œì„± ëª©ë¡ì— ë“±ë¡í•˜ëŠ” í•¨ìˆ˜
     {
         if (unit == null)
             return;
@@ -13,7 +13,7 @@ public static class UnitRegistry
         activeUnits.Add(unit);
     }
 
-    public static void Unregister(Unit unit) // À¯´ÖÀ» È°¼º ¸ñ·Ï¿¡¼­ Á¦°ÅÇÏ´Â ÇÔ¼ö
+    public static void Unregister(Unit unit) // ìœ ë‹›ì„ í™œì„± ëª©ë¡ì—ì„œ ì œê±°í•˜ëŠ” í•¨ìˆ˜
     {
         if (unit == null)
             return;
@@ -21,12 +21,12 @@ public static class UnitRegistry
         activeUnits.Remove(unit);
     }
 
-    public static void Clear() // È°¼º À¯´ÖÀ» ÃÊ±âÈ­ÇÏ´Â ÇÔ¼ö
+    public static void Clear() // í™œì„± ìœ ë‹›ì„ ì´ˆê¸°í™”í•˜ëŠ” í•¨ìˆ˜
     {
         activeUnits.Clear();
     }
 
-    public static void CopyTo(List<Unit> buffer) // È°¼º À¯´Ö ¸ñ·ÏÀ» ¿ÜºÎ·Î º¹»çÇÏ´Â ÇÔ¼ö
+    public static void CopyTo(List<Unit> buffer) // í™œì„± ìœ ë‹› ëª©ë¡ì„ ì™¸ë¶€ë¡œ ë³µì‚¬í•˜ëŠ” í•¨ìˆ˜
     {
         if (buffer == null)
             return;

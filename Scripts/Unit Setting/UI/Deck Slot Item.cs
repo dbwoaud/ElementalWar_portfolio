@@ -5,13 +5,13 @@ using System;
 
 public class DeckSlotItem : MonoBehaviour, IDropHandler, IBeginDragHandler, IDragHandler, IEndDragHandler
 {   
-    [Header("UI ¿ä¼Ò")]
+    [Header("UI ìš”ì†Œ")]
     [SerializeField] private GameObject slotNumTextObj;
     [SerializeField] private GameObject unitInfoObj;
     [SerializeField] private Image unitIconImage;
     [SerializeField] private Text unitCostText;
 
-    [Header("½½·Ô °ü¸®")]
+    [Header("ìŠ¬ë¡¯ ê´€ë¦¬")]
     [SerializeField] public int slotIndex;
     [SerializeField] private UnitStat assignedUnit;
     public UnitStat AssignedUnit => assignedUnit;
@@ -23,7 +23,7 @@ public class DeckSlotItem : MonoBehaviour, IDropHandler, IBeginDragHandler, IDra
     public event Action<int, int> OnSlotSwapped;
 
 
-    public void UpdateUI(UnitStat stat) // ½½·Ô UI¿¡ À¯´Ö Á¤º¸¸¦ ¾÷µ¥ÀÌÆ®ÇÏ´Â ÇÔ¼ö  
+    public void UpdateUI(UnitStat stat) // ìŠ¬ë¡¯ UIì— ìœ ë‹› ì •ë³´ë¥¼ ì—…ë°ì´íŠ¸í•˜ëŠ” í•¨ìˆ˜  
     {
         assignedUnit = stat;
         if (stat == null)
@@ -32,13 +32,13 @@ public class DeckSlotItem : MonoBehaviour, IDropHandler, IBeginDragHandler, IDra
             SetUnitSlotItem(stat);
     }
 
-    private void SetEmptySlotItem() // ºó ½½·Ô ¾ÆÀÌÅÛÀÇ UI¸¦ ¼³Á¤ÇÏ´Â ÇÔ¼ö
+    private void SetEmptySlotItem() // ë¹ˆ ìŠ¬ë¡¯ ì•„ì´í…œì˜ UIë¥¼ ì„¤ì •í•˜ëŠ” í•¨ìˆ˜
     {
         slotNumTextObj?.SetActive(true);
         unitInfoObj?.SetActive(false);
     }
 
-    private void SetUnitSlotItem(UnitStat stat) // À¯´Ö ½½·Ô ¾ÆÀÌÅÛÀÇ UI¸¦ ¼³Á¤ÇÏ´Â ÇÔ¼ö
+    private void SetUnitSlotItem(UnitStat stat) // ìœ ë‹› ìŠ¬ë¡¯ ì•„ì´í…œì˜ UIë¥¼ ì„¤ì •í•˜ëŠ” í•¨ìˆ˜
     {
         if (stat == null)
             return;
@@ -48,7 +48,7 @@ public class DeckSlotItem : MonoBehaviour, IDropHandler, IBeginDragHandler, IDra
         SetUnitInfoInDeckSlot(stat);
     }
 
-    private void SetUnitInfoInDeckSlot(UnitStat stat) // µ¦ ½½·Ô ¾È¿¡ À¯´Ö Á¤º¸¸¦ ¼³Á¤ÇÏ´Â ÇÔ¼ö
+    private void SetUnitInfoInDeckSlot(UnitStat stat) // ë± ìŠ¬ë¡¯ ì•ˆì— ìœ ë‹› ì •ë³´ë¥¼ ì„¤ì •í•˜ëŠ” í•¨ìˆ˜
     {
         if (unitIconImage != null)
             unitIconImage.sprite = stat.unitIcon;
@@ -56,7 +56,7 @@ public class DeckSlotItem : MonoBehaviour, IDropHandler, IBeginDragHandler, IDra
             unitCostText.text = GameSystem.Cost.GetUnitCostText(stat.spawnCost);
     }
 
-    public void OnBeginDrag(PointerEventData eventData) // µå·¡±× ½ÃÀÛ ½Ã ½ÇÇàµÇ´Â ÇÔ¼ö
+    public void OnBeginDrag(PointerEventData eventData) // ë“œë˜ê·¸ ì‹œì‘ ì‹œ ì‹¤í–‰ë˜ëŠ” í•¨ìˆ˜
     {
         if (assignedUnit == null) 
             return;
@@ -64,7 +64,7 @@ public class DeckSlotItem : MonoBehaviour, IDropHandler, IBeginDragHandler, IDra
         OnBeginDragEvent?.Invoke(this);
     }
 
-    public void OnDrag(PointerEventData eventData) // µå·¡±× ÁøÇà ½Ã ½ÇÇàµÇ´Â ÇÔ¼ö
+    public void OnDrag(PointerEventData eventData) // ë“œë˜ê·¸ ì§„í–‰ ì‹œ ì‹¤í–‰ë˜ëŠ” í•¨ìˆ˜
     {
         if (assignedUnit == null) 
             return;
@@ -72,12 +72,12 @@ public class DeckSlotItem : MonoBehaviour, IDropHandler, IBeginDragHandler, IDra
         OnDragEvent?.Invoke(eventData);
     }
 
-    public void OnEndDrag(PointerEventData eventData) // µå·¡±× ¿Ï·á ½Ã ½ÇÇàµÇ´Â ÇÔ¼ö
+    public void OnEndDrag(PointerEventData eventData) // ë“œë˜ê·¸ ì™„ë£Œ ì‹œ ì‹¤í–‰ë˜ëŠ” í•¨ìˆ˜
     {
         OnEndDragEvent?.Invoke(this, eventData);
     }
 
-    public void OnDrop(PointerEventData eventData) // ¸¶¿ì½º¸¦ µå·ÓÇßÀ» ¶§ ½ÇÇàµÇ´Â ÇÔ¼ö
+    public void OnDrop(PointerEventData eventData) // ë§ˆìš°ìŠ¤ë¥¼ ë“œë¡­í–ˆì„ ë•Œ ì‹¤í–‰ë˜ëŠ” í•¨ìˆ˜
     {
         GameObject draggedObj = eventData.pointerDrag;
         if (draggedObj == null)
@@ -93,22 +93,22 @@ public class DeckSlotItem : MonoBehaviour, IDropHandler, IBeginDragHandler, IDra
             OnDropDeckSlotItem(slotItem);
     }
 
-    private bool CheckDropUnitSlotItem(UnitSlotItem unitSlotItem) // µå·ÓÇÑ °´Ã¼°¡ À¯´Ö ½½·Ô ¾ÆÀÌÅÛÀÎÁö È®ÀÎÇÏ´Â ÇÔ¼ö
+    private bool CheckDropUnitSlotItem(UnitSlotItem unitSlotItem) // ë“œë¡­í•œ ê°ì²´ê°€ ìœ ë‹› ìŠ¬ë¡¯ ì•„ì´í…œì¸ì§€ í™•ì¸í•˜ëŠ” í•¨ìˆ˜
     {
         return unitSlotItem != null && unitSlotItem.AssignedUnit != null;
     }
 
-    private void OnDropUnitSlotItem(UnitSlotItem draggedItem) // À¯´Ö ½½·Ô ¾ÆÀÌÅÛÀ» µå·ÓÇßÀ» ¶§ ½ÇÇàµÇ´Â ÇÔ¼ö
+    private void OnDropUnitSlotItem(UnitSlotItem draggedItem) // ìœ ë‹› ìŠ¬ë¡¯ ì•„ì´í…œì„ ë“œë¡­í–ˆì„ ë•Œ ì‹¤í–‰ë˜ëŠ” í•¨ìˆ˜
     {
         OnSlotDropped?.Invoke(slotIndex, draggedItem.AssignedUnit);
     }
 
-    private bool CheckDropDeckSlotItem(DeckSlotItem slotItem) // µå·ÓÇÑ °´Ã¼°¡ µ¦ ½½·Ô ¾ÆÀÌÅÛÀÎÁö È®ÀÎÇÏ´Â ÇÔ¼ö
+    private bool CheckDropDeckSlotItem(DeckSlotItem slotItem) // ë“œë¡­í•œ ê°ì²´ê°€ ë± ìŠ¬ë¡¯ ì•„ì´í…œì¸ì§€ í™•ì¸í•˜ëŠ” í•¨ìˆ˜
     {
         return slotItem != null && slotItem != this;
     }
 
-    private void OnDropDeckSlotItem(DeckSlotItem draggedItem) // µ¦ ½½·Ô ¾ÆÀÌÅÛÀ» µå·ÓÇßÀ» ¶§ ½ÇÇàµÇ´Â ÇÔ¼ö
+    private void OnDropDeckSlotItem(DeckSlotItem draggedItem) // ë± ìŠ¬ë¡¯ ì•„ì´í…œì„ ë“œë¡­í–ˆì„ ë•Œ ì‹¤í–‰ë˜ëŠ” í•¨ìˆ˜
     {
         OnSlotSwapped?.Invoke(draggedItem.slotIndex, this.slotIndex);
     }

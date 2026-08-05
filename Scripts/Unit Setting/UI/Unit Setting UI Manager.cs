@@ -7,7 +7,7 @@ using System.Collections.Generic;
 
 public class UnitSettingUIManager : BaseUIManager<UnitSettingUIManager>
 {
-    [Header("UI ¼³Á¤")]
+    [Header("UI ì„¤ì •")]
     [SerializeField] private Button voidButton;
     [SerializeField] private Button windButton;
     [SerializeField] private Button forestButton;
@@ -15,12 +15,12 @@ public class UnitSettingUIManager : BaseUIManager<UnitSettingUIManager>
     [SerializeField] private Button mountainButton;
     [SerializeField] private Button readyButton;
 
-    [Header("ÇÏÀ§ ÄÁÅ×ÀÌ³Ê °ü¸®")]
+    [Header("í•˜ìœ„ ì»¨í…Œì´ë„ˆ ê´€ë¦¬")]
     [SerializeField] private DeckSlotContainer slotContainer;
     [SerializeField] private UnitSlotContainer unitSlotContainer;
     [SerializeField] private GameObject elementalButtonContainer;
 
-    [Header("µå·¡±× °í½ºÆ® ¿¬Ãâ")]
+    [Header("ë“œë˜ê·¸ ê³ ìŠ¤íŠ¸ ì—°ì¶œ")]
     [SerializeField] private GameObject dragGhostObj;
     [SerializeField] private Image ghostImage;
     [SerializeField] private Text ghostCostText;
@@ -44,7 +44,7 @@ public class UnitSettingUIManager : BaseUIManager<UnitSettingUIManager>
         InitDragGhost();
     }
 
-    private void InitDragGhost() // µå·¡±× ¿¬Ãâ ¼³Á¤À» ÃÊ±âÈ­ÇÏ´Â ÇÔ¼ö
+    private void InitDragGhost() // ë“œë˜ê·¸ ì—°ì¶œ ì„¤ì •ì„ ì´ˆê¸°í™”í•˜ëŠ” í•¨ìˆ˜
     {
         dragGhostObj?.SetActive(false);
         ghostImage.raycastTarget = false;
@@ -122,74 +122,74 @@ public class UnitSettingUIManager : BaseUIManager<UnitSettingUIManager>
     }
 
 
-    private void OnClickVoidButton() // ¹«¼Ó¼º À¯´Ö ¹öÆ°À» Å¬¸¯ ½Ã ½ÇÇàµÇ´Â ÇÔ¼ö
+    private void OnClickVoidButton() // ë¬´ì†ì„± ìœ ë‹› ë²„íŠ¼ì„ í´ë¦­ ì‹œ ì‹¤í–‰ë˜ëŠ” í•¨ìˆ˜
     {
         PlayButtonSound(); 
         ShowUnitContainer(ElementType.Void);
     }
 
-    private void OnClickWindButton() // Ç³¼Ó¼º À¯´Ö ¹öÆ°À» Å¬¸¯ ½Ã ½ÇÇàµÇ´Â ÇÔ¼ö
+    private void OnClickWindButton() // í’ì†ì„± ìœ ë‹› ë²„íŠ¼ì„ í´ë¦­ ì‹œ ì‹¤í–‰ë˜ëŠ” í•¨ìˆ˜
     {
         PlayButtonSound(); 
         ShowUnitContainer(ElementType.Wind);
     }
 
-    private void OnClickForestButton() // ¸²¼Ó¼º À¯´Ö ¹öÆ°À» Å¬¸¯ ½Ã ½ÇÇàµÇ´Â ÇÔ¼ö
+    private void OnClickForestButton() // ë¦¼ì†ì„± ìœ ë‹› ë²„íŠ¼ì„ í´ë¦­ ì‹œ ì‹¤í–‰ë˜ëŠ” í•¨ìˆ˜
     {
         PlayButtonSound(); 
         ShowUnitContainer(ElementType.Forest);
     }
 
-    private void OnClickFireButton() // È­¼Ó¼º À¯´Ö ¹öÆ°À» Å¬¸¯ ½Ã ½ÇÇàµÇ´Â ÇÔ¼ö
+    private void OnClickFireButton() // í™”ì†ì„± ìœ ë‹› ë²„íŠ¼ì„ í´ë¦­ ì‹œ ì‹¤í–‰ë˜ëŠ” í•¨ìˆ˜
     {
         PlayButtonSound(); 
         ShowUnitContainer(ElementType.Fire);
     }
 
-    private void OnClickMountainButton() // »ê¼Ó¼º À¯´Ö ¹öÆ°À» Å¬¸¯ ½Ã ½ÇÇàµÇ´Â ÇÔ¼ö
+    private void OnClickMountainButton() // ì‚°ì†ì„± ìœ ë‹› ë²„íŠ¼ì„ í´ë¦­ ì‹œ ì‹¤í–‰ë˜ëŠ” í•¨ìˆ˜
     {
         PlayButtonSound(); 
         ShowUnitContainer(ElementType.Mountain);
     }
 
-    private void OnClickBackButton() // µÚ·Î °¡±â ¹öÆ° Å¬¸¯ ½Ã ½ÇÇàµÇ´Â ÇÔ¼ö
+    private void OnClickBackButton() // ë’¤ë¡œ ê°€ê¸° ë²„íŠ¼ í´ë¦­ ì‹œ ì‹¤í–‰ë˜ëŠ” í•¨ìˆ˜
     {
         PlayButtonSound();
         unitSlotContainer?.gameObject.SetActive(false);
         elementalButtonContainer?.SetActive(true);
     }
 
-    private void OnClickReadyButton() // ÁØºñ ¿Ï·á ¹öÆ° Å¬¸¯ ½Ã ½ÇÇàµÇ´Â ÇÔ¼ö
+    private void OnClickReadyButton() // ì¤€ë¹„ ì™„ë£Œ ë²„íŠ¼ í´ë¦­ ì‹œ ì‹¤í–‰ë˜ëŠ” í•¨ìˆ˜
     {
         PlayButtonSound(); 
         OnReadyButtonClicked?.Invoke(); 
     }
 
-    private void ShowUnitContainer(ElementType type) // ¼Ó¼º º° À¯´ÖÀ» ºÒ·¯¿À´Â ÇÔ¼ö
+    private void ShowUnitContainer(ElementType type) // ì†ì„± ë³„ ìœ ë‹›ì„ ë¶ˆëŸ¬ì˜¤ëŠ” í•¨ìˆ˜
     {
         elementalButtonContainer?.SetActive(false);
         unitSlotContainer?.gameObject.SetActive(true);
         OnElementButtonClicked?.Invoke(type);
     }
 
-    private void HandleDeckSlotDropped(int index, UnitStat stat) // µ¦ ½½·Ô¿¡ À¯´Ö ½½·ÔÀ» µå·ÓÇßÀ» ¶§ ½ÇÇàµÇ´Â ÇÔ¼ö
+    private void HandleDeckSlotDropped(int index, UnitStat stat) // ë± ìŠ¬ë¡¯ì— ìœ ë‹› ìŠ¬ë¡¯ì„ ë“œë¡­í–ˆì„ ë•Œ ì‹¤í–‰ë˜ëŠ” í•¨ìˆ˜
     { 
         OnDeckSlotDropped?.Invoke(index, stat); 
     }
 
-    private void HandleDeckSlotSwapped(int from, int to) // µ¦ ½½·ÔÀ» ½º¿ÒÇßÀ» ¶§ ½ÇÇàµÇ´Â ÇÔ¼ö
+    private void HandleDeckSlotSwapped(int from, int to) // ë± ìŠ¬ë¡¯ì„ ìŠ¤ì™‘í–ˆì„ ë•Œ ì‹¤í–‰ë˜ëŠ” í•¨ìˆ˜
     { 
         OnDeckSlotSwapped?.Invoke(from, to); 
     }
 
-    public void ShowDragGhost(UnitSlotItem unitSlotItem) // À¯´Ö ½½·ÔÀÇ µå·¡±× ¿¬ÃâÀ» º¸¿©ÁÖ´Â ÇÔ¼ö
+    public void ShowDragGhost(UnitSlotItem unitSlotItem) // ìœ ë‹› ìŠ¬ë¡¯ì˜ ë“œë˜ê·¸ ì—°ì¶œì„ ë³´ì—¬ì£¼ëŠ” í•¨ìˆ˜
     {
         dragGhostObj?.SetActive(true);
         dragGhostObj?.transform.SetAsLastSibling();
         SetDragGhostUI(unitSlotItem);
     }
 
-    private void SetDragGhostUI(UnitSlotItem unitSlotItem) // À¯´Ö ½½·ÔÀÇ µå·¡±× °í½ºÆ® UI¸¦ ¼³Á¤ÇÏ´Â ÇÔ¼ö
+    private void SetDragGhostUI(UnitSlotItem unitSlotItem) // ìœ ë‹› ìŠ¬ë¡¯ì˜ ë“œë˜ê·¸ ê³ ìŠ¤íŠ¸ UIë¥¼ ì„¤ì •í•˜ëŠ” í•¨ìˆ˜
     {
         if (ghostImage != null)
             ghostImage.sprite = unitSlotItem.AssignedUnit.unitIcon;
@@ -197,12 +197,12 @@ public class UnitSettingUIManager : BaseUIManager<UnitSettingUIManager>
             ghostCostText.text = GameSystem.Cost.GetUnitCostText(unitSlotItem.AssignedUnit.spawnCost);
     }
 
-    private void HandleMoveDragGhost(PointerEventData data)  // µå·¡±× °í½ºÆ®°¡ ÀÌµ¿ÇÒ ¶§ ½ÇÇàµÇ´Â ÇÔ¼ö 
+    private void HandleMoveDragGhost(PointerEventData data)  // ë“œë˜ê·¸ ê³ ìŠ¤íŠ¸ê°€ ì´ë™í•  ë•Œ ì‹¤í–‰ë˜ëŠ” í•¨ìˆ˜ 
     { 
         MoveDragGhost(data, mainCanvas); 
     }
 
-    private void HandleSlotEndDrag(DeckSlotItem slotItem, PointerEventData eventData)  // µ¦ ½½·ÔÀÇ µå·¡±× ¿Ï·á ½Ã ½ÇÇàµÇ´Â ÇÔ¼ö
+    private void HandleSlotEndDrag(DeckSlotItem slotItem, PointerEventData eventData)  // ë± ìŠ¬ë¡¯ì˜ ë“œë˜ê·¸ ì™„ë£Œ ì‹œ ì‹¤í–‰ë˜ëŠ” í•¨ìˆ˜
     {
         HideDragGhost();
         GameObject dropTarget = eventData.pointerCurrentRaycast.gameObject;
@@ -212,19 +212,19 @@ public class UnitSettingUIManager : BaseUIManager<UnitSettingUIManager>
         }
     }
 
-    private void HandleUnitSlotClicked(UnitStat stat) // À¯´Ö ½½·Ô Å¬¸¯ ½Ã ½ÇÇàµÇ´Â ÇÔ¼ö
+    private void HandleUnitSlotClicked(UnitStat stat) // ìœ ë‹› ìŠ¬ë¡¯ í´ë¦­ ì‹œ ì‹¤í–‰ë˜ëŠ” í•¨ìˆ˜
     {
         OnUnitSlotClicked?.Invoke(stat); 
     }
 
-    public void ShowDragGhost(DeckSlotItem slotItem) // µ¦ ½½·ÔÀÇ µå·¡±× ¿¬ÃâÀ» º¸¿©ÁÖ´Â ÇÔ¼ö
+    public void ShowDragGhost(DeckSlotItem slotItem) // ë± ìŠ¬ë¡¯ì˜ ë“œë˜ê·¸ ì—°ì¶œì„ ë³´ì—¬ì£¼ëŠ” í•¨ìˆ˜
     {
         dragGhostObj?.SetActive(true);
         dragGhostObj?.transform.SetAsLastSibling();
         SetDragGhostUI(slotItem);
     }
 
-    private void SetDragGhostUI(DeckSlotItem slotItem) // µ¦ ½½·ÔÀÇ µå·¡±× °í½ºÆ® UI¸¦ ¼³Á¤ÇÏ´Â ÇÔ¼ö
+    private void SetDragGhostUI(DeckSlotItem slotItem) // ë± ìŠ¬ë¡¯ì˜ ë“œë˜ê·¸ ê³ ìŠ¤íŠ¸ UIë¥¼ ì„¤ì •í•˜ëŠ” í•¨ìˆ˜
     {
         if (ghostCostText != null)
             ghostImage.sprite = slotItem.AssignedUnit.unitIcon;
@@ -232,34 +232,34 @@ public class UnitSettingUIManager : BaseUIManager<UnitSettingUIManager>
             ghostCostText.text = GameSystem.Cost.GetUnitCostText(slotItem.AssignedUnit.spawnCost);
     }
 
-    public void MoveDragGhost(PointerEventData eventData, Canvas mainCanvas) // µå·¡±× °í½ºÆ® ÀÌµ¿À» ¿¬ÃâÇÏ´Â ÇÔ¼ö
+    public void MoveDragGhost(PointerEventData eventData, Canvas mainCanvas) // ë“œë˜ê·¸ ê³ ìŠ¤íŠ¸ ì´ë™ì„ ì—°ì¶œí•˜ëŠ” í•¨ìˆ˜
     {
         RectTransformUtility.ScreenPointToLocalPointInRectangle(
             mainCanvas.transform as RectTransform, eventData.position, mainCanvas.worldCamera, out Vector2 localPos);
         dragGhostObj.transform.localPosition = localPos;
     }
 
-    public void HideDragGhost() // µå·¡±× °í½ºÆ® Á¾·á¸¦ ¿¬ÃâÇÏ´Â ÇÔ¼ö
+    public void HideDragGhost() // ë“œë˜ê·¸ ê³ ìŠ¤íŠ¸ ì¢…ë£Œë¥¼ ì—°ì¶œí•˜ëŠ” í•¨ìˆ˜
     {
         dragGhostObj?.SetActive(false);
     }
 
-    private void HandleUnitUnequipped(int index) // À¯´ÖÀ» ÀåÂø ÇØÁ¦ÇÒ ¶§ ½ÇÇàµÇ´Â ÇÔ¼ö
+    private void HandleUnitUnequipped(int index) // ìœ ë‹›ì„ ì¥ì°© í•´ì œí•  ë•Œ ì‹¤í–‰ë˜ëŠ” í•¨ìˆ˜
     { 
         OnUnitUnequipped?.Invoke(index); 
     }
 
-    public void UpdateUnitSlotList(List<UnitStat> units) // À¯´Ö ½½·Ô ¸ñ·ÏÀ» ¾÷µ¥ÀÌÆ®ÇÏ´Â ÇÔ¼ö
+    public void UpdateUnitSlotList(List<UnitStat> units) // ìœ ë‹› ìŠ¬ë¡¯ ëª©ë¡ì„ ì—…ë°ì´íŠ¸í•˜ëŠ” í•¨ìˆ˜
     {
         unitSlotContainer?.UpdateSlots(units);
     }
 
-    public void RefreshUnitSlotState(List<UnitStat> equippedUnits, UnitStat selectedUnit) // À¯´Ö ½½·Ô »óÅÂ¸¦ ¾÷µ¥ÀÌÆ®ÇÏ´Â ÇÔ¼ö
+    public void RefreshUnitSlotState(List<UnitStat> equippedUnits, UnitStat selectedUnit) // ìœ ë‹› ìŠ¬ë¡¯ ìƒíƒœë¥¼ ì—…ë°ì´íŠ¸í•˜ëŠ” í•¨ìˆ˜
     {
         unitSlotContainer?.RefreshState(equippedUnits, selectedUnit);
     }
 
-    public void UpdateDeckSlotUI(int index, UnitStat stat) // µ¦ ½½·Ô UI¸¦ ¾÷µ¥ÀÌÆ®ÇÏ´Â ÇÔ¼ö
+    public void UpdateDeckSlotUI(int index, UnitStat stat) // ë± ìŠ¬ë¡¯ UIë¥¼ ì—…ë°ì´íŠ¸í•˜ëŠ” í•¨ìˆ˜
     {
         slotContainer?.UpdateSlotUI(index, stat);
     }

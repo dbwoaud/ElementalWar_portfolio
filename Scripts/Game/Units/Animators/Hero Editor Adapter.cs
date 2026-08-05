@@ -6,16 +6,16 @@ using UnityEngine;
 
 public class HeroEditorAdapter : BaseUnitAnimator
 {
-    [Header("¾î´ğÅÍ ÄÄÆ÷³ÍÆ®")]
+    [Header("ì–´ëŒ‘í„° ì»´í¬ë„ŒíŠ¸")]
     [SerializeField] private Character characterScript;
 
-    [Header("Ä³½Ì º¯¼ö")]
+    [Header("ìºì‹± ë³€ìˆ˜")]
     [SerializeField] private SpriteRenderer[] renderers;
     [SerializeField] private readonly Dictionary<SpriteRenderer, Color> originalColors = new Dictionary<SpriteRenderer, Color>();
     [SerializeField] private readonly Dictionary<SpriteRenderer, Material> originalMaterials = new Dictionary<SpriteRenderer, Material>();
     private static Material defaultSpriteMaterial;
 
-    [Header("°ø°İ ¾Ö´Ï¸ŞÀÌ¼Ç ¸ÅÇÎ")]
+    [Header("ê³µê²© ì• ë‹ˆë©”ì´ì…˜ ë§¤í•‘")]
     [SerializeField] private string attackTriggerName;
     [SerializeField] private string attackClipName;
 
@@ -29,7 +29,7 @@ public class HeroEditorAdapter : BaseUnitAnimator
         base.Awake();
     }
 
-    protected override void CacheRenderers() // ¿øº» »ö»ó°ú ¸ÓÆ¼¸®¾óÀ» ÀúÀåÇÏ´Â ÇÔ¼ö
+    protected override void CacheRenderers() // ì›ë³¸ ìƒ‰ìƒê³¼ ë¨¸í‹°ë¦¬ì–¼ì„ ì €ì¥í•˜ëŠ” í•¨ìˆ˜
     {
         renderers = GetComponentsInChildren<SpriteRenderer>(true);
         foreach (var r in renderers)
@@ -43,17 +43,17 @@ public class HeroEditorAdapter : BaseUnitAnimator
         }
     }
 
-    public override void PlayIdle() // À¯´ÖÀ» ´ë±â »óÅÂ·Î ¸¸µå´Â ÇÔ¼ö
+    public override void PlayIdle() // ìœ ë‹›ì„ ëŒ€ê¸° ìƒíƒœë¡œ ë§Œë“œëŠ” í•¨ìˆ˜
     {
         characterScript.SetState(CharacterState.Idle);
     }
 
-    public override void PlayMove() // À¯´ÖÀ» ÀÌµ¿ »óÅÂ·Î ¸¸µå´Â ÇÔ¼ö
+    public override void PlayMove() // ìœ ë‹›ì„ ì´ë™ ìƒíƒœë¡œ ë§Œë“œëŠ” í•¨ìˆ˜
     {
         characterScript.SetState(CharacterState.Walk);
     }
 
-    public override float PlayAttack() // À¯´ÖÀ» °ø°İ »óÅÂ·Î ¸¸µé°í ¾Ö´Ï¸ŞÀÌ¼Ç ±æÀÌ¸¦ ¹İÈ¯ÇÏ´Â ÇÔ¼ö
+    public override float PlayAttack() // ìœ ë‹›ì„ ê³µê²© ìƒíƒœë¡œ ë§Œë“¤ê³  ì• ë‹ˆë©”ì´ì…˜ ê¸¸ì´ë¥¼ ë°˜í™˜í•˜ëŠ” í•¨ìˆ˜
     {
         characterScript.SetState(CharacterState.Idle);
         ResolveAttackAnimByWeapon();
@@ -62,7 +62,7 @@ public class HeroEditorAdapter : BaseUnitAnimator
         return GetAnimationClipDuration(characterScript.Animator, attackClipName);
     }
 
-    private void ResolveAttackAnimByWeapon() // ¹«±â Á¾·ù¿¡ µû¶ó °ø°İ ¾Ö´Ï¸ŞÀÌ¼Ç Å¬¸³¸íÀ» °áÁ¤ÇÏ´Â ÇÔ¼ö
+    private void ResolveAttackAnimByWeapon() // ë¬´ê¸° ì¢…ë¥˜ì— ë”°ë¼ ê³µê²© ì• ë‹ˆë©”ì´ì…˜ í´ë¦½ëª…ì„ ê²°ì •í•˜ëŠ” í•¨ìˆ˜
     {
         switch (characterScript.WeaponType)
         {
@@ -79,26 +79,26 @@ public class HeroEditorAdapter : BaseUnitAnimator
         }
     }
 
-    public override void SetDirection(bool lookLeft) // À¯´ÖÀÇ ¹æÇâÀ» ¼³Á¤ÇÏ´Â ÇÔ¼ö
+    public override void SetDirection(bool lookLeft) // ìœ ë‹›ì˜ ë°©í–¥ì„ ì„¤ì •í•˜ëŠ” í•¨ìˆ˜
     {
         transform.localRotation = lookLeft ? Quaternion.Euler(0, 180, 0) : Quaternion.identity;
     }
 
-    protected override void OnPlayHitInternal() // ÇÇ°İ ½Ã Hit Æ®¸®°Å¿Í ½Ã°¢Àû ³Ë¹é ¿¬ÃâÀ» È£ÃâÇÏ´Â ÇÔ¼ö
+    protected override void OnPlayHitInternal() // í”¼ê²© ì‹œ Hit íŠ¸ë¦¬ê±°ì™€ ì‹œê°ì  ë„‰ë°± ì—°ì¶œì„ í˜¸ì¶œí•˜ëŠ” í•¨ìˆ˜
     {
         characterScript.SetState(CharacterState.Idle);
         characterScript.Animator.SetTrigger("Hit");
         characterScript.Spring();
     }
 
-    protected override void OnPlayDeadInternal() // Á×À½ ½Ã Ç¥Á¤/¸¶½ºÅ©/»óÅÂ¸¦ Ã³¸®ÇÏ´Â ÇÔ¼ö
+    protected override void OnPlayDeadInternal() // ì£½ìŒ ì‹œ í‘œì •/ë§ˆìŠ¤í¬/ìƒíƒœë¥¼ ì²˜ë¦¬í•˜ëŠ” í•¨ìˆ˜
     {
         characterScript.SetExpression("Dead");
         ToggleSpriteMasks(false);
         characterScript.SetState(CharacterState.DeathB);
     }
 
-    protected override void OnResetForReuseInternal() // ³×Æ®¿öÅ© Ç® Àç»ç¿ë ½Ã ¸ÓÆ¼¸®¾ó/¸¶½ºÅ©/Ç¥Á¤À» ÃÊ±âÈ­ÇÏ´Â ÇÔ¼ö
+    protected override void OnResetForReuseInternal() // ë„¤íŠ¸ì›Œí¬ í’€ ì¬ì‚¬ìš© ì‹œ ë¨¸í‹°ë¦¬ì–¼/ë§ˆìŠ¤í¬/í‘œì •ì„ ì´ˆê¸°í™”í•˜ëŠ” í•¨ìˆ˜
     {
         ToggleSpriteMasks(true);
         RestoreOriginalMaterials();
@@ -106,7 +106,7 @@ public class HeroEditorAdapter : BaseUnitAnimator
         characterScript.SetExpression("Default");
     }
 
-    protected override void ApplyFlashColor(Color color) // FlashRed È¿°ú¸¦ Àû¿ëÇÏ´Â ÇÔ¼ö
+    protected override void ApplyFlashColor(Color color) // FlashRed íš¨ê³¼ë¥¼ ì ìš©í•˜ëŠ” í•¨ìˆ˜
     {
         foreach (var r in renderers)
         {
@@ -115,7 +115,7 @@ public class HeroEditorAdapter : BaseUnitAnimator
         }
     }
 
-    protected override void RestoreOriginalColors() // Ä³½ÌÇÑ ¿øº» »ö»óÀ¸·Î º¹±¸ÇÏ´Â ÇÔ¼ö
+    protected override void RestoreOriginalColors() // ìºì‹±í•œ ì›ë³¸ ìƒ‰ìƒìœ¼ë¡œ ë³µêµ¬í•˜ëŠ” í•¨ìˆ˜
     {
         foreach (var kvp in originalColors)
         {
@@ -124,7 +124,7 @@ public class HeroEditorAdapter : BaseUnitAnimator
         }
     }
 
-    protected override void ApplyAlpha(float alpha) // ÆäÀÌµå ¾Æ¿ô ¾ËÆÄ¸¦ Àû¿ëÇÏ´Â ÇÔ¼ö
+    protected override void ApplyAlpha(float alpha) // í˜ì´ë“œ ì•„ì›ƒ ì•ŒíŒŒë¥¼ ì ìš©í•˜ëŠ” í•¨ìˆ˜
     {
         foreach (var r in renderers)
         {
@@ -136,7 +136,7 @@ public class HeroEditorAdapter : BaseUnitAnimator
         }
     }
 
-    protected override IEnumerator FadeOutCoroutine(float duration) // ÆäÀÌµå ¾Æ¿ô È¿°ú¸¦ Ã³¸®ÇÏ´Â ÄÚ·çÆ¾
+    protected override IEnumerator FadeOutCoroutine(float duration) // í˜ì´ë“œ ì•„ì›ƒ íš¨ê³¼ë¥¼ ì²˜ë¦¬í•˜ëŠ” ì½”ë£¨í‹´
     {
         ToggleSpriteMasks(false);
         ApplyDefaultMaterial();
@@ -156,7 +156,7 @@ public class HeroEditorAdapter : BaseUnitAnimator
         dieCoroutine = null;
     }
 
-    private void ApplyDefaultMaterial() // ÆäÀÌµå ½Ã ±âº» ¸ÓÆ¼¸®¾ó·Î ±³Ã¼ÇÏ´Â ÇÔ¼ö
+    private void ApplyDefaultMaterial() // í˜ì´ë“œ ì‹œ ê¸°ë³¸ ë¨¸í‹°ë¦¬ì–¼ë¡œ êµì²´í•˜ëŠ” í•¨ìˆ˜
     {
         foreach (var r in renderers)
         {
@@ -165,7 +165,7 @@ public class HeroEditorAdapter : BaseUnitAnimator
         }
     }
 
-    private void RestoreOriginalMaterials() // ÀúÀåÇÑ ¿øº» ¸ÓÆ¼¸®¾ó·Î º¹±¸ÇÏ´Â ÇÔ¼ö
+    private void RestoreOriginalMaterials() // ì €ì¥í•œ ì›ë³¸ ë¨¸í‹°ë¦¬ì–¼ë¡œ ë³µêµ¬í•˜ëŠ” í•¨ìˆ˜
     {
         foreach (var kvp in originalMaterials)
         {
@@ -174,7 +174,7 @@ public class HeroEditorAdapter : BaseUnitAnimator
         }
     }
 
-    private void RefreshRenderers() // ÀÚ½Ä °´Ã¼ÀÇ ¿øº» »ö»ó°ú ¸ÓÅÍ¸®¾óÀ» ´Ù½Ã ÀúÀåÇÏ´Â ÇÔ¼ö
+    private void RefreshRenderers() // ìì‹ ê°ì²´ì˜ ì›ë³¸ ìƒ‰ìƒê³¼ ë¨¸í„°ë¦¬ì–¼ì„ ë‹¤ì‹œ ì €ì¥í•˜ëŠ” í•¨ìˆ˜
     {
         renderers = GetComponentsInChildren<SpriteRenderer>(true);
         foreach (var r in renderers)
@@ -188,7 +188,7 @@ public class HeroEditorAdapter : BaseUnitAnimator
         }
     }
 
-    private void ToggleSpriteMasks(bool isOn) // ÀÚ½Ä SpriteMask µéÀÇ È°¼ºÈ­ »óÅÂ¸¦ ÀÏ°ı º¯°æÇÏ´Â ÇÔ¼ö
+    private void ToggleSpriteMasks(bool isOn) // ìì‹ SpriteMask ë“¤ì˜ í™œì„±í™” ìƒíƒœë¥¼ ì¼ê´„ ë³€ê²½í•˜ëŠ” í•¨ìˆ˜
     {
         foreach (var mask in GetComponentsInChildren<SpriteMask>(true))
         {

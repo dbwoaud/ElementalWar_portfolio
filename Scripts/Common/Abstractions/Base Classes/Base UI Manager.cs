@@ -1,4 +1,3 @@
-using System;
 using UnityEngine;
 
 public abstract class BaseUIManager<T> : Singleton<T> where T : MonoBehaviour
@@ -9,34 +8,35 @@ public abstract class BaseUIManager<T> : Singleton<T> where T : MonoBehaviour
         BindUIEvents();
     }
 
-    protected abstract void InitUIElements(); // UI ¿ä¼Ò ÃÊ±âÈ­ ÇÔ¼ö
+    protected abstract void InitUIElements(); // UI ìš”ì†Œ ì´ˆê¸°í™” í•¨ìˆ˜
 
-    protected virtual void BindUIEvents() // UI ÀÌº¥Æ® ÇÒ´ç ÇÔ¼ö
+    protected virtual void BindUIEvents() // UI ì´ë²¤íŠ¸ í• ë‹¹ í•¨ìˆ˜
     {
         BindButtonEvent();
         BindPanelEvent();
     }
 
-    protected abstract void BindButtonEvent(); // ¹öÆ° ÀÌº¥Æ® ÇÒ´ç ÇÔ¼ö
+    protected abstract void BindButtonEvent(); // ë²„íŠ¼ ì´ë²¤íŠ¸ í• ë‹¹ í•¨ìˆ˜
 
-    protected abstract void BindPanelEvent();  // ÆĞ³Î ³»ºÎ ¹× µ¥ÀÌÅÍ ÀÌº¥Æ® ÇÒ´ç ÇÔ¼ö
+    protected abstract void BindPanelEvent();  // íŒ¨ë„ ë‚´ë¶€ ë° ë°ì´í„° ì´ë²¤íŠ¸ í• ë‹¹ í•¨ìˆ˜
 
-    protected virtual void OnDestroy()
+    protected override void OnDestroy()
     {
         UnbindUIEvents();
+        base.OnDestroy();
     }
 
-    protected virtual void UnbindUIEvents() // UI ÀÌº¥Æ® ÇØÁ¦ ÇÔ¼ö
+    protected virtual void UnbindUIEvents() // UI ì´ë²¤íŠ¸ í•´ì œ í•¨ìˆ˜
     {
         UnbindButtonEvent();
         UnbindPanelEvent();
     }
 
-    protected virtual void UnbindButtonEvent() { } // ¹öÆ° ÀÌº¥Æ® ÇØÁ¦ ÇÔ¼ö 
+    protected virtual void UnbindButtonEvent() { } // ë²„íŠ¼ ì´ë²¤íŠ¸ í•´ì œ í•¨ìˆ˜ 
 
-    protected virtual void UnbindPanelEvent() { } // ÆĞ³Î ³»ºÎ ¹× µ¥ÀÌÅÍ ÀÌº¥Æ® ÇØÁ¦ ÇÔ¼ö
+    protected virtual void UnbindPanelEvent() { } // íŒ¨ë„ ë‚´ë¶€ ë° ë°ì´í„° ì´ë²¤íŠ¸ í•´ì œ í•¨ìˆ˜
 
-    protected void PlayButtonSound() // ¹öÆ° ¼Ò¸® Àç»ı ÇÔ¼ö
+    protected void PlayButtonSound() // ë²„íŠ¼ ì†Œë¦¬ ì¬ìƒ í•¨ìˆ˜
     {
         SoundManager.instance?.Play(SoundKey.ButtonClick);
     }

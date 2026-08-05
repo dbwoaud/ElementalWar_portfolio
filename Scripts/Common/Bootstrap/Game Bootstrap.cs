@@ -3,10 +3,10 @@ using UnityEngine.SceneManagement;
 
 public class GameBootstrap : MonoBehaviour
 {
-    [Header("Àü¿ª ¸Å´ÏÀú ÇÁ¸®ÆÕ")]
+    [Header("ì „ì—­ ë§¤ë‹ˆì € í”„ë¦¬íŒ¹")]
     [SerializeField] private GameObject[] persistentManagerPrefabs;
 
-    [Header("ºÎÆ®½ºÆ®·¦ ÈÄ ÁøÀÔÇÒ ¾À")]
+    [Header("ë¶€íŠ¸ìŠ¤íŠ¸ë© í›„ ì§„ì…í•  ì”¬")]
     [SerializeField] private string firstSceneName = SceneName.MainMenu;
 
     private static bool isBootstrapped;
@@ -25,7 +25,7 @@ public class GameBootstrap : MonoBehaviour
         LoadFirstScene();
     }
 
-    private void SpawnPersistentManagers() // Àü¿ª ¸Å´ÏÀú¸¦ »ı¼ºÇÏ´Â ÇÔ¼ö
+    private void SpawnPersistentManagers() // ì „ì—­ ë§¤ë‹ˆì €ë¥¼ ìƒì„±í•˜ëŠ” í•¨ìˆ˜
     {
         if (persistentManagerPrefabs == null)
             return;
@@ -41,7 +41,7 @@ public class GameBootstrap : MonoBehaviour
         }
     }
 
-    private void LoadFirstScene() // ºÎÆ®½ºÆ®·¦ ÈÄ Ã¹ ¾ÀÀ¸·Î ÀÌµ¿ÇÏ´Â ÇÔ¼ö
+    private void LoadFirstScene() // ë¶€íŠ¸ìŠ¤íŠ¸ë© í›„ ì²« ì”¬ìœ¼ë¡œ ì´ë™í•˜ëŠ” í•¨ìˆ˜
     {
         if (string.IsNullOrEmpty(firstSceneName))
             return;

@@ -15,7 +15,7 @@ public class RoomNetworkManager : MonoBehaviourPunCallbacks
     public event Action<Player> OnBecameMasterClient;
 
 
-    public void InitializeRoomState() // ¹æ »óÅÂ¸¦ ÃÊ±âÈ­ÇÏ´Â ÇÔ¼ö
+    public void InitializeRoomState() // ë°© ìƒíƒœë¥¼ ì´ˆê¸°í™”í•˜ëŠ” í•¨ìˆ˜
     {
         SetLocalReadyState(false);
         if (PhotonNetwork.IsMasterClient && PhotonNetwork.CurrentRoom != null)
@@ -25,7 +25,7 @@ public class RoomNetworkManager : MonoBehaviourPunCallbacks
         }
     }
 
-    private void ResetRoomProperties() // ¹æ Á¤º¸¸¦ ÃÊ±âÈ­ÇÏ´Â ÇÔ¼ö
+    private void ResetRoomProperties() // ë°© ì •ë³´ë¥¼ ì´ˆê¸°í™”í•˜ëŠ” í•¨ìˆ˜
     {
         Hashtable roomProps = new Hashtable()
         {
@@ -35,54 +35,54 @@ public class RoomNetworkManager : MonoBehaviourPunCallbacks
         PhotonNetwork.CurrentRoom.SetCustomProperties(roomProps);
     }
 
-    public void SetLocalReadyState(bool isReady) // ÇÃ·¹ÀÌ¾îÀÇ ÁØºñ »óÅÂ¸¦ ¼³Á¤ÇÏ´Â ÇÔ¼ö
+    public void SetLocalReadyState(bool isReady) // í”Œë ˆì´ì–´ì˜ ì¤€ë¹„ ìƒíƒœë¥¼ ì„¤ì •í•˜ëŠ” í•¨ìˆ˜
     {
         Hashtable props = new Hashtable() { { PlayerConstants.Properties.GameReady, isReady } };
         PhotonNetwork.LocalPlayer.SetCustomProperties(props);
     }
 
-    public void StartGame() // °ÔÀÓÀ» ½ÃÀÛÇÏ´Â ÇÔ¼ö
+    public void StartGame() // ê²Œì„ì„ ì‹œì‘í•˜ëŠ” í•¨ìˆ˜
     {
         PhotonNetwork.CurrentRoom.IsOpen = false;
         Hashtable roomProps = new Hashtable() { { RoomConstants.Properties.GameStart, true } };
         PhotonNetwork.CurrentRoom.SetCustomProperties(roomProps);
     }
 
-    public void LeaveRoom() // ¹æ ÅğÀåÀ» ½ÃµµÇÏ´Â ÇÔ¼ö
+    public void LeaveRoom() // ë°© í‡´ì¥ì„ ì‹œë„í•˜ëŠ” í•¨ìˆ˜
     {
         PhotonNetwork.LeaveRoom();
     }
 
-    public override void OnLeftRoom() // ¹æ ÅğÀå ¼º°ø ½Ã ½ÇÇàµÇ´Â ÇÔ¼ö
+    public override void OnLeftRoom() // ë°© í‡´ì¥ ì„±ê³µ ì‹œ ì‹¤í–‰ë˜ëŠ” í•¨ìˆ˜
     {
         OnLeftRoomSuccess?.Invoke();
     }
 
-    public override void OnPlayerEnteredRoom(Player newPlayer) // ÇÃ·¹ÀÌ¾î ÀÔÀå ½Ã ½ÇÇàµÇ´Â ÇÔ¼ö
+    public override void OnPlayerEnteredRoom(Player newPlayer) // í”Œë ˆì´ì–´ ì…ì¥ ì‹œ ì‹¤í–‰ë˜ëŠ” í•¨ìˆ˜
     {
         OnRoomStateUpdated?.Invoke();
         OnPlayerJoined?.Invoke(newPlayer);
     }
 
-    public override void OnPlayerLeftRoom(Player otherPlayer) // ÇÃ·¹ÀÌ¾î ÅğÀå ½Ã ½ÇÇàµÇ´Â ÇÔ¼ö
+    public override void OnPlayerLeftRoom(Player otherPlayer) // í”Œë ˆì´ì–´ í‡´ì¥ ì‹œ ì‹¤í–‰ë˜ëŠ” í•¨ìˆ˜
     { 
         OnRoomStateUpdated?.Invoke();
         OnPlayerLeft?.Invoke(otherPlayer);
     }
 
-    public override void OnMasterClientSwitched(Player newMasterClient) // ¹æÀåÀÌ ¹Ù²ğ ¶§ ½ÇÇàµÇ´Â ÇÔ¼ö
+    public override void OnMasterClientSwitched(Player newMasterClient) // ë°©ì¥ì´ ë°”ë€” ë•Œ ì‹¤í–‰ë˜ëŠ” í•¨ìˆ˜
     {
         OnRoomStateUpdated?.Invoke();
         OnBecameMasterClient?.Invoke(newMasterClient);
     }
 
-    public override void OnPlayerPropertiesUpdate(Player targetPlayer, Hashtable changedProps) // ÇÃ·¹ÀÌ¾î Á¤º¸¸¦ ¾÷µ¥ÀÌÆ®ÇÏ´Â ÇÔ¼ö
+    public override void OnPlayerPropertiesUpdate(Player targetPlayer, Hashtable changedProps) // í”Œë ˆì´ì–´ ì •ë³´ë¥¼ ì—…ë°ì´íŠ¸í•˜ëŠ” í•¨ìˆ˜
     {
         if (changedProps.ContainsKey(PlayerConstants.Properties.GameReady))
             OnRoomStateUpdated?.Invoke();
     }
 
-    public override void OnRoomPropertiesUpdate(Hashtable propertiesThatChanged) // ¹æ Á¤º¸¸¦ ¾÷µ¥ÀÌÆ®ÇÏ´Â ÇÔ¼ö
+    public override void OnRoomPropertiesUpdate(Hashtable propertiesThatChanged) // ë°© ì •ë³´ë¥¼ ì—…ë°ì´íŠ¸í•˜ëŠ” í•¨ìˆ˜
     {
         if (propertiesThatChanged.ContainsKey(RoomConstants.Properties.GameStart) && (bool)propertiesThatChanged[RoomConstants.Properties.GameStart])
             OnGameStart?.Invoke();

@@ -5,17 +5,17 @@ using Photon.Realtime;
 
 public class RoomListContainer : MonoBehaviour
 {
-    [Header("¹æ ¸ñ·Ï ¼³Á¤")]
+    [Header("ë°© ëª©ë¡ ì„¤ì •")]
     [SerializeField] private Transform roomListContent;
     [SerializeField] private GameObject roomListItemPrefab;
 
-    [Header("¹æ ¸ñ·Ï µñ¼Å³Ê¸®")]
+    [Header("ë°© ëª©ë¡ ë”•ì…”ë„ˆë¦¬")]
     [SerializeField] private Dictionary<string, RoomListItem> roomItems = new Dictionary<string, RoomListItem>();
 
     public event Action<RoomInfo> OnRoomItemClicked;
 
 
-    public void UpdateRoomList(List<RoomInfo> roomList) // ¹æ ¸®½ºÆ®¸¦ ¾÷µ¥ÀÌÆ®ÇÏ´Â ÇÔ¼ö
+    public void UpdateRoomList(List<RoomInfo> roomList) // ë°© ë¦¬ìŠ¤íŠ¸ë¥¼ ì—…ë°ì´íŠ¸í•˜ëŠ” í•¨ìˆ˜
     {
         foreach (var room in roomList)
         {
@@ -39,24 +39,24 @@ public class RoomListContainer : MonoBehaviour
         }
     }
 
-    private bool CheckRoomExist(RoomInfo room, out RoomListItem item) // ¹æ ¸®½ºÆ®¿¡ ¹æÀÌ ÀÖ´ÂÁö È®ÀÎÇÏ´Â ÇÔ¼ö
+    private bool CheckRoomExist(RoomInfo room, out RoomListItem item) // ë°© ë¦¬ìŠ¤íŠ¸ì— ë°©ì´ ìˆëŠ”ì§€ í™•ì¸í•˜ëŠ” í•¨ìˆ˜
     {
         return roomItems.TryGetValue(room.Name, out item);
     }
 
-    private void RemoveRoom(RoomInfo room, RoomListItem item) // ¹æÀ» Á¦°ÅÇÏ´Â ÇÔ¼ö
+    private void RemoveRoom(RoomInfo room, RoomListItem item) // ë°©ì„ ì œê±°í•˜ëŠ” í•¨ìˆ˜
     {
         item.OnRoomItemClicked -= HandleRoomClick;
         Destroy(item.gameObject);
         roomItems.Remove(room.Name);
     }
 
-    private void ChangeRoom(RoomInfo room, RoomListItem existingItem) // ¹æÀÇ Á¤º¸¸¦ º¯°æÇÏ´Â ÇÔ¼ö
+    private void ChangeRoom(RoomInfo room, RoomListItem existingItem) // ë°©ì˜ ì •ë³´ë¥¼ ë³€ê²½í•˜ëŠ” í•¨ìˆ˜
     {
         existingItem.Setup(room);
     }
 
-    private void CreateRoom(RoomInfo room) // ¹æÀ» »ı¼ºÇÏ´Â ÇÔ¼ö
+    private void CreateRoom(RoomInfo room) // ë°©ì„ ìƒì„±í•˜ëŠ” í•¨ìˆ˜
     {
         GameObject tempRoom = Instantiate(roomListItemPrefab, roomListContent);
         RoomListItem newItem = tempRoom.GetComponent<RoomListItem>();
@@ -65,12 +65,12 @@ public class RoomListContainer : MonoBehaviour
         roomItems.Add(room.Name, newItem);
     }
 
-    private void HandleRoomClick(RoomInfo info) // ¹æ ¹öÆ°À» Å¬¸¯ÇÒ ¶§ ½ÇÇàµÇ´Â ÇÔ¼ö
+    private void HandleRoomClick(RoomInfo info) // ë°© ë²„íŠ¼ì„ í´ë¦­í•  ë•Œ ì‹¤í–‰ë˜ëŠ” í•¨ìˆ˜
     {
         OnRoomItemClicked?.Invoke(info);
     }
 
-    public List<int> GetCurrentRoomNumbers() // ÇöÀç ¹æÀÇ ¹øÈ£¸¦ ¾ò´Â ÇÔ¼ö
+    public List<int> GetCurrentRoomNumbers() // í˜„ì¬ ë°©ì˜ ë²ˆí˜¸ë¥¼ ì–»ëŠ” í•¨ìˆ˜
     {
         List<int> numbers = new List<int>();
         foreach (var item in roomItems.Values)

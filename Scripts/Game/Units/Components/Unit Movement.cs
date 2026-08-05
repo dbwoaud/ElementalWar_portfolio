@@ -5,16 +5,16 @@ using UnityEngine;
 [RequireComponent(typeof(Collider2D))]
 public class UnitMovement : MonoBehaviour
 {
-    [Header("ÄÄÆ÷³ÍÆ®")]
+    [Header("ì»´í¬ë„ŒíŠ¸")]
     [SerializeField] private Rigidbody2D rb;
     public Rigidbody2D Body => rb;
     [SerializeField] private Collider2D unitCollider;
     public Collider2D UnitCollider => unitCollider;
 
-    [Header("À¯´Ö °ü·Ã º¯¼ö")]
+    [Header("ìœ ë‹› ê´€ë ¨ ë³€ìˆ˜")]
     [SerializeField] private UnitStats stats;
 
-    [Header("³Ë¹é ¼³Á¤")]
+    [Header("ë„‰ë°± ì„¤ì •")]
     [SerializeField] private float knockbackPower = 3f;
     [SerializeField] private float knockbackDuration = 0.5f;
     public float KnockbackDuration => knockbackDuration;
@@ -32,20 +32,24 @@ public class UnitMovement : MonoBehaviour
             stats = GetComponent<UnitStats>();
     }
 
-    public void SetDirection(float multiplier) // À¯´ÖÀÇ ¹æÇâÀ» ¼³Á¤ÇÏ´Â ÇÔ¼ö
+    public void SetDirection(float multiplier) // ìœ ë‹›ì˜ ë°©í–¥ì„ ì„¤ì •í•˜ëŠ” í•¨ìˆ˜
     {
         DirectionMultiplier = multiplier;
     }
 
-    public void ResetForReuse() // ³×Æ®¿öÅ© Ç®¿¡¼­ Àç»ç¿ë ½Ã ¹°¸® »óÅÂ¸¦ ÃÊ±âÈ­ÇÏ´Â ÇÔ¼ö
+    public void ResetForReuse() // ë„¤íŠ¸ì›Œí¬ í’€ì—ì„œ ì¬ì‚¬ìš© ì‹œ ë¬¼ë¦¬ ìƒíƒœë¥¼ ì´ˆê¸°í™”í•˜ëŠ” í•¨ìˆ˜
     {
         if (rb != null)
+        {
             rb.simulated = true;
+            rb.linearVelocity = Vector2.zero;
+            rb.angularVelocity = 0f;
+        }
         if (unitCollider != null)
             unitCollider.enabled = true;
     }
 
-    public void MoveForward() // Á¤¸é ¹æÇâÀ¸·Î À¯´ÖÀ» µî¼Ó ÀÌµ¿½ÃÅ°´Â ÇÔ¼ö
+    public void MoveForward() // ì •ë©´ ë°©í–¥ìœ¼ë¡œ ìœ ë‹›ì„ ë“±ì† ì´ë™ì‹œí‚¤ëŠ” í•¨ìˆ˜
     {
         if (rb == null || stats == null)
             return;
@@ -55,7 +59,7 @@ public class UnitMovement : MonoBehaviour
         rb.linearVelocity = v;
     }
 
-    public void Stop() // ¼öÆò ¼Óµµ¸¦ 0À¸·Î ¼³Á¤ÇÏ´Â ÇÔ¼ö
+    public void Stop() // ìˆ˜í‰ ì†ë„ë¥¼ 0ìœ¼ë¡œ ì„¤ì •í•˜ëŠ” í•¨ìˆ˜
     {
         if (rb == null)
             return;
@@ -63,9 +67,9 @@ public class UnitMovement : MonoBehaviour
         rb.linearVelocity = new Vector2(0f, rb.linearVelocity.y);
     }
 
-    public void ApplyKnockback() // ÇÇ°İ ½Ã µÚ·Î ³Ë¹é È¿°ú¸¦ Àû¿ëÇÏ´Â ÇÔ¼ö
+    public void ApplyKnockback() // í”¼ê²© ì‹œ ë’¤ë¡œ ë„‰ë°± íš¨ê³¼ë¥¼ ì ìš©í•˜ëŠ” í•¨ìˆ˜
     {
-        if (rb == null)
+        if (rb == null || rb.bodyType != RigidbodyType2D.Dynamic)
             return;
 
         rb.linearVelocity = Vector2.zero;
@@ -73,11 +77,22 @@ public class UnitMovement : MonoBehaviour
         rb.AddForce(force, ForceMode2D.Impulse);
     }
 
-    public void DisableAllPhysics() // À¯´Ö »ç¸Á ½Ã ¹°¸® »óÅÂ¸¦ Â÷´ÜÇÏ´Â ÇÔ¼ö
+    public void DisableAllPhysics() // ìœ ë‹› ì‚¬ë§ ì‹œ ë¬¼ë¦¬ ìƒíƒœë¥¼ ì°¨ë‹¨í•˜ëŠ” í•¨ìˆ˜
     {
         if (rb != null)
             rb.simulated = false;
         if (unitCollider != null)
             unitCollider.enabled = false;
+    }
+
+    public void SetPhysicsRole(bool isOwnedByLocalPlayer) // ë¬¼ë¦¬ ì—­í• ì„ ì„¤ì •í•˜ëŠ” í•¨ìˆ˜
+    {
+        if (rb == null)
+            return;
+
+        rb.bodyType = isOwnedByLocalPlayer
+            ? RigidbodyType2D.Dynamic
+            : RigidbodyType2D.Kinematic;
+        rb.simulated = true;
     }
 }

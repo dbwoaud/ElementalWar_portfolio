@@ -6,45 +6,45 @@ public enum PopupType { Error, Confirm, Selection, Waiting}
 
 public class PopupPanelUIManager : Singleton<PopupPanelUIManager>
 {
-    [Header("ÆË¾÷ ÆĞ³Î ÇÁ¸®ÆÕ")]
+    [Header("íŒì—… íŒ¨ë„ í”„ë¦¬íŒ¹")]
     [SerializeField] private ErrorPopupPanel errorPanel;
     [SerializeField] private ConfirmPopupPanel confirmPanel;
     [SerializeField] private SelectionPopupPanel selectionPanel;
     [SerializeField] private WaitingPopupPanel waitingPanel;
 
-    [Header("ºÎ¸ğ Äµ¹ö½º")]
+    [Header("ë¶€ëª¨ ìº”ë²„ìŠ¤")]
     [SerializeField] private Transform canvasRoot;
 
-    [Header("ÆĞ³Î ÀúÀå µñ¼Å³Ê¸®")]
+    [Header("íŒ¨ë„ ì €ì¥ ë”•ì…”ë„ˆë¦¬")]
     private Dictionary<PopupType, BasePopupPanel> popupCache = new Dictionary<PopupType, BasePopupPanel>();
 
 
-    public void ShowError(string message, Action action = null) // ¿¡·¯ ÆË¾÷ ÆĞ³Î È°¼ºÈ­ ÇÔ¼ö
+    public void ShowError(string message, Action action = null) // ì—ëŸ¬ íŒì—… íŒ¨ë„ í™œì„±í™” í•¨ìˆ˜
     {
         GetOrSpawn<ErrorPopupPanel>(PopupType.Error).Setup(message, action);
     }
 
-    public void ShowConfirm(string message, Action action = null) // È®ÀÎ ÆË¾÷ ÆĞ³Î È°¼ºÈ­ ÇÔ¼ö
+    public void ShowConfirm(string message, Action action = null) // í™•ì¸ íŒì—… íŒ¨ë„ í™œì„±í™” í•¨ìˆ˜
     {
         GetOrSpawn<ConfirmPopupPanel>(PopupType.Confirm).Setup(message, action);
     }
 
-    public void ShowSelection(string message, Action onYes, Action onNo) // ¼±ÅÃ ÆË¾÷ ÆĞ³Î È°¼ºÈ­ ÇÔ¼ö
+    public void ShowSelection(string message, Action onYes, Action onNo) // ì„ íƒ íŒì—… íŒ¨ë„ í™œì„±í™” í•¨ìˆ˜
     {
         GetOrSpawn<SelectionPopupPanel>(PopupType.Selection).Setup(message, onYes, onNo);
     }
 
-    public void ShowWaiting(string message, Action onCancel = null) // ´ë±â ÆË¾÷ ÆĞ³Î È°¼ºÈ­ ÇÔ¼ö
+    public void ShowWaiting(string message, Action onCancel = null) // ëŒ€ê¸° íŒì—… íŒ¨ë„ í™œì„±í™” í•¨ìˆ˜
     {
         GetOrSpawn<WaitingPopupPanel>(PopupType.Waiting).Setup(message, onCancel);
     }
 
-    public void HideWaiting() // ´ë±â ÆË¾÷ ÆĞ³Î ºñÈ°¼ºÈ­ ÇÔ¼ö
+    public void HideWaiting() // ëŒ€ê¸° íŒì—… íŒ¨ë„ ë¹„í™œì„±í™” í•¨ìˆ˜
     {
         GetOrSpawn<WaitingPopupPanel>(PopupType.Waiting).Close();
     }
 
-    private T GetOrSpawn<T>(PopupType type) where T : BasePopupPanel // ÆË¾÷ ÇÁ¸®ÆÕÀ» °¡Á®¿À°Å³ª »ı¼ºÇÏ´Â ÇÔ¼ö
+    private T GetOrSpawn<T>(PopupType type) where T : BasePopupPanel // íŒì—… í”„ë¦¬íŒ¹ì„ ê°€ì ¸ì˜¤ê±°ë‚˜ ìƒì„±í•˜ëŠ” í•¨ìˆ˜
     {
         if (popupCache.TryGetValue(type, out var existingPopup))
         {
@@ -64,7 +64,7 @@ public class PopupPanelUIManager : Singleton<PopupPanelUIManager>
         return null;
     }
 
-    private T GetPrefabByType<T>(PopupType type) where T : BasePopupPanel // ÇÁ¸®ÆÕÀ» °¡Á®¿À´Â ÇÔ¼ö
+    private T GetPrefabByType<T>(PopupType type) where T : BasePopupPanel // í”„ë¦¬íŒ¹ì„ ê°€ì ¸ì˜¤ëŠ” í•¨ìˆ˜
     {
         return type switch
         {

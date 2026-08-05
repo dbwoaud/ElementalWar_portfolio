@@ -4,13 +4,13 @@ using UnityEngine;
 
 public class GameUnitSlotContainer : MonoBehaviour
 {
-    [Header("°ÔÀÓ ½½·Ô ¹è¿­")]
+    [Header("ê²Œì„ ìŠ¬ë¡¯ ë°°ì—´")]
     [SerializeField] private GameUnitSlotItem[] gameSlots;
 
     public event Action<int, UnitStat> OnUnitSlotClicked;
 
 
-    public void InitializeSlots() // °ÔÀÓÀÇ À¯´Ö ½½·ÔÀ» ÃÊ±âÈ­ÇÏ´Â ÇÔ¼ö
+    public void InitializeSlots() // ê²Œì„ì˜ ìœ ë‹› ìŠ¬ë¡¯ì„ ì´ˆê¸°í™”í•˜ëŠ” í•¨ìˆ˜
     {
         for (int i = 0; i < gameSlots.Length; i++)
         {
@@ -19,32 +19,37 @@ public class GameUnitSlotContainer : MonoBehaviour
         }
     }
 
-    private void HandleSlotClick(int index, UnitStat stat) // ½½·Ô Å¬¸¯ ½Ã ½ÇÇàµÇ´Â ÇÔ¼ö
+    private void HandleSlotClick(int index, UnitStat stat) // ìŠ¬ë¡¯ í´ë¦­ ì‹œ ì‹¤í–‰ë˜ëŠ” í•¨ìˆ˜
     {
         OnUnitSlotClicked?.Invoke(index, stat);
     }
 
-    public void ShowUnitSlot(int index, UnitStat stat) // ½½·Ô¿¡ À¯´Ö Á¤º¸¸¦ Ç¥½ÃÇÏ´Â ÇÔ¼ö
+    public void ShowUnitSlot(int index, UnitStat stat) // ìŠ¬ë¡¯ì— ìœ ë‹› ì •ë³´ë¥¼ í‘œì‹œí•˜ëŠ” í•¨ìˆ˜
     {
         if (IsValidIndex(index))
             gameSlots[index].UpdateUI(stat);
     }
 
-    public void StartSlotCoolTime(int index) // ½½·ÔÀÇ ÄğÅ¸ÀÓÀ» ½ÃÀÛÇÏ´Â ÇÔ¼ö
+    public void StartSlotCoolTime(int index) // ìŠ¬ë¡¯ì˜ ì¿¨íƒ€ì„ì„ ì‹œì‘í•˜ëŠ” í•¨ìˆ˜
     {
         if (IsValidIndex(index))
             gameSlots[index].StartCoolTime();
     }
 
-    private bool IsValidIndex(int index) // °ÔÀÓ ½½·ÔÀÇ À¯È¿ÇÑ ÀÎµ¦½º¸¦ È®ÀÎÇÏ´Â ÇÔ¼ö
+    private bool IsValidIndex(int index) // ê²Œì„ ìŠ¬ë¡¯ì˜ ìœ íš¨í•œ ì¸ë±ìŠ¤ë¥¼ í™•ì¸í•˜ëŠ” í•¨ìˆ˜
     {
         return index >= 0 && index < gameSlots.Length;
     }
 
-    public void RefreshSlotsEnergyState(float currentEnergy) // ¸ğµç ½½·ÔÀ» ¿¡³ÊÁö »óÅÂ¿¡ ¸ÂÃç ¾÷µ¥ÀÌÆ®ÇÏ´Â ÇÔ¼ö
+    public void RefreshSlotsEnergyState(float currentEnergy) // ëª¨ë“  ìŠ¬ë¡¯ì„ ì—ë„ˆì§€ ìƒíƒœì— ë§ì¶° ì—…ë°ì´íŠ¸í•˜ëŠ” í•¨ìˆ˜
     {
         foreach (var slot in gameSlots)
             slot.EvaluateEnergyState(currentEnergy);
+    }
+
+    public bool IsSlotSpawnable(int index) // ìŠ¬ë¡¯ ìœ ë‹›ì„ ìƒì„±í•  ìˆ˜ ìˆëŠ”ì§€ í™•ì¸í•˜ëŠ” í•¨ìˆ˜
+    {
+        return IsValidIndex(index) && gameSlots[index].IsSpawnable;
     }
 
     private void OnDestroy() 

@@ -4,7 +4,7 @@ using UnityEngine.EventSystems;
 
 public class DeckSlotContainer : MonoBehaviour
 {
-    [Header("µ¦ ½½·Ô °ü¸®")]
+    [Header("ë± ìŠ¬ë¡¯ ê´€ë¦¬")]
     [SerializeField] public DeckSlotItem[] slotItems;
 
     public event Action<int, UnitStat> OnSlotDropped;
@@ -14,7 +14,7 @@ public class DeckSlotContainer : MonoBehaviour
     public event Action<DeckSlotItem, PointerEventData> OnEndDragEvent;
 
 
-    public void InitializeSlots() // µ¦ ½½·Ô ÀÌº¥Æ®¸¦ ÃÊ±âÈ­ÇÏ´Â ÇÔ¼ö
+    public void InitializeSlots() // ë± ìŠ¬ë¡¯ ì´ë²¤íŠ¸ë¥¼ ì´ˆê¸°í™”í•˜ëŠ” í•¨ìˆ˜
     {
         for (int i = 0; i < slotItems.Length; i++)
         {
@@ -28,38 +28,38 @@ public class DeckSlotContainer : MonoBehaviour
         }
     }
 
-    private void HandleSlotDropped(int index, UnitStat stat) // µ¦ ½½·Ô¿¡ µå·ÓÇÒ ¶§ ½ÇÇàµÇ´Â ÇÔ¼ö
+    private void HandleSlotDropped(int index, UnitStat stat) // ë± ìŠ¬ë¡¯ì— ë“œë¡­í•  ë•Œ ì‹¤í–‰ë˜ëŠ” í•¨ìˆ˜
     { 
         OnSlotDropped?.Invoke(index, stat); 
     }
 
-    private void HandleSlotSwapped(int from, int to) // µ¦ ½½·ÔÀ» ½º¿ÒÇÒ ¶§ ½ÇÇàµÇ´Â ÇÔ¼ö
+    private void HandleSlotSwapped(int from, int to) // ë± ìŠ¬ë¡¯ì„ ìŠ¤ì™‘í•  ë•Œ ì‹¤í–‰ë˜ëŠ” í•¨ìˆ˜
     { 
         OnSlotSwapped?.Invoke(from, to); 
     }
 
-    private void HandleBeginDrag(DeckSlotItem item) // µå·¡±× ½ÃÀÛ ½Ã ½ÇÇàµÇ´Â ÇÔ¼ö
+    private void HandleBeginDrag(DeckSlotItem item) // ë“œë˜ê·¸ ì‹œì‘ ì‹œ ì‹¤í–‰ë˜ëŠ” í•¨ìˆ˜
     { 
         OnBeginDragEvent?.Invoke(item); 
     }
 
-    private void HandleDrag(PointerEventData data) // µå·¡±× ÁøÇà ½Ã ½ÇÇàµÇ´Â ÇÔ¼ö
+    private void HandleDrag(PointerEventData data) // ë“œë˜ê·¸ ì§„í–‰ ì‹œ ì‹¤í–‰ë˜ëŠ” í•¨ìˆ˜
     {
         OnDragEvent?.Invoke(data); 
     }
 
-    private void HandleEndDrag(DeckSlotItem item, PointerEventData data) // µå·¡±× ¿Ï·á ½Ã ½ÇÇàµÇ´Â ÇÔ¼ö
+    private void HandleEndDrag(DeckSlotItem item, PointerEventData data) // ë“œë˜ê·¸ ì™„ë£Œ ì‹œ ì‹¤í–‰ë˜ëŠ” í•¨ìˆ˜
     { 
         OnEndDragEvent?.Invoke(item, data); 
     }
 
-    public void UpdateSlotUI(int index, UnitStat stat) // ½½·Ô UI¸¦ ¾÷µ¥ÀÌÆ®ÇÏ´Â ÇÔ¼ö
+    public void UpdateSlotUI(int index, UnitStat stat) // ìŠ¬ë¡¯ UIë¥¼ ì—…ë°ì´íŠ¸í•˜ëŠ” í•¨ìˆ˜
     {
         if (CheckValidIndex(index))
             slotItems[index].UpdateUI(stat);
     }
 
-    private bool CheckValidIndex(int index) // À¯È¿ÇÑ ÀÎµ¦½ºÀÎÁö È®ÀÎÇÏ´Â ÇÔ¼ö
+    private bool CheckValidIndex(int index) // ìœ íš¨í•œ ì¸ë±ìŠ¤ì¸ì§€ í™•ì¸í•˜ëŠ” í•¨ìˆ˜
     {
         return index >= 0 && index < slotItems.Length;
     }

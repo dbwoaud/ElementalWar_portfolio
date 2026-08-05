@@ -6,17 +6,17 @@ public class UnitStateMove : IUnitState
 {
     public UnitStateType Type => UnitStateType.Move;
 
-    [Header("½ºÄµ º¯¼ö")]
-    [SerializeField] private const float ScanInterval = 0.1f;
+    [Header("ìŠ¤ìº” ë³€ìˆ˜")]
+    private const float ScanInterval = 0.1f;
     [SerializeField] private float lastScanTime;
 
-    public void EnterState(Unit unit) // À¯´ÖÀÌ ÀÌµ¿ »óÅÂ¿¡ µé¾î¿ÔÀ» ¶§ ½ÇÇàµÇ´Â ÇÔ¼ö
+    public void EnterState(Unit unit) // ìœ ë‹›ì´ ì´ë™ ìƒíƒœì— ë“¤ì–´ì™”ì„ ë•Œ ì‹¤í–‰ë˜ëŠ” í•¨ìˆ˜
     {
         unit.Animator?.PlayMove();
         lastScanTime = -ScanInterval;
     }
 
-    public void UpdateState(Unit unit) // À¯´ÖÀÌ ÀÌµ¿ »óÅÂ ÁßÀÏ ¶§ ½ÇÇàµÇ´Â ÇÔ¼ö
+    public void UpdateState(Unit unit) // ìœ ë‹›ì´ ì´ë™ ìƒíƒœ ì¤‘ì¼ ë•Œ ì‹¤í–‰ë˜ëŠ” í•¨ìˆ˜
     {
         if (unit == null) 
             return;
@@ -34,7 +34,7 @@ public class UnitStateMove : IUnitState
         unit?.MoveUnit();
     }
 
-    public void ExitState(Unit unit) // À¯´ÖÀÌ ÀÌµ¿ »óÅÂ°¡ ³¡³µÀ» ¶§ ½ÇÇàµÇ´Â ÇÔ¼ö
+    public void ExitState(Unit unit) // ìœ ë‹›ì´ ì´ë™ ìƒíƒœê°€ ëë‚¬ì„ ë•Œ ì‹¤í–‰ë˜ëŠ” í•¨ìˆ˜
     {
         unit?.StopUnit();
     }

@@ -5,7 +5,7 @@ using System.Collections;
 
 public class MapManager : BaseSceneController<MapManager>
 {
-    [Header("Ä³½Ì º¯¼ö")]
+    [Header("ìºì‹± ë³€ìˆ˜")]
     [SerializeField] private MapSpawner mapSpawner;
     [SerializeField] private CastleSpawner castleSpawner;
     [SerializeField] private Collider2D cachedGroundCollider;
@@ -26,12 +26,12 @@ public class MapManager : BaseSceneController<MapManager>
         SoundManager.instance?.StopAll();
     }
 
-    public void SetupGameEnvironment(int mapIndex) // ¸ÊÀ» ÃÖÁ¾ÀûÀ¸·Î ¼³Á¤ÇÏ´Â ÇÔ¼ö
+    public void SetupGameEnvironment(int mapIndex) // ë§µì„ ìµœì¢…ì ìœ¼ë¡œ ì„¤ì •í•˜ëŠ” í•¨ìˆ˜
     {
         StartCoroutine(SetupGameEnvironmentCoroutine(mapIndex));
     }
 
-    private IEnumerator SetupGameEnvironmentCoroutine(int mapIndex) // ¸ÊÀ» ÃÖÁ¾ÀûÀ¸·Î ¼³Á¤ÇÏ´Â ÄÚ·çÆ¾
+    private IEnumerator SetupGameEnvironmentCoroutine(int mapIndex) // ë§µì„ ìµœì¢…ì ìœ¼ë¡œ ì„¤ì •í•˜ëŠ” ì½”ë£¨í‹´
     {
         OnLoadProgress?.Invoke(0.1f);
         yield return null;
@@ -52,7 +52,7 @@ public class MapManager : BaseSceneController<MapManager>
     }
 
 
-    private void SpawnPlayerCastle(MapData mapData) // ÇÃ·¹ÀÌ¾î ¼ºÀ» »ı¼ºÇÏ´Â ÇÔ¼ö
+    private void SpawnPlayerCastle(MapData mapData) // í”Œë ˆì´ì–´ ì„±ì„ ìƒì„±í•˜ëŠ” í•¨ìˆ˜
     {
         Transform spawnPoint = PhotonNetwork.IsMasterClient
             ? mapData.Player1CastlePoint

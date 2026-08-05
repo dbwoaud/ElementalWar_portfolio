@@ -2,27 +2,27 @@ using UnityEngine;
 
 public class PlayerSlotContainer : MonoBehaviour
 {
-    [Header("ÇÃ·¹ÀÌ¾î ½½·Ô")]
+    [Header("í”Œë ˆì´ì–´ ìŠ¬ë¡¯")]
     [SerializeField] private PlayerSlot[] playerSlots = new PlayerSlot[2];
 
-    public void ClearAllSlots() // ¸ğµç ÇÃ·¹ÀÌ¾î ½½·ÔÀ» ÃÊ±âÈ­ÇÏ´Â ÇÔ¼ö
+    public void ClearAllSlots() // ëª¨ë“  í”Œë ˆì´ì–´ ìŠ¬ë¡¯ì„ ì´ˆê¸°í™”í•˜ëŠ” í•¨ìˆ˜
     {
         for (int i = 0; i < playerSlots.Length; i++)
             ClearSlot(i);
     }
 
-    public void ClearSlot(int slotIndex) // ÇÃ·¹ÀÌ¾î ½½·ÔÀ» ÃÊ±âÈ­ÇÏ´Â ÇÔ¼ö
+    public void ClearSlot(int slotIndex) // í”Œë ˆì´ì–´ ìŠ¬ë¡¯ì„ ì´ˆê¸°í™”í•˜ëŠ” í•¨ìˆ˜
     {
         if (CheckValidIndex(slotIndex))
             playerSlots[slotIndex].ClearSlot();    
     }
 
-    private bool CheckValidIndex(int slotIndex) // À¯È¿ÇÑ ÀÎµ¦½º¸¦ È®ÀÎÇÏ´Â ÇÔ¼ö
+    private bool CheckValidIndex(int slotIndex) // ìœ íš¨í•œ ì¸ë±ìŠ¤ë¥¼ í™•ì¸í•˜ëŠ” í•¨ìˆ˜
     {
         return slotIndex >= 0 && slotIndex < playerSlots.Length;
     }
 
-    public void UpdatePlayerSlot(int slotIndex, string name, bool isMaster, bool isReady) // ÇÃ·¹ÀÌ¾î ½½·Ô Á¤º¸¸¦ ¾÷µ¥ÀÌÆ®ÇÏ´Â ÇÔ¼ö
+    public void UpdatePlayerSlot(int slotIndex, string name, bool isMaster, bool isReady) // í”Œë ˆì´ì–´ ìŠ¬ë¡¯ ì •ë³´ë¥¼ ì—…ë°ì´íŠ¸í•˜ëŠ” í•¨ìˆ˜
     {
         if (CheckValidIndex(slotIndex))
             playerSlots[slotIndex].SetSlot(name, isMaster, isReady);

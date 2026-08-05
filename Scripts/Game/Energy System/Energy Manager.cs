@@ -4,19 +4,19 @@ using System;
 
 public class EnergyManager : BaseSceneController<EnergyManager>
 {
-    [Header("Ä³½Ì º¯¼ö")]
+    [Header("ìºì‹± ë³€ìˆ˜")]
     [SerializeField] private EnergyUIManager energyUIManager;
 
-    [Header("µ¥ÀÌÅÍ º£ÀÌ½º")]
+    [Header("ë°ì´í„° ë² ì´ìŠ¤")]
     [SerializeField] private EnergyLevelStat[] levelStats;
 
-    [Header("¿¡³ÊÁö ½Ã½ºÅÛ °ü·Ã º¯¼ö")]
+    [Header("ì—ë„ˆì§€ ì‹œìŠ¤í…œ ê´€ë ¨ ë³€ìˆ˜")]
     [SerializeField] private float currentEnergy = 0f;
     public float CurrentEnergy => currentEnergy;
     [SerializeField] private int currentLevel = 1;
     [SerializeField] private bool wasUpgradeable = false;
 
-    [Header("°ÔÀÓ ÁøÇà »óÅÂ")]
+    [Header("ê²Œì„ ì§„í–‰ ìƒíƒœ")]
     [SerializeField] private bool isStop;
 
     public event Action<float> OnEnergyChanged;
@@ -53,7 +53,7 @@ public class EnergyManager : BaseSceneController<EnergyManager>
         CheckUpgradeAvailability(true);
     }
 
-    private void HandleUpgradeRequest() // ¾÷±×·¹ÀÌµå ¹öÆ° Å¬¸¯ ½Ã ½ÇÇàµÇ´Â ÇÔ¼ö
+    private void HandleUpgradeRequest() // ì—…ê·¸ë ˆì´ë“œ ë²„íŠ¼ í´ë¦­ ì‹œ ì‹¤í–‰ë˜ëŠ” í•¨ìˆ˜
     {
         int index = currentLevel - 1;
         if (IsCurrentlyMaxLevel()) 
@@ -74,12 +74,12 @@ public class EnergyManager : BaseSceneController<EnergyManager>
         }
     }
 
-    private bool IsCurrentlyMaxLevel() // ÇöÀç ¿¡³ÊÁö ·¹º§ÀÌ ¸¸·¾ÀÎÁö È®ÀÎÇÏ´Â ÇÔ¼ö
+    private bool IsCurrentlyMaxLevel() // í˜„ì¬ ì—ë„ˆì§€ ë ˆë²¨ì´ ë§Œë ™ì¸ì§€ í™•ì¸í•˜ëŠ” í•¨ìˆ˜
     {
         return currentLevel >= levelStats.Length;
     }
 
-    private void RefreshAllUI() // ¸ğµç ¿¡³ÊÁö UI ÅØ½ºÆ®¸¦ ¾÷µ¥ÀÌÆ®ÇÏ´Â ÇÔ¼ö
+    private void RefreshAllUI() // ëª¨ë“  ì—ë„ˆì§€ UI í…ìŠ¤íŠ¸ë¥¼ ì—…ë°ì´íŠ¸í•˜ëŠ” í•¨ìˆ˜
     {
         UpdateEnergyUIOnly();
 
@@ -90,13 +90,13 @@ public class EnergyManager : BaseSceneController<EnergyManager>
         energyUIManager?.UpdateUpgradeCostText(levelStats[index].upgradeCost, isMax);
     }
 
-    private void UpdateEnergyUIOnly() // ÇöÀç ¿¡³ÊÁö ÅØ½ºÆ®¸¦ ¾÷µ¥ÀÌÆ®ÇÏ´Â ÇÔ¼ö
+    private void UpdateEnergyUIOnly() // í˜„ì¬ ì—ë„ˆì§€ í…ìŠ¤íŠ¸ë¥¼ ì—…ë°ì´íŠ¸í•˜ëŠ” í•¨ìˆ˜
     {
         int index = Mathf.Min(currentLevel - 1, levelStats.Length - 1);
         energyUIManager?.UpdateEnergyText((int)currentEnergy, (int)levelStats[index].maxEnergy);
     }
 
-    private void CheckUpgradeAvailability(bool forceUpdate = false) // ¿¡³ÊÁö ¾÷±×·¹ÀÌµå°¡ °¡´ÉÇÑÁö °Ë»çÇÏ´Â ÇÔ¼ö
+    private void CheckUpgradeAvailability(bool forceUpdate = false) // ì—ë„ˆì§€ ì—…ê·¸ë ˆì´ë“œê°€ ê°€ëŠ¥í•œì§€ ê²€ì‚¬í•˜ëŠ” í•¨ìˆ˜
     {
         int index = currentLevel - 1;
         if (CheckMaxLevelIndex(index))
@@ -107,12 +107,12 @@ public class EnergyManager : BaseSceneController<EnergyManager>
         
     }
 
-    private bool CheckMaxLevelIndex(int index) // À¯È¿ÇÑ ÀÎµ¦½ºÀÎÁö È®ÀÎÇÏ´Â ÇÔ¼ö 
+    private bool CheckMaxLevelIndex(int index) // ìœ íš¨í•œ ì¸ë±ìŠ¤ì¸ì§€ í™•ì¸í•˜ëŠ” í•¨ìˆ˜ 
     {
         return index >= levelStats.Length - 1;
     }
 
-    private void HandleMaxLevelState(bool forceUpdate) // ¿¡³ÊÁö ¸¸·¾ »óÅÂ¸¦ Ã³¸®ÇÏ´Â ÇÔ¼ö
+    private void HandleMaxLevelState(bool forceUpdate) // ì—ë„ˆì§€ ë§Œë ™ ìƒíƒœë¥¼ ì²˜ë¦¬í•˜ëŠ” í•¨ìˆ˜
     {
         if (wasUpgradeable || forceUpdate)
         {
@@ -121,7 +121,7 @@ public class EnergyManager : BaseSceneController<EnergyManager>
         }
     }
 
-    private void HandleLevelState(bool forceUpdate, int index) // ¸¸·¾ÀÌ ¾Æ´Ñ ¿¡³ÊÁö ·¹º§ »óÅÂ¸¦ Ã³¸®ÇÏ´Â ÇÔ¼ö
+    private void HandleLevelState(bool forceUpdate, int index) // ë§Œë ™ì´ ì•„ë‹Œ ì—ë„ˆì§€ ë ˆë²¨ ìƒíƒœë¥¼ ì²˜ë¦¬í•˜ëŠ” í•¨ìˆ˜
     {
         bool canUpgrade = currentEnergy >= levelStats[index].upgradeCost;
 
@@ -138,10 +138,10 @@ public class EnergyManager : BaseSceneController<EnergyManager>
             return;
 
         GenerateEnergy();
-        CheckShiftKeyInput();
+        CheckEnergyUpgradeInput();
     }
 
-    private void GenerateEnergy() // ¿¡³ÊÁö¸¦ »ı¼ºÇÏ´Â ÇÔ¼ö
+    private void GenerateEnergy() // ì—ë„ˆì§€ë¥¼ ìƒì„±í•˜ëŠ” í•¨ìˆ˜
     {
         int index = currentLevel - 1;
         if (index >= levelStats.Length)
@@ -158,22 +158,29 @@ public class EnergyManager : BaseSceneController<EnergyManager>
         }
     }
 
-    private void CalculateCurrentEnergy(EnergyLevelStat stat) // ÇöÀç ¿¡³ÊÁö¸¦ °è»êÇÏ´Â ÇÔ¼ö
+    private void CalculateCurrentEnergy(EnergyLevelStat stat) // í˜„ì¬ ì—ë„ˆì§€ë¥¼ ê³„ì‚°í•˜ëŠ” í•¨ìˆ˜
     {
         currentEnergy += stat.energyPerSecond * Time.deltaTime;
         currentEnergy = Mathf.Min(currentEnergy, stat.maxEnergy);
     }
 
-    private void CheckShiftKeyInput() // ½ÃÇÁÆ® Å°¸¦ ´©¸£¸é ½ÇÇàµÇ´Â ÇÔ¼ö
+    private void CheckEnergyUpgradeInput() // ì‹œí”„íŠ¸ í‚¤ë¥¼ ëˆ„ë¥´ë©´ ì‹¤í–‰ë˜ëŠ” í•¨ìˆ˜
     {
         if (InputGate.IsBlocked)
             return;
 
-        if (Input.GetKeyDown(KeyCode.LeftShift) || Input.GetKeyDown(KeyCode.RightShift))
-            HandleUpgradeRequest();
+        var keys = InputBindings.EnergyUpgradeKeys;
+        for (int i = 0; i < keys.Length; i++)
+        {
+            if (Input.GetKeyDown(keys[i]))
+            {
+                HandleUpgradeRequest();
+                return;
+            }
+        }
     } 
 
-    public bool TryConsumeEnergy(float amount) // ¿¡³ÊÁö¸¦ ¼ÒºñÇÒ ¶§ È£ÃâµÇ´Â ÇÔ¼ö
+    public bool TryConsumeEnergy(float amount) // ì—ë„ˆì§€ë¥¼ ì†Œë¹„í•  ë•Œ í˜¸ì¶œë˜ëŠ” í•¨ìˆ˜
     {
         if (currentEnergy >= amount)
         {
@@ -186,7 +193,7 @@ public class EnergyManager : BaseSceneController<EnergyManager>
         return false;
     }
 
-    public void AddEnergy(float amount) // ¿¡³ÊÁö¸¦ Ãß°¡ÇÒ ¶§ È£ÃâµÇ´Â ÇÔ¼ö
+    public void AddEnergy(float amount) // ì—ë„ˆì§€ë¥¼ ì¶”ê°€í•  ë•Œ í˜¸ì¶œë˜ëŠ” í•¨ìˆ˜
     {
         int index = Mathf.Min(currentLevel - 1, levelStats.Length - 1);
         float maxEnergy = levelStats[index].maxEnergy;
@@ -196,7 +203,7 @@ public class EnergyManager : BaseSceneController<EnergyManager>
         OnEnergyChanged?.Invoke(currentEnergy);
     }
 
-    public void Stop() // ¿¡³ÊÁö »ı¼ºÀ» ¸ØÃß´Â ÇÔ¼ö
+    public void Stop() // ì—ë„ˆì§€ ìƒì„±ì„ ë©ˆì¶”ëŠ” í•¨ìˆ˜
     {
         isStop = true;
     }

@@ -9,33 +9,34 @@ public enum SlotState { Active, Inactive, CoolTime }
 
 public class GameUnitSlotItem : MonoBehaviour, IPointerClickHandler
 {
-    [Header("UI ¿ä¼Ò")]
+    [Header("UI ìš”ì†Œ")]
     [SerializeField] private GameObject unitInfoObj;
     [SerializeField] private Image darkOverlayImage;
     [SerializeField] private Image unitIconImage;
     [SerializeField] private Text unitCostText;
 
-    [Header("½½·Ô Á¤º¸ ¹× »óÅÂ")]
+    [Header("ìŠ¬ë¡¯ ì •ë³´ ë° ìƒíƒœ")]
     [SerializeField] private int slotIndex;
     [SerializeField] private UnitStat assignedUnit;
     [SerializeField] private SlotState currentState = SlotState.Inactive;
     public bool IsActive => currentState == SlotState.Active;
     public bool IsInCoolTime => currentState == SlotState.CoolTime;
+    public bool IsSpawnable => assignedUnit != null && IsActive;
 
-    [Header("ÄğÅ¸ÀÓ ÄÚ·çÆ¾")]
+    [Header("ì¿¨íƒ€ì„ ì½”ë£¨í‹´")]
     [SerializeField] private Coroutine coolTimeCoroutine;
 
     public event Action<int, UnitStat> OnUnitSlotClicked;
 
 
-    public void SetupSlot(int index) // ½½·ÔÀÇ ÀÎµ¦½º¿Í Å¬¸¯ Äİ¹éÀ» µî·ÏÇÏ´Â ÇÔ¼ö
+    public void SetupSlot(int index) // ìŠ¬ë¡¯ì˜ ì¸ë±ìŠ¤ì™€ í´ë¦­ ì½œë°±ì„ ë“±ë¡í•˜ëŠ” í•¨ìˆ˜
     {
         slotIndex = index;
         if(assignedUnit == null)
             UpdateUI(null);
     }
 
-    public void UpdateUI(UnitStat stat) // À¯´Ö Á¤º¸¸¦ ½½·Ô¿¡ Ç¥½ÃÇÏ´Â ÇÔ¼ö
+    public void UpdateUI(UnitStat stat) // ìœ ë‹› ì •ë³´ë¥¼ ìŠ¬ë¡¯ì— í‘œì‹œí•˜ëŠ” í•¨ìˆ˜
     {
         assignedUnit = stat;
         bool hasUnit = stat != null;
@@ -52,7 +53,7 @@ public class GameUnitSlotItem : MonoBehaviour, IPointerClickHandler
         ChangeState(SlotState.Inactive);  
     }
 
-    private void ChangeState(SlotState newState) // ½½·ÔÀÇ »óÅÂ¸¦ º¯È­½ÃÅ°´Â ÇÔ¼ö
+    private void ChangeState(SlotState newState) // ìŠ¬ë¡¯ì˜ ìƒíƒœë¥¼ ë³€í™”ì‹œí‚¤ëŠ” í•¨ìˆ˜
     {
         currentState = newState;
         darkOverlayImage.gameObject.SetActive(!IsActive);
@@ -60,9 +61,9 @@ public class GameUnitSlotItem : MonoBehaviour, IPointerClickHandler
             darkOverlayImage.fillAmount = 1f;
     }
 
-    public void OnPointerClick(PointerEventData eventData) // ¸¶¿ì½º Å¬¸¯ ½Ã ½ÇÇàµÇ´Â ÇÔ¼ö
+    public void OnPointerClick(PointerEventData eventData) // ë§ˆìš°ìŠ¤ í´ë¦­ ì‹œ ì‹¤í–‰ë˜ëŠ” í•¨ìˆ˜
     {
-        if (assignedUnit == null || !IsActive) 
+        if (!IsSpawnable) 
             return;
 
         if (eventData.button != PointerEventData.InputButton.Left)
@@ -71,18 +72,15 @@ public class GameUnitSlotItem : MonoBehaviour, IPointerClickHandler
         OnUnitSlotClicked?.Invoke(slotIndex, assignedUnit);
     }
 
-    public void StartCoolTime() // À¯´Ö ÄğÅ¸ÀÓ ¿¬ÃâÀ» ½ÃÀÛÇÏ´Â ÇÔ¼ö
+    public void StartCoolTime() // ìœ ë‹› ì¿¨íƒ€ì„ ì—°ì¶œì„ ì‹œì‘í•˜ëŠ” í•¨ìˆ˜
     {
-        if (IsInCoolTime) 
+        if (assignedUnit == null || IsInCoolTime)
             return;
-
-        if (coolTimeCoroutine != null)
-            StopCoroutine(coolTimeCoroutine);
 
         coolTimeCoroutine = StartCoroutine(CoolTimeCoroutine());
     }
 
-    private IEnumerator CoolTimeCoroutine() // À¯´Ö ÄğÅ¸ÀÓ ¿¬ÃâÀ» ½ÃÀÛÇÏ´Â ÄÚ·çÆ¾
+    private IEnumerator CoolTimeCoroutine() // ìœ ë‹› ì¿¨íƒ€ì„ ì—°ì¶œì„ ì‹œì‘í•˜ëŠ” ì½”ë£¨í‹´
     {
         ChangeState(SlotState.CoolTime);
 
@@ -103,7 +101,7 @@ public class GameUnitSlotItem : MonoBehaviour, IPointerClickHandler
             EvaluateEnergyState(EnergyManager.instance.CurrentEnergy);
     }
 
-    public void EvaluateEnergyState(float currentEnergy) // ÇöÀç ¿¡³ÊÁöÀÇ »óÅÂ¸¦ Æò°¡ÇÏ´Â ÇÔ¼ö
+    public void EvaluateEnergyState(float currentEnergy) // í˜„ì¬ ì—ë„ˆì§€ì˜ ìƒíƒœë¥¼ í‰ê°€í•˜ëŠ” í•¨ìˆ˜
     {
         if (assignedUnit == null || IsInCoolTime) 
             return;

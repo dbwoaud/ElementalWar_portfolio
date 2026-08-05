@@ -5,20 +5,20 @@ using UnityEngine;
 
 public class UnitSettingManager : BaseSceneController<UnitSettingManager>
 {
-    [Header("Ä³½Ì º¯¼ö")]
+    [Header("ìºì‹± ë³€ìˆ˜")]
     [SerializeField] private UnitSettingUIManager unitSettingUIManager;
     [SerializeField] private UnitSettingNetworkManager unitSettingNetworkManager;
     [SerializeField] private DeckHotkeyHandler deckHotkeyHandler;
     [SerializeField] private UnitDatabase unitDatabase;
 
-    [Header("·£´ı ¸Ê °áÁ¤¿ë Ç® ±æÀÌ")]
+    [Header("ëœë¤ ë§µ ê²°ì •ìš© í’€ ê¸¸ì´")]
     [SerializeField] private int totalMapCount = 5;
 
-    [Header("À¯´Ö ¹× µ¦ ¼³Á¤ º¯¼ö")]
+    [Header("ìœ ë‹› ë° ë± ì„¤ì • ë³€ìˆ˜")]
     [SerializeField] private DeckModel deck;
     [SerializeField] private UnitStat currentSelectedUnit;
 
-    [Header("¾À ÀüÈ¯ º¯¼ö")]
+    [Header("ì”¬ ì „í™˜ ë³€ìˆ˜")]
     [SerializeField] private bool transitionLocked = false;
 
 
@@ -91,7 +91,7 @@ public class UnitSettingManager : BaseSceneController<UnitSettingManager>
         unitSettingNetworkManager?.ResetPlayerReadyState();
     }
 
-    private void HandleElementSelected(ElementType type) // ¼Ó¼º ¹öÆ° Å¬¸¯ ½Ã ½ÇÇàµÇ´Â ÇÔ¼ö
+    private void HandleElementSelected(ElementType type) // ì†ì„± ë²„íŠ¼ í´ë¦­ ì‹œ ì‹¤í–‰ë˜ëŠ” í•¨ìˆ˜
     {
         if (unitDatabase == null)
             return;
@@ -102,7 +102,7 @@ public class UnitSettingManager : BaseSceneController<UnitSettingManager>
         RefreshDeckUI();
     }
 
-    private void HandleReadyCheck() // µ¦ÀÇ ÁØºñ ¿Ï·á »óÅÂ¸¦ È®ÀÎÇÏ´Â ÇÔ¼ö
+    private void HandleReadyCheck() // ë±ì˜ ì¤€ë¹„ ì™„ë£Œ ìƒíƒœë¥¼ í™•ì¸í•˜ëŠ” í•¨ìˆ˜
     {
         if (!deck.IsFull())
         {
@@ -114,12 +114,12 @@ public class UnitSettingManager : BaseSceneController<UnitSettingManager>
         unitSettingNetworkManager?.SetPlayerReadyState(deck.GetUnitNames());
     }
 
-    private void HandleCancelDeckReady() // µ¦ÀÇ ÁØºñ ¿Ï·á »óÅÂ¸¦ Ãë¼ÒÇÏ´Â ÇÔ¼ö
+    private void HandleCancelDeckReady() // ë±ì˜ ì¤€ë¹„ ì™„ë£Œ ìƒíƒœë¥¼ ì·¨ì†Œí•˜ëŠ” í•¨ìˆ˜
     {
         unitSettingNetworkManager?.ResetPlayerReadyState();
     }
 
-    private void HandleAssignUnitToDeck(int slotIndex, UnitStat stat) // À¯´ÖÀ» µ¦¿¡ ÇÒ´çÇÏ´Â ÇÔ¼ö
+    private void HandleAssignUnitToDeck(int slotIndex, UnitStat stat) // ìœ ë‹›ì„ ë±ì— í• ë‹¹í•˜ëŠ” í•¨ìˆ˜
     {
         if (stat == null)
             return;
@@ -137,14 +137,14 @@ public class UnitSettingManager : BaseSceneController<UnitSettingManager>
         RefreshDeckUI();
     }
 
-    private void RemoveUnitFromDeck(int slotIndex) // ÀÎµ¦½º¿¡ ÇØ´çÇÏ´Â µ¦ À¯´ÖÀ» Á¦°ÅÇÏ´Â ÇÔ¼ö
+    private void RemoveUnitFromDeck(int slotIndex) // ì¸ë±ìŠ¤ì— í•´ë‹¹í•˜ëŠ” ë± ìœ ë‹›ì„ ì œê±°í•˜ëŠ” í•¨ìˆ˜
     {
         deck.RemoveUnit(slotIndex);
         unitSettingUIManager?.UpdateDeckSlotUI(slotIndex, null);
         RefreshDeckUI();
     }
 
-    private void RefreshDeckUI() // µ¦ ½½·Ô UI¸¦ °»½ÅÇÏ´Â ÇÔ¼ö
+    private void RefreshDeckUI() // ë± ìŠ¬ë¡¯ UIë¥¼ ê°±ì‹ í•˜ëŠ” í•¨ìˆ˜
     {
         List<UnitStat> equippedUnits = new List<UnitStat>(InputBindings.DeckSize);
         for (int i = 0; i < InputBindings.DeckSize; i++)
@@ -156,7 +156,7 @@ public class UnitSettingManager : BaseSceneController<UnitSettingManager>
         unitSettingUIManager?.RefreshUnitSlotState(equippedUnits, currentSelectedUnit);
     }
 
-    private void HandleSwapUnitsInDeck(int fromIndex, int toIndex) // µ¦ÀÇ ½½·ÔÀ» ¼­·Î ¹Ù²Ù´Â ÇÔ¼ö
+    private void HandleSwapUnitsInDeck(int fromIndex, int toIndex) // ë±ì˜ ìŠ¬ë¡¯ì„ ì„œë¡œ ë°”ê¾¸ëŠ” í•¨ìˆ˜
     {
         SoundManager.instance?.Play(SoundKey.ButtonClick);
         deck.SwapUnits(fromIndex, toIndex);
@@ -164,13 +164,13 @@ public class UnitSettingManager : BaseSceneController<UnitSettingManager>
         unitSettingUIManager?.UpdateDeckSlotUI(toIndex, deck.GetUnit(toIndex));
     }
 
-    private void HandleUnitLeftClick(UnitStat stat) // À¯´Ö ½½·ÔÀÇ ¿ŞÂÊ Å¬¸¯À» Ã³¸®ÇÏ´Â ÇÔ¼ö
+    private void HandleUnitLeftClick(UnitStat stat) // ìœ ë‹› ìŠ¬ë¡¯ì˜ ì™¼ìª½ í´ë¦­ì„ ì²˜ë¦¬í•˜ëŠ” í•¨ìˆ˜
     {
         currentSelectedUnit = stat;
         RefreshDeckUI();
     }
 
-    private void HandleGameStart() // °ÔÀÓ ½ÃÀÛÀ» Ã³¸®ÇÏ´Â ÇÔ¼ö
+    private void HandleGameStart() // ê²Œì„ ì‹œì‘ì„ ì²˜ë¦¬í•˜ëŠ” í•¨ìˆ˜
     {
         if (transitionLocked) 
             return;
@@ -185,7 +185,7 @@ public class UnitSettingManager : BaseSceneController<UnitSettingManager>
         PhotonNetwork.LoadLevel(SceneName.Game);
     }
 
-    private void DecideMap() // ¸ÊÀ» ·£´ıÀ¸·Î °áÁ¤ÇÏ´Â ÇÔ¼ö
+    private void DecideMap() // ë§µì„ ëœë¤ìœ¼ë¡œ ê²°ì •í•˜ëŠ” í•¨ìˆ˜
     {
         int randomIndex = Random.Range(0, Mathf.Max(1, totalMapCount));
         var props = new Hashtable
@@ -196,12 +196,12 @@ public class UnitSettingManager : BaseSceneController<UnitSettingManager>
         PhotonNetwork.CurrentRoom.SetCustomProperties(props);
     }
 
-    private void CloseRoom() // ÇöÀç ¹æÀ» ´İ´Â ÇÔ¼ö
+    private void CloseRoom() // í˜„ì¬ ë°©ì„ ë‹«ëŠ” í•¨ìˆ˜
     {
         PhotonNetwork.CurrentRoom.IsOpen = false;
     }
 
-    private void HandleOpponentLeft(Photon.Realtime.Player leftPlayer) // »ó´ë¹æÀÇ Å»ÁÖ¸¦ Ã³¸®ÇÏ´Â ÇÔ¼ö
+    private void HandleOpponentLeft(Photon.Realtime.Player leftPlayer) // ìƒëŒ€ë°©ì˜ íƒˆì£¼ë¥¼ ì²˜ë¦¬í•˜ëŠ” í•¨ìˆ˜
     {
         if (transitionLocked) 
             return;
@@ -215,13 +215,13 @@ public class UnitSettingManager : BaseSceneController<UnitSettingManager>
         );
     }
 
-    private void HandleReturnToRoom() // ¹æÀ¸·Î ÀÌµ¿ÇÏ´Â ÇÔ¼ö
+    private void HandleReturnToRoom() // ë°©ìœ¼ë¡œ ì´ë™í•˜ëŠ” í•¨ìˆ˜
     {
         unitSettingNetworkManager?.ResetPlayerReadyState();
         PhotonNetwork.LoadLevel(SceneName.Room);
     }
 
-    private void HandleHotkeyAssignSlot(int slotIndex) // Å°º¸µå ¼ıÀÚÅ° ÀÔ·ÂÀ¸·Î ÇöÀç ¼±ÅÃµÈ À¯´ÖÀ» ½½·Ô¿¡ ÇÒ´çÇÏ´Â ÇÔ¼ö
+    private void HandleHotkeyAssignSlot(int slotIndex) // í‚¤ë³´ë“œ ìˆ«ìí‚¤ ì…ë ¥ìœ¼ë¡œ í˜„ì¬ ì„ íƒëœ ìœ ë‹›ì„ ìŠ¬ë¡¯ì— í• ë‹¹í•˜ëŠ” í•¨ìˆ˜
     {
         if (currentSelectedUnit == null)
             return;

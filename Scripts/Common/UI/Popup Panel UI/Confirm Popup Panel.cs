@@ -4,10 +4,10 @@ using UnityEngine.UI;
 
 public class ConfirmPopupPanel : BasePopupPanel
 {
-    [Header("UI ¿ä¼Ò")]
+    [Header("UI ìš”ì†Œ")]
     [SerializeField] private Button confirmButton;
 
-    [Header("¹öÆ° Å¬¸¯ ÀÌº¥Æ®")]
+    [Header("ë²„íŠ¼ í´ë¦­ ì´ë²¤íŠ¸")]
     private Action onConfirmAction;
 
 
@@ -26,14 +26,14 @@ public class ConfirmPopupPanel : BasePopupPanel
         messageText.text = "";
     }
 
-    private void OnClickConfirmButton() // È®ÀÎ ¹öÆ° Å¬¸¯ ½Ã ½ÇÇàµÇ´Â ÇÔ¼ö
+    private void OnClickConfirmButton() // í™•ì¸ ë²„íŠ¼ í´ë¦­ ì‹œ ì‹¤í–‰ë˜ëŠ” í•¨ìˆ˜
     {
         SoundManager.instance?.Play(SoundKey.ButtonClick);
         onConfirmAction?.Invoke();
         Hide();
     }
 
-    public void Setup(string message, Action onConfirm = null) // È®ÀÎ ÆË¾÷ ÆĞ³ÎÀ» È°¼ºÈ­ÇÏ´Â ÇÔ¼ö
+    public void Setup(string message, Action onConfirm = null) // í™•ì¸ íŒì—… íŒ¨ë„ì„ í™œì„±í™”í•˜ëŠ” í•¨ìˆ˜
     {
         onConfirmAction = onConfirm;
         ShowPopup(message);

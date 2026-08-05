@@ -3,18 +3,18 @@ using UnityEngine;
 
 public class CastleAttackManager : BaseSceneController<CastleAttackManager>
 {
-    [Header("Ä³½Ì º¯¼ö")]
+    [Header("ìºì‹± ë³€ìˆ˜")]
     [SerializeField] private CastleUIManager castleUIManager;
     [SerializeField] private Castle playerCastle;
     public Castle PlayerCastle => playerCastle;
 
-    [Header("°ø°İ ¼³Á¤")]
+    [Header("ê³µê²© ì„¤ì •")]
     [SerializeField] private float coolTime = 50f;
     [SerializeField] private float currentTimer = 0f;
     [SerializeField] private bool isReady = false;
     [SerializeField] private bool isRegistered = false;
 
-    [Header("°ÔÀÓ ÁøÇà »óÅÂ")]
+    [Header("ê²Œì„ ì§„í–‰ ìƒíƒœ")]
     [SerializeField] private bool isStop;
 
     protected override void SetUIManager()
@@ -51,10 +51,10 @@ public class CastleAttackManager : BaseSceneController<CastleAttackManager>
             return;
 
         UpdateCoolTimeTimer();
-        CheckSpaceBarInput();
+        CheckCannonBarInput();
     }
 
-    private void UpdateCoolTimeTimer() // ´ëÆ÷ ¹ß»ç ÄğÅ¸ÀÓÀ» °è»êÇÏ°í UI¸¦ °»½ÅÇÏ´Â ÇÔ¼ö
+    private void UpdateCoolTimeTimer() // ëŒ€í¬ ë°œì‚¬ ì¿¨íƒ€ì„ì„ ê³„ì‚°í•˜ê³  UIë¥¼ ê°±ì‹ í•˜ëŠ” í•¨ìˆ˜
     {
         if (!isReady && isRegistered)
         {
@@ -66,16 +66,16 @@ public class CastleAttackManager : BaseSceneController<CastleAttackManager>
         }
     }
 
-    private void CheckSpaceBarInput() // ½ºÆäÀÌ½º ¹Ù ÀÔ·ÂÀ» È®ÀÎÇÏ´Â ÇÔ¼ö
+    private void CheckCannonBarInput() // ìŠ¤í˜ì´ìŠ¤ ë°” ì…ë ¥ì„ í™•ì¸í•˜ëŠ” í•¨ìˆ˜
     {
         if (InputGate.IsBlocked)
             return;
 
-        if (isReady && Input.GetKeyDown(KeyCode.Space))
+        if (isReady && Input.GetKeyDown(InputBindings.CannonFireKey))
             HandleFireRequest();     
     }
 
-    private void HandleFireRequest() // ´ëÆ÷ ¹ß»ç ¿äÃ»À» Ã³¸®ÇÏ´Â ÇÔ¼ö
+    private void HandleFireRequest() // ëŒ€í¬ ë°œì‚¬ ìš”ì²­ì„ ì²˜ë¦¬í•˜ëŠ” í•¨ìˆ˜
     {
         if (!isReady || playerCastle == null)
             return;
@@ -84,14 +84,14 @@ public class CastleAttackManager : BaseSceneController<CastleAttackManager>
         playerCastle?.FireCannon();
     }
 
-    private void ResetFireState() // ´ëÆ÷ ¹ß»ç »óÅÂ¸¦ ÃÊ±âÈ­ÇÏ´Â ÇÔ¼ö
+    private void ResetFireState() // ëŒ€í¬ ë°œì‚¬ ìƒíƒœë¥¼ ì´ˆê¸°í™”í•˜ëŠ” í•¨ìˆ˜
     {
         isReady = false;
         currentTimer = 0f;
         castleUIManager?.UpdateCoolTimeUI(0f);
     }
 
-    public void SetPlayerCastle(Castle castle) // ÇÃ·¹ÀÌ¾î ¼ºÀ» ¼³Á¤ÇÏ´Â ÇÔ¼ö
+    public void SetPlayerCastle(Castle castle) // í”Œë ˆì´ì–´ ì„±ì„ ì„¤ì •í•˜ëŠ” í•¨ìˆ˜
     {
         playerCastle = castle;
         isRegistered = true;
@@ -99,7 +99,7 @@ public class CastleAttackManager : BaseSceneController<CastleAttackManager>
         currentTimer = 0f;
     }
 
-    public void Stop() // ´ëÆ÷ ½Ã½ºÅÛ µ¿ÀÛÀ» Áß´ÜÇÏ´Â ÇÔ¼ö
+    public void Stop() // ëŒ€í¬ ì‹œìŠ¤í…œ ë™ì‘ì„ ì¤‘ë‹¨í•˜ëŠ” í•¨ìˆ˜
     {
         isStop = true;
     }

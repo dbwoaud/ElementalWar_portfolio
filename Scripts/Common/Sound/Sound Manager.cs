@@ -3,11 +3,11 @@ using UnityEngine;
 
 public class SoundManager : Singleton<SoundManager>
 {
-    [Header("¿Àµğ¿À ¼Ò½º")]
+    [Header("ì˜¤ë””ì˜¤ ì†ŒìŠ¤")]
     [SerializeField] private AudioSource bgmAudioSource;
     [SerializeField] private AudioSource sfxAudioSource;
 
-    [Header("¿Àµğ¿À Å¬¸³")]
+    [Header("ì˜¤ë””ì˜¤ í´ë¦½")]
     [SerializeField] private SoundEntry[] entries;
     private readonly Dictionary<SoundKey, SoundEntry> soundTable = new Dictionary<SoundKey, SoundEntry>();
 
@@ -21,7 +21,7 @@ public class SoundManager : Singleton<SoundManager>
         BuildSoundTableData();
     }
 
-    private void BuildSoundTableData() // ÀÎ½ºÆåÅÍ¿¡ µî·ÏµÈ »ç¿îµå Á¤º¸µéÀ» µñ¼Å³Ê¸®·Î º¯È¯ÇÏ´Â ÇÔ¼ö
+    private void BuildSoundTableData() // ì¸ìŠ¤í™í„°ì— ë“±ë¡ëœ ì‚¬ìš´ë“œ ì •ë³´ë“¤ì„ ë”•ì…”ë„ˆë¦¬ë¡œ ë³€í™˜í•˜ëŠ” í•¨ìˆ˜
     {
         soundTable.Clear();
         if (entries == null)
@@ -38,7 +38,7 @@ public class SoundManager : Singleton<SoundManager>
         }
     }
 
-    public void Play(SoundKey key, float volumeScale = 1f) // Å°¿¡ ¸ÅÇÎµÈ »ç¿îµå¸¦ Àç»ıÇÏ´Â ÇÔ¼ö
+    public void Play(SoundKey key, float volumeScale = 1f) // í‚¤ì— ë§¤í•‘ëœ ì‚¬ìš´ë“œë¥¼ ì¬ìƒí•˜ëŠ” í•¨ìˆ˜
     {
         if (!soundTable.TryGetValue(key, out SoundEntry entry))
             return;
@@ -54,7 +54,7 @@ public class SoundManager : Singleton<SoundManager>
         }
     }
 
-    public void Stop(SoundChannel channel) // ÁöÁ¤µÈ Ã¤³ÎÀÇ »ç¿îµå¸¦ ¸ØÃß´Â ÇÔ¼ö
+    public void Stop(SoundChannel channel) // ì§€ì •ëœ ì±„ë„ì˜ ì‚¬ìš´ë“œë¥¼ ë©ˆì¶”ëŠ” í•¨ìˆ˜
     {
         switch (channel)
         {
@@ -69,13 +69,13 @@ public class SoundManager : Singleton<SoundManager>
         }
     }
 
-    public void StopAll() // ¸ğµç »ç¿îµå¸¦ ¸ØÃß´Â ÇÔ¼ö
+    public void StopAll() // ëª¨ë“  ì‚¬ìš´ë“œë¥¼ ë©ˆì¶”ëŠ” í•¨ìˆ˜
     {
         Stop(SoundChannel.SFX);
         Stop(SoundChannel.BGM);
     }
 
-    private void PlaySFX(SoundEntry entry, float volumeScale) // SFX Ã¤³Î¿¡ »ç¿îµå¸¦ Àç»ıÇÏ´Â ÇÔ¼ö
+    private void PlaySFX(SoundEntry entry, float volumeScale) // SFX ì±„ë„ì— ì‚¬ìš´ë“œë¥¼ ì¬ìƒí•˜ëŠ” í•¨ìˆ˜
     {
         if (sfxAudioSource == null || entry.clip == null)
             return;
@@ -83,7 +83,7 @@ public class SoundManager : Singleton<SoundManager>
         sfxAudioSource.PlayOneShot(entry.clip, entry.defaultVolume * volumeScale);
     }
 
-    private void PlayBGM(SoundEntry entry, float volumeScale) // BGM Ã¤³Î¿¡ »ç¿îµå¸¦ Àç»ıÇÏ´Â ÇÔ¼ö
+    private void PlayBGM(SoundEntry entry, float volumeScale) // BGM ì±„ë„ì— ì‚¬ìš´ë“œë¥¼ ì¬ìƒí•˜ëŠ” í•¨ìˆ˜
     {
         if (bgmAudioSource == null || entry.clip == null)
             return;
@@ -97,7 +97,7 @@ public class SoundManager : Singleton<SoundManager>
         bgmAudioSource.Play();
     }
 
-    public void PlayDynamicBGM(AudioClip clip, float volume = 1f) // ¸Ê¿¡ µû¸¥ µ¿Àû ¹è°æÀ½¾ÇÀ» Àç»ıÇÏ´Â ÇÔ¼ö
+    public void PlayDynamicBGM(AudioClip clip, float volume = 1f) // ë§µì— ë”°ë¥¸ ë™ì  ë°°ê²½ìŒì•…ì„ ì¬ìƒí•˜ëŠ” í•¨ìˆ˜
     {
         if (clip == null || bgmAudioSource == null)
             return;

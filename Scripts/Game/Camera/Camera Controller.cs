@@ -4,15 +4,15 @@ using System.Collections;
 [RequireComponent(typeof(Camera), typeof(CameraInputManager), typeof(CameraBoundManager))]
 public class CameraController : MonoBehaviour
 {
-    [Header("Ä³½Ì º¯¼ö")]
+    [Header("ìºì‹± ë³€ìˆ˜")]
     [SerializeField] private Camera cam;
     [SerializeField] private CameraInputManager cameraInputManager;
     [SerializeField] private CameraBoundManager cameraBoundManager;
 
-    [Header("½ºÅ©·Ñ ¼³Á¤")]
+    [Header("ìŠ¤í¬ë¡¤ ì„¤ì •")]
     [SerializeField] private float scrollSpeed = 20f;
 
-    [Header("ÄÚ·çÆ¾ Á¦¾î")]
+    [Header("ì½”ë£¨í‹´ ì œì–´")]
     private Coroutine moveCoroutine;
 
 
@@ -27,7 +27,7 @@ public class CameraController : MonoBehaviour
         }
     }
 
-    private void HandleEdgeScroll(float direction) // Ä«¸Ş¶ó ÀÌµ¿À» Ã³¸®ÇÏ´Â ÇÔ¼ö
+    private void HandleEdgeScroll(float direction) // ì¹´ë©”ë¼ ì´ë™ì„ ì²˜ë¦¬í•˜ëŠ” í•¨ìˆ˜
     {
         if (!cameraBoundManager.IsInitialized)
             return;
@@ -50,22 +50,22 @@ public class CameraController : MonoBehaviour
         }
     }
 
-    public void SetBounds(PolygonCollider2D bounds) // Ä«¸Ş¶óÀÇ °æ°è¸¦ ¼³Á¤ÇÏ´Â ÇÔ¼ö
+    public void SetBounds(PolygonCollider2D bounds) // ì¹´ë©”ë¼ì˜ ê²½ê³„ë¥¼ ì„¤ì •í•˜ëŠ” í•¨ìˆ˜
     {
         cameraBoundManager?.SetBounds(cam, bounds);
     }
 
-    public void EnablePlayerControl() // ÇÃ·¹ÀÌ¾îÀÇ Á¦¾î¸¦ È°¼ºÈ­ÇÏ´Â ÇÔ¼ö
+    public void EnablePlayerControl() // í”Œë ˆì´ì–´ì˜ ì œì–´ë¥¼ í™œì„±í™”í•˜ëŠ” í•¨ìˆ˜
     {
         cameraInputManager.IsInputEnabled = true;
     }
 
-    public void DisablePlayerControl() // ÇÃ·¹ÀÌ¾îÀÇ Á¦¾î¸¦ ºñÈ°¼ºÈ­ÇÏ´Â ÇÔ¼ö
+    public void DisablePlayerControl() // í”Œë ˆì´ì–´ì˜ ì œì–´ë¥¼ ë¹„í™œì„±í™”í•˜ëŠ” í•¨ìˆ˜
     {
         cameraInputManager.IsInputEnabled = false;
     }
 
-    public void MoveToTarget(Vector3 targetWorldPos, float duration) // Ä«¸Ş¶ó¸¦ Á¤ÇØÁø À§Ä¡·Î ÀÌµ¿½ÃÅ°´Â ÇÔ¼ö
+    public void MoveToTarget(Vector3 targetWorldPos, float duration) // ì¹´ë©”ë¼ë¥¼ ì •í•´ì§„ ìœ„ì¹˜ë¡œ ì´ë™ì‹œí‚¤ëŠ” í•¨ìˆ˜
     {
         if (moveCoroutine != null)
             StopCoroutine(moveCoroutine);
@@ -73,7 +73,7 @@ public class CameraController : MonoBehaviour
         moveCoroutine = StartCoroutine(MoveToTargetCoroutine(targetWorldPos, duration));
     }
 
-    private IEnumerator MoveToTargetCoroutine(Vector3 targetWorldPos, float duration) // Ä«¸Ş¶ó¸¦ Á¤ÇØÁø À§Ä¡·Î ÀÌµ¿½ÃÅ°´Â ÄÚ·çÆ¾
+    private IEnumerator MoveToTargetCoroutine(Vector3 targetWorldPos, float duration) // ì¹´ë©”ë¼ë¥¼ ì •í•´ì§„ ìœ„ì¹˜ë¡œ ì´ë™ì‹œí‚¤ëŠ” ì½”ë£¨í‹´
     {
         DisablePlayerControl();
 

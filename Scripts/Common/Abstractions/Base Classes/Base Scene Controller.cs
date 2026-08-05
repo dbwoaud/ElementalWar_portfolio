@@ -9,7 +9,7 @@ public abstract class BaseSceneController<T> : Singleton<T> where T : MonoBehavi
         InitializeState(); 
     }
 
-    protected virtual void SetCachedVariable() // Ä³½Ì º¯¼ö¸¦ ¼³Á¤ÇÏ´Â ÇÔ¼ö
+    protected virtual void SetCachedVariable() // ìºì‹± ë³€ìˆ˜ë¥¼ ì„¤ì •í•˜ëŠ” í•¨ìˆ˜
     {
         SubscribeEvents();
     }
@@ -20,26 +20,27 @@ public abstract class BaseSceneController<T> : Singleton<T> where T : MonoBehavi
         SetNetworkManager();
     }
 
-    protected abstract void SetUIManager(); // UI ¸Å´ÏÀú¸¦ ¼³Á¤ÇÏ´Â ÇÔ¼ö
+    protected abstract void SetUIManager(); // UI ë§¤ë‹ˆì €ë¥¼ ì„¤ì •í•˜ëŠ” í•¨ìˆ˜
 
-    protected abstract void SetNetworkManager(); // ³×Æ®¿öÅ© ¸Å´ÏÀú¸¦ ¼³Á¤ÇÏ´Â ÇÔ¼ö
+    protected abstract void SetNetworkManager(); // ë„¤íŠ¸ì›Œí¬ ë§¤ë‹ˆì €ë¥¼ ì„¤ì •í•˜ëŠ” í•¨ìˆ˜
 
-    protected abstract void PlayBGM(); // ¾ÀÀÇ ¹è°æÀ½¾ÇÀ» Àç»ıÇÏ´Â ÇÔ¼ö
+    protected abstract void PlayBGM(); // ì”¬ì˜ ë°°ê²½ìŒì•…ì„ ì¬ìƒí•˜ëŠ” í•¨ìˆ˜
 
-    protected abstract void InitializeState(); // ¾ÀÀÇ ÃÊ±â»óÅÂ¸¦ ¼³Á¤ÇÏ´Â ÇÔ¼ö
+    protected abstract void InitializeState(); // ì”¬ì˜ ì´ˆê¸°ìƒíƒœë¥¼ ì„¤ì •í•˜ëŠ” í•¨ìˆ˜
 
-    protected virtual void OnDestroy()
+    protected override void OnDestroy()
     {
         UnsubscribeAll();
+        base.OnDestroy();
     }
 
-    protected virtual void UnsubscribeAll() // ¸ğµç ÀÌº¥Æ®¸¦ ±¸µ¶ ÇØÁ¦ÇÏ´Â ÇÔ¼ö
+    protected virtual void UnsubscribeAll() // ëª¨ë“  ì´ë²¤íŠ¸ë¥¼ êµ¬ë… í•´ì œí•˜ëŠ” í•¨ìˆ˜
     {
         ResetUIManager();
         ResetNetworkManager();
     }
 
-    protected abstract void ResetUIManager(); // UI ¸Å´ÏÀú¸¦ ¸®¼ÂÇÏ´Â ÇÔ¼ö
+    protected abstract void ResetUIManager(); // UI ë§¤ë‹ˆì €ë¥¼ ë¦¬ì…‹í•˜ëŠ” í•¨ìˆ˜
 
-    protected abstract void ResetNetworkManager(); // ³×Æ®¿öÅ© ¸Å´ÏÀú¸¦ ¸®¼ÂÇÏ´Â ÇÔ¼ö
+    protected abstract void ResetNetworkManager(); // ë„¤íŠ¸ì›Œí¬ ë§¤ë‹ˆì €ë¥¼ ë¦¬ì…‹í•˜ëŠ” í•¨ìˆ˜
 }

@@ -6,17 +6,17 @@ using Photon.Realtime;
 
 public class LobbyUIManager : BaseUIManager<LobbyUIManager>
 {
-    [Header("UI ¼³Á¤")]
+    [Header("UI ì„¤ì •")]
     [SerializeField] private Text nicknameText;
     [SerializeField] private Button randomRoomEntryButton;
     [SerializeField] private Button roomCreateButton;
 
-    [Header("ÇÏÀ§ ÆĞ³Î °ü¸®")]
+    [Header("í•˜ìœ„ íŒ¨ë„ ê´€ë¦¬")]
     [SerializeField] private RoomCreatePanel roomCreatePanel;
     [SerializeField] private PasswordInputPanel passwordInputPanel;
     [SerializeField] private List<UIPanel> uiPanels = new List<UIPanel>();
 
-    [Header("ÇÏÀ§ ÄÁÅ×ÀÌ³Ê °ü¸®")]
+    [Header("í•˜ìœ„ ì»¨í…Œì´ë„ˆ ê´€ë¦¬")]
     [SerializeField] private RoomListContainer roomListContainer;
 
     public event Action OnClickRandomButton;
@@ -33,7 +33,7 @@ public class LobbyUIManager : BaseUIManager<LobbyUIManager>
         HideAllPanelsImmediate();
     }
 
-    private void HideAllPanelsImmediate() // ¸ğµç ÇÏÀ§ ÆĞ³ÎÀ» Áï½Ã ºñÈ°¼ºÈ­½ÃÅ°´Â ÇÔ¼ö
+    private void HideAllPanelsImmediate() // ëª¨ë“  í•˜ìœ„ íŒ¨ë„ì„ ì¦‰ì‹œ ë¹„í™œì„±í™”ì‹œí‚¤ëŠ” í•¨ìˆ˜
     {
         foreach (var panel in uiPanels)
         {
@@ -88,64 +88,64 @@ public class LobbyUIManager : BaseUIManager<LobbyUIManager>
         }
     }
 
-    private void OnClickRoomCreateButton() // ¹æ »ı¼º ¹öÆ° Å¬¸¯ ½Ã ½ÇÇàµÇ´Â ÇÔ¼ö
+    private void OnClickRoomCreateButton() // ë°© ìƒì„± ë²„íŠ¼ í´ë¦­ ì‹œ ì‹¤í–‰ë˜ëŠ” í•¨ìˆ˜
     {
         PlayButtonSound();
         roomCreatePanel.Show();
     }
 
-    private void OnClickRandomRoomEntryButton() // ·£´ı ¹æ ÀÔÀå ¹öÆ° Å¬¸¯ ½Ã ½ÇÇàµÇ´Â ÇÔ¼ö  
+    private void OnClickRandomRoomEntryButton() // ëœë¤ ë°© ì…ì¥ ë²„íŠ¼ í´ë¦­ ì‹œ ì‹¤í–‰ë˜ëŠ” í•¨ìˆ˜  
     {
         PlayButtonSound();
         OnClickRandomButton?.Invoke();
     }
 
-    private void HandleCreateSubmit(string name, string pw) // ¹æ »ı¼º ÆĞ³Î¿¡¼­ ¹æ »ı¼º ¹öÆ° Å¬¸¯ ½Ã ½ÇÇàµÇ´Â ÇÔ¼ö
+    private void HandleCreateSubmit(string name, string pw) // ë°© ìƒì„± íŒ¨ë„ì—ì„œ ë°© ìƒì„± ë²„íŠ¼ í´ë¦­ ì‹œ ì‹¤í–‰ë˜ëŠ” í•¨ìˆ˜
     {
         OnRoomCreateSubmit?.Invoke(name, pw);
     }
 
-    private void HandlePasswordSubmit(string pw) // ºñ¹Ğ¹øÈ£ ÆĞ³Î¿¡¼­ È®ÀÎ ¹öÆ° Å¬¸¯ ½Ã ½ÇÇàµÇ´Â ÇÔ¼ö
+    private void HandlePasswordSubmit(string pw) // ë¹„ë°€ë²ˆí˜¸ íŒ¨ë„ì—ì„œ í™•ì¸ ë²„íŠ¼ í´ë¦­ ì‹œ ì‹¤í–‰ë˜ëŠ” í•¨ìˆ˜
     {
         OnPasswordSubmit?.Invoke(pw);
     }
 
-    private void HandlePasswordCancel() // ºñ¹Ğ¹øÈ£ ÆĞ³Î¿¡¼­ Ãë¼Ò ¹öÆ° Å¬¸¯ ½Ã ½ÇÇàµÇ´Â ÇÔ¼ö
+    private void HandlePasswordCancel() // ë¹„ë°€ë²ˆí˜¸ íŒ¨ë„ì—ì„œ ì·¨ì†Œ ë²„íŠ¼ í´ë¦­ ì‹œ ì‹¤í–‰ë˜ëŠ” í•¨ìˆ˜
     {
         OnPasswordCancel?.Invoke();
     }
 
-    private void HandleRoomItemClicked(RoomInfo info) // ¹æ ¹öÆ° Å¬¸¯ ½Ã ½ÇÇàµÇ´Â ÇÔ¼ö
+    private void HandleRoomItemClicked(RoomInfo info) // ë°© ë²„íŠ¼ í´ë¦­ ì‹œ ì‹¤í–‰ë˜ëŠ” í•¨ìˆ˜
     {
         OnClickRoomItem?.Invoke(info);
     }
 
-    public void SetNicknameUI(string nickname) // ´Ğ³×ÀÓÀ» Ãâ·ÂÇÏ´Â ÇÔ¼ö
+    public void SetNicknameUI(string nickname) // ë‹‰ë„¤ì„ì„ ì¶œë ¥í•˜ëŠ” í•¨ìˆ˜
     {
         nicknameText.text = nickname;
     }
 
-    public void UpdateRoomListUI(List<RoomInfo> roomList) // ¹æ ¸ñ·Ï UI¸¦ ¾÷µ¥ÀÌÆ®ÇÏ´Â ÇÔ¼ö
+    public void UpdateRoomListUI(List<RoomInfo> roomList) // ë°© ëª©ë¡ UIë¥¼ ì—…ë°ì´íŠ¸í•˜ëŠ” í•¨ìˆ˜
     {
         roomListContainer?.UpdateRoomList(roomList);
     }
 
-    public List<int> GetCurrentRoomNumbers() // ÇöÀç ¹æ ¹øÈ£¸¦ ¾ò´Â ÇÔ¼ö
+    public List<int> GetCurrentRoomNumbers() // í˜„ì¬ ë°© ë²ˆí˜¸ë¥¼ ì–»ëŠ” í•¨ìˆ˜
     {
         return roomListContainer.GetCurrentRoomNumbers();
     }
 
-    public void HideRoomCreatePanel() // ¹æ »ı¼º ÆĞ³ÎÀ» ºñÈ°¼ºÈ­ÇÏ´Â ÇÔ¼ö
+    public void HideRoomCreatePanel() // ë°© ìƒì„± íŒ¨ë„ì„ ë¹„í™œì„±í™”í•˜ëŠ” í•¨ìˆ˜
     {
         roomCreatePanel.Hide();
     }
 
-    public void ShowPasswordPanel() // ºñ¹Ğ¹øÈ£ ÆĞ³ÎÀ» È°¼ºÈ­ÇÏ´Â ÇÔ¼ö
+    public void ShowPasswordPanel() // ë¹„ë°€ë²ˆí˜¸ íŒ¨ë„ì„ í™œì„±í™”í•˜ëŠ” í•¨ìˆ˜
     {
         passwordInputPanel.Show();
     }
 
-    public void HidePasswordPanel() // ºñ¹Ğ¹øÈ£ ÆĞ³ÎÀ» ºñÈ°¼ºÈ­ÇÏ´Â ÇÔ¼ö
+    public void HidePasswordPanel() // ë¹„ë°€ë²ˆí˜¸ íŒ¨ë„ì„ ë¹„í™œì„±í™”í•˜ëŠ” í•¨ìˆ˜
     {
         passwordInputPanel.Hide();
     }

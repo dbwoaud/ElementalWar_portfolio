@@ -4,7 +4,7 @@ using UnityEngine;
 [CreateAssetMenu(fileName = "UnitDatabase", menuName = "Scriptable Objects/Unit Database")]
 public class UnitDatabase : ScriptableObject
 {
-    [Header("µî·ÏµÈ ¸ğµç À¯´Ö")]
+    [Header("ë“±ë¡ëœ ëª¨ë“  ìœ ë‹›")]
     [SerializeField] private List<UnitStat> units = new List<UnitStat>();
     private Dictionary<string, UnitStat> nameData;
     private Dictionary<ElementType, List<UnitStat>> elementData;
@@ -17,7 +17,7 @@ public class UnitDatabase : ScriptableObject
         BuildData();
     }
 
-    private void BuildData() // ºü¸¥ Á¶È¸¸¦ À§ÇØ Ä³½Ã¸¦ ±¸ÃàÇÏ´Â ÇÔ¼ö
+    private void BuildData() // ë¹ ë¥¸ ì¡°íšŒë¥¼ ìœ„í•´ ìºì‹œë¥¼ êµ¬ì¶•í•˜ëŠ” í•¨ìˆ˜
     {
         nameData = new Dictionary<string, UnitStat>(units.Count);
         elementData = new Dictionary<ElementType, List<UnitStat>>();
@@ -41,7 +41,7 @@ public class UnitDatabase : ScriptableObject
             statList.Sort((a, b) => a.spawnCost.CompareTo(b.spawnCost));
     }
 
-    public UnitStat FindByName(string unitName) // ÀÌ¸§À¸·Î À¯´Ö Á¤º¸¸¦ Á¶È¸ÇÏ´Â ÇÔ¼ö
+    public UnitStat FindByName(string unitName) // ì´ë¦„ìœ¼ë¡œ ìœ ë‹› ì •ë³´ë¥¼ ì¡°íšŒí•˜ëŠ” í•¨ìˆ˜
     {
         if (string.IsNullOrEmpty(unitName) || nameData == null)
             return null;
@@ -49,7 +49,7 @@ public class UnitDatabase : ScriptableObject
         return nameData.TryGetValue(unitName, out var stat) ? stat : null;
     }
 
-    public IReadOnlyList<UnitStat> FindByElement(ElementType type) // ¼Ó¼ºÀ¸·Î À¯´Ö ¸ñ·ÏÀ» Á¶È¸ÇÏ´Â ÇÔ¼ö
+    public IReadOnlyList<UnitStat> FindByElement(ElementType type) // ì†ì„±ìœ¼ë¡œ ìœ ë‹› ëª©ë¡ì„ ì¡°íšŒí•˜ëŠ” í•¨ìˆ˜
     {
         if (elementData == null)
             BuildData();
@@ -60,7 +60,7 @@ public class UnitDatabase : ScriptableObject
     }
 
 #if UNITY_EDITOR
-    private void OnValidate() // Inspector ¿¡¼­ º¯°æ ½Ã Ä³½Ã¸¦ ´Ù½Ã ±¸ÃàÇÏ´Â ÇÔ¼ö
+    private void OnValidate() // Inspector ì—ì„œ ë³€ê²½ ì‹œ ìºì‹œë¥¼ ë‹¤ì‹œ êµ¬ì¶•í•˜ëŠ” í•¨ìˆ˜
     {
         BuildData();
     }

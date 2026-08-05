@@ -3,17 +3,17 @@ using UnityEngine.UI;
 
 public abstract class BasePopupPanel : UIPanel
 {
-    [Header("ÆË¾÷ ÆĞ³Î °øÅë UI ¿ä¼Ò")]
+    [Header("íŒì—… íŒ¨ë„ ê³µí†µ UI ìš”ì†Œ")]
     [SerializeField] protected Text messageText;
 
 
-    public virtual void SetMessage(string message) // ¸Ş½ÃÁö ¼³Á¤ ÇÔ¼ö
+    public virtual void SetMessage(string message) // ë©”ì‹œì§€ ì„¤ì • í•¨ìˆ˜
     {
         if(!string.IsNullOrEmpty(message) && messageText != null)
             messageText.text = message;
     }
 
-    protected virtual void ShowPopup(string message) // ÆË¾÷ ÆĞ³Î È°¼ºÈ­ ÇÔ¼ö
+    protected virtual void ShowPopup(string message) // íŒì—… íŒ¨ë„ í™œì„±í™” í•¨ìˆ˜
     {
         SetMessage(message);
         transform.SetAsLastSibling();

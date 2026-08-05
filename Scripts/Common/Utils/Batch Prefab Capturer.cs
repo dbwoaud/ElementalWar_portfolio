@@ -7,24 +7,24 @@ using UnityEditor;
 
 public class BatchPrefabCapturer : MonoBehaviour
 {
-    [Header("Ä«¸Ş¶ó ¼¼ÆÃ")]
+    [Header("ì¹´ë©”ë¼ ì„¸íŒ…")]
     public Camera captureCamera;
 
-    [Header("Ä¸Ã³ÇÒ ÇÁ¸®ÆÕ ¸ñ·Ï")]
+    [Header("ìº¡ì²˜í•  í”„ë¦¬íŒ¹ ëª©ë¡")]
     public List<GameObject> targetPrefabs;
 
-    [Header("ÀÌ¹ÌÁö ¼¼ÆÃ")]
+    [Header("ì´ë¯¸ì§€ ì„¸íŒ…")]
     public int imageSize = 512;
     [Range(1f, 2f)]
-    public float padding = 1.2f; // 1.2¸é »óÇÏÁÂ¿ì ¾à 20%ÀÇ ¿©¹é »ı¼º
+    public float padding = 1.2f; // 1.2ë©´ ìƒí•˜ì¢Œìš° ì•½ 20%ì˜ ì—¬ë°± ìƒì„±
     
     
-    [ContextMenu("ÁöÁ¤µÈ ¸ğµç ÇÁ¸®ÆÕ ÃÔ¿µÇÏ±â!")]
+    [ContextMenu("ì§€ì •ëœ ëª¨ë“  í”„ë¦¬íŒ¹ ì´¬ì˜í•˜ê¸°!")]
     public void CaptureAllPrefabs()
     {
         if (captureCamera == null || targetPrefabs.Count == 0)
         {
-            Debug.LogError("Ä«¸Ş¶ó ¶Ç´Â Ä¸Ã³ÇÒ ÇÁ¸®ÆÕÀÌ ¼³Á¤µÇÁö ¾Ê¾Ò½À´Ï´Ù!");
+            Debug.LogError("ì¹´ë©”ë¼ ë˜ëŠ” ìº¡ì²˜í•  í”„ë¦¬íŒ¹ì´ ì„¤ì •ë˜ì§€ ì•Šì•˜ìŠµë‹ˆë‹¤!");
             return;
         }
 
@@ -78,11 +78,11 @@ public class BatchPrefabCapturer : MonoBehaviour
             string fullPath = Path.Combine(saveDirectory, fileName);
             File.WriteAllBytes(fullPath, bytes);
 
-            Debug.Log($"[ÀúÀå ¿Ï·á] {fileName} (Size: {captureCamera.orthographicSize})");
+            Debug.Log($"[ì €ì¥ ì™„ë£Œ] {fileName} (Size: {captureCamera.orthographicSize})");
         }
 #if UNITY_EDITOR
         AssetDatabase.Refresh();
 #endif
-        Debug.Log("¸ğµç ÇÁ¸®ÆÕ Ä¸Ã³°¡ ¼º°øÀûÀ¸·Î ¿Ï·áµÇ¾ú½À´Ï´Ù! (Assets/UnitIcons Æú´õ È®ÀÎ)");
+        Debug.Log("ëª¨ë“  í”„ë¦¬íŒ¹ ìº¡ì²˜ê°€ ì„±ê³µì ìœ¼ë¡œ ì™„ë£Œë˜ì—ˆìŠµë‹ˆë‹¤! (Assets/UnitIcons í´ë” í™•ì¸)");
     }
 }

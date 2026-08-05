@@ -4,7 +4,7 @@ using System;
 
 public class CastleUIManager : BaseUIManager<CastleUIManager>
 {
-    [Header("UI ¿ä¼Ò")]
+    [Header("UI ìš”ì†Œ")]
     [SerializeField] private Button attackButton;
     [SerializeField] private Image attackButtonImage;
     [SerializeField] private Text fireText;
@@ -29,12 +29,12 @@ public class CastleUIManager : BaseUIManager<CastleUIManager>
         attackButton?.onClick.RemoveListener(HandleAttackButtonClicked);
     }
 
-    private void HandleAttackButtonClicked() // °ø°İ ¹öÆ° Å¬¸¯ ½Ã ½ÇÇàµÇ´Â ÇÔ¼ö
+    private void HandleAttackButtonClicked() // ê³µê²© ë²„íŠ¼ í´ë¦­ ì‹œ ì‹¤í–‰ë˜ëŠ” í•¨ìˆ˜
     {
         OnFireRequested?.Invoke();
     }
 
-    public void UpdateCoolTimeUI(float progress) // °ø°İ ¹öÆ°ÀÇ UI¸¦ ¾÷µ¥ÀÌÆ®ÇÏ´Â ÇÔ¼ö
+    public void UpdateCoolTimeUI(float progress) // ê³µê²© ë²„íŠ¼ì˜ UIë¥¼ ì—…ë°ì´íŠ¸í•˜ëŠ” í•¨ìˆ˜
     {
         attackButtonImage.fillAmount = progress;
 
@@ -44,7 +44,7 @@ public class CastleUIManager : BaseUIManager<CastleUIManager>
             SetUIState(false, progress);
     }
 
-    private void SetUIState(bool isReady, float fillAmount) // °ø°İ ¹öÆ°ÀÇ UI »óÅÂ¸¦ ¼³Á¤ÇÏ´Â ÇÔ¼ö
+    private void SetUIState(bool isReady, float fillAmount) // ê³µê²© ë²„íŠ¼ì˜ UI ìƒíƒœë¥¼ ì„¤ì •í•˜ëŠ” í•¨ìˆ˜
     {
         attackButton.interactable = isReady;
         fireText.gameObject.SetActive(isReady);

@@ -1,6 +1,6 @@
 public static class ChatMessageFormatter
 {
-    public static string FormatPlayerMessage(string sender, string message, bool isMine) // ÇÃ·¹ÀÌ¾î ¸Ş½ÃÁö¸¦ »ö»ó ÅÂ±×·Î Æ÷¸ËÇÏ´Â ÇÔ¼ö
+    public static string FormatPlayerMessage(string sender, string message, bool isMine) // í”Œë ˆì´ì–´ ë©”ì‹œì§€ë¥¼ ìƒ‰ìƒ íƒœê·¸ë¡œ í¬ë§·í•˜ëŠ” í•¨ìˆ˜
     {
         var colorEnum = isMine
             ? ChattingSystem.Color.ChatColor.Blue
@@ -9,7 +9,7 @@ public static class ChatMessageFormatter
         return $"<color={colorTag}>{sender} : {message}</color>";
     }
 
-    public static string FormatSystemMessage(string message) // ½Ã½ºÅÛ ¸Ş½ÃÁö¸¦ »ö»ó ÅÂ±×·Î Æ÷¸ËÇÏ´Â ÇÔ¼ö
+    public static string FormatSystemMessage(string message) // ì‹œìŠ¤í…œ ë©”ì‹œì§€ë¥¼ ìƒ‰ìƒ íƒœê·¸ë¡œ í¬ë§·í•˜ëŠ” í•¨ìˆ˜
     {
         string colorTag = ChattingSystem.Color.GetColor(ChattingSystem.Color.ChatColor.Purple);
         return $"<color={colorTag}>[System] : {message}</color>";

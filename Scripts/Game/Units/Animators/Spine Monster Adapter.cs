@@ -4,10 +4,10 @@ using UnityEngine;
 public class SpineMonsterAdapter : BaseUnitAnimator
 {
 
-    [Header("¾î´ğÅÍ ÄÄÆ÷³ÍÆ®")]
+    [Header("ì–´ëŒ‘í„° ì»´í¬ë„ŒíŠ¸")]
     [SerializeField] private SkeletonAnimation skeletonAnim;
 
-    [Header("¾Ö´Ï¸ŞÀÌ¼Ç Å¬¸³¸í")]
+    [Header("ì• ë‹ˆë©”ì´ì…˜ í´ë¦½ëª…")]
     [SerializeField] private string idleAnim = "Idle";
     [SerializeField] private string walkAnim = "Walk";
     [SerializeField] private string attackAnim = "Attack";
@@ -27,66 +27,66 @@ public class SpineMonsterAdapter : BaseUnitAnimator
         
     }
 
-    public override void PlayIdle() // À¯´ÖÀ» ´ë±â »óÅÂ·Î ¸¸µå´Â ÇÔ¼ö
+    public override void PlayIdle() // ìœ ë‹›ì„ ëŒ€ê¸° ìƒíƒœë¡œ ë§Œë“œëŠ” í•¨ìˆ˜
     {
         SetSpineAnim(idleAnim, true);
     }
 
-    public override void PlayMove() // À¯´ÖÀ» ÀÌµ¿ »óÅÂ·Î ¸¸µå´Â ÇÔ¼ö
+    public override void PlayMove() // ìœ ë‹›ì„ ì´ë™ ìƒíƒœë¡œ ë§Œë“œëŠ” í•¨ìˆ˜
     {
         SetSpineAnim(walkAnim, true);
     }
 
-    public override float PlayAttack() // À¯´ÖÀ» °ø°İ »óÅÂ·Î ¸¸µé°í ¾Ö´Ï¸ŞÀÌ¼Ç ±æÀÌ¸¦ ¹İÈ¯ÇÏ´Â ÇÔ¼ö
+    public override float PlayAttack() // ìœ ë‹›ì„ ê³µê²© ìƒíƒœë¡œ ë§Œë“¤ê³  ì• ë‹ˆë©”ì´ì…˜ ê¸¸ì´ë¥¼ ë°˜í™˜í•˜ëŠ” í•¨ìˆ˜
     {
         var trackEntry = skeletonAnim.AnimationState.SetAnimation(0, attackAnim, false);
         return trackEntry != null ? trackEntry.Animation.Duration : 0.5f;
     }
 
-    public override void SetDirection(bool lookLeft) // À¯´ÖÀÇ ¹æÇâÀ» ¼³Á¤ÇÏ´Â ÇÔ¼ö
+    public override void SetDirection(bool lookLeft) // ìœ ë‹›ì˜ ë°©í–¥ì„ ì„¤ì •í•˜ëŠ” í•¨ìˆ˜
     {
         skeletonAnim.skeleton.ScaleX = lookLeft ? -1f : 1f;
     }
 
-    protected override void OnPlayHitInternal() // ÇÇ°İ ½Ã Hit ¾Ö´Ï¸ŞÀÌ¼ÇÀ» ½Ã°¢Àû ³Ë¹é ¿¬Ãâ·Î »ç¿ëÇÏ´Â ÇÔ¼ö
+    protected override void OnPlayHitInternal() // í”¼ê²© ì‹œ Hit ì• ë‹ˆë©”ì´ì…˜ì„ ì‹œê°ì  ë„‰ë°± ì—°ì¶œë¡œ ì‚¬ìš©í•˜ëŠ” í•¨ìˆ˜
     {
         if (HasAnimation(hitAnim))
             skeletonAnim.AnimationState.SetAnimation(0, hitAnim, false);
     }
 
-    protected override void OnPlayDeadInternal() // Á×À½ ½Ã Dead ¾Ö´Ï¸ŞÀÌ¼ÇÀ» Àç»ıÇÏ´Â ÇÔ¼ö
+    protected override void OnPlayDeadInternal() // ì£½ìŒ ì‹œ Dead ì• ë‹ˆë©”ì´ì…˜ì„ ì¬ìƒí•˜ëŠ” í•¨ìˆ˜
     {
         SetSpineAnim(deadAnim, loop: false);
     }
 
-    protected override void OnResetForReuseInternal() // ³×Æ®¿öÅ© Ç® Àç»ç¿ë ½Ã Idle ¾Ö´Ï¸ŞÀÌ¼ÇÀ¸·Î º¹±ÍÇÏ´Â ÇÔ¼ö
+    protected override void OnResetForReuseInternal() // ë„¤íŠ¸ì›Œí¬ í’€ ì¬ì‚¬ìš© ì‹œ Idle ì• ë‹ˆë©”ì´ì…˜ìœ¼ë¡œ ë³µê·€í•˜ëŠ” í•¨ìˆ˜
     {
         SetSpineAnim(idleAnim, loop: true);
     }
 
-    protected override void ApplyFlashColor(Color color) // FlashRed È¿°ú¸¦ skeleton ´ÜÀ§·Î Àû¿ëÇÏ´Â ÇÔ¼ö
+    protected override void ApplyFlashColor(Color color) // FlashRed íš¨ê³¼ë¥¼ skeleton ë‹¨ìœ„ë¡œ ì ìš©í•˜ëŠ” í•¨ìˆ˜
     {
         skeletonAnim.skeleton.SetColor(color);
     }
 
-    protected override void RestoreOriginalColors() // skeleton »ö»óÀ» Èò»ö¿øº»À¸·Î º¹±¸ÇÏ´Â ÇÔ¼ö
+    protected override void RestoreOriginalColors() // skeleton ìƒ‰ìƒì„ í°ìƒ‰ì›ë³¸ìœ¼ë¡œ ë³µêµ¬í•˜ëŠ” í•¨ìˆ˜
     {
         skeletonAnim.skeleton.SetColor(Color.white);
     }
 
-    protected override void ApplyAlpha(float alpha) // ÆäÀÌµå ¾Æ¿ô ¾ËÆÄ¸¦ skeleton ¿¡ Àû¿ëÇÏ´Â ÇÔ¼ö
+    protected override void ApplyAlpha(float alpha) // í˜ì´ë“œ ì•„ì›ƒ ì•ŒíŒŒë¥¼ skeleton ì— ì ìš©í•˜ëŠ” í•¨ìˆ˜
     {
         skeletonAnim.skeleton.A = alpha;
     }
 
-    private void SetSpineAnim(string animName, bool loop) // Spine ¾Ö´Ï¸ŞÀÌ¼ÇÀ» ¾ÈÀüÇÏ°Ô ¼³Á¤ÇÏ´Â ÇÔ¼ö
+    private void SetSpineAnim(string animName, bool loop) // Spine ì• ë‹ˆë©”ì´ì…˜ì„ ì•ˆì „í•˜ê²Œ ì„¤ì •í•˜ëŠ” í•¨ìˆ˜
     {
         if (skeletonAnim.AnimationName == animName) 
             return;
         skeletonAnim.AnimationState.SetAnimation(0, animName, loop);
     }
 
-    private bool HasAnimation(string animName) // ÁöÁ¤µÈ ÀÌ¸§ÀÇ ¾Ö´Ï¸ŞÀÌ¼ÇÀÌ µ¥ÀÌÅÍ¿¡ Á¸ÀçÇÏ´ÂÁö È®ÀÎÇÏ´Â ÇÔ¼ö
+    private bool HasAnimation(string animName) // ì§€ì •ëœ ì´ë¦„ì˜ ì• ë‹ˆë©”ì´ì…˜ì´ ë°ì´í„°ì— ì¡´ì¬í•˜ëŠ”ì§€ í™•ì¸í•˜ëŠ” í•¨ìˆ˜
     {
         return skeletonAnim != null
             && skeletonAnim.skeleton != null

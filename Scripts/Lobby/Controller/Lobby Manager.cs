@@ -7,7 +7,7 @@ using UnityEngine;
 
 public class LobbyManager : BaseSceneController<LobbyManager>
 {
-    [Header("Ä³½Ì º¯¼ö")]
+    [Header("ìºì‹± ë³€ìˆ˜")]
     [SerializeField] private LobbyNetworkManager lobbyNetworkManager;
     [SerializeField] private LobbyUIManager lobbyUIManager;
     [SerializeField] private RoomInfo selectedPrivateRoom;
@@ -84,7 +84,7 @@ public class LobbyManager : BaseSceneController<LobbyManager>
         }
     }
 
-    private void ResetLocalPlayerProperties() // ·Îºñ ÀÔÀå ½Ã ·ÎÄÃ ÇÃ·¹ÀÌ¾îÀÇ Á¤º¸¸¦ ÃÊ±âÈ­ÇÏ´Â ÇÔ¼ö
+    private void ResetLocalPlayerProperties() // ë¡œë¹„ ì…ì¥ ì‹œ ë¡œì»¬ í”Œë ˆì´ì–´ì˜ ì •ë³´ë¥¼ ì´ˆê¸°í™”í•˜ëŠ” í•¨ìˆ˜
     {
         Hashtable resetProps = new Hashtable
         {
@@ -95,18 +95,18 @@ public class LobbyManager : BaseSceneController<LobbyManager>
         PhotonNetwork.LocalPlayer.SetCustomProperties(resetProps);
     }
 
-    private bool CanEnterLobby() // ·Îºñ¿¡ ÀÔÀå °¡´ÉÇÑ »óÅÂÀÎÁö È®ÀÎÇÏ´Â ÇÔ¼ö
+    private bool CanEnterLobby() // ë¡œë¹„ì— ì…ì¥ ê°€ëŠ¥í•œ ìƒíƒœì¸ì§€ í™•ì¸í•˜ëŠ” í•¨ìˆ˜
     {
         return PhotonNetwork.IsConnectedAndReady && !PhotonNetwork.InLobby;
     }
 
-    private void HandleRandomJoin() // ·£´ı ¹æ ¹öÆ° Å¬¸¯À» Ã³¸®ÇÏ´Â ÇÔ¼ö
+    private void HandleRandomJoin() // ëœë¤ ë°© ë²„íŠ¼ í´ë¦­ì„ ì²˜ë¦¬í•˜ëŠ” í•¨ìˆ˜
     {
         PopupPanelUIManager.instance?.ShowWaiting(PopupMessage.Waiting.RandomMatching, null);
         lobbyNetworkManager?.JoinRandomRoom();
     }
 
-    private void HandleRoomClick(RoomInfo info) // ¹æ ¹öÆ° Å¬¸¯À» Ã³¸®ÇÏ´Â ÇÔ¼ö
+    private void HandleRoomClick(RoomInfo info) // ë°© ë²„íŠ¼ í´ë¦­ì„ ì²˜ë¦¬í•˜ëŠ” í•¨ìˆ˜
     {
         bool isPublic = (bool)info.CustomProperties[RoomConstants.Properties.PublicOrPrivate];
         if (isPublic)
@@ -121,7 +121,7 @@ public class LobbyManager : BaseSceneController<LobbyManager>
         }
     }
 
-    private void HandleCreateSubmit(string name, string pw) // ¹æ »ı¼º ¹öÆ° Å¬¸¯À» Ã³¸®ÇÏ´Â ÇÔ¼ö
+    private void HandleCreateSubmit(string name, string pw) // ë°© ìƒì„± ë²„íŠ¼ í´ë¦­ì„ ì²˜ë¦¬í•˜ëŠ” í•¨ìˆ˜
     {
         if (CheckInvalidRoomName(name))
         {
@@ -140,18 +140,18 @@ public class LobbyManager : BaseSceneController<LobbyManager>
         lobbyNetworkManager?.CreateRoom(name, pw, nextNum);
     }
 
-    private bool CheckInvalidRoomName(string name) // À¯È¿ ¹æ ÀÌ¸§À» °Ë»çÇÏ´Â ÇÔ¼ö
+    private bool CheckInvalidRoomName(string name) // ìœ íš¨ ë°© ì´ë¦„ì„ ê²€ì‚¬í•˜ëŠ” í•¨ìˆ˜
     {
         return string.IsNullOrWhiteSpace(name) || name.Length < 2 || name.Length > 16;
     }
 
-    private bool CheckInvalidPassword(string pw) // À¯È¿ ºñ¹Ğ¹øÈ£¸¦ °Ë»çÇÏ´Â ÇÔ¼ö
+    private bool CheckInvalidPassword(string pw) // ìœ íš¨ ë¹„ë°€ë²ˆí˜¸ë¥¼ ê²€ì‚¬í•˜ëŠ” í•¨ìˆ˜
     {
         Regex regex = new Regex(RegexPattern.Room.ValidPassword);
         return !regex.IsMatch(pw) && !string.IsNullOrEmpty(pw);
     }
 
-    private int CalculateNextNumber(List<int> existing) // ºñ¾î ÀÖ´Â ¹æ ¹øÈ£¸¦ °è»êÇÏ´Â ÇÔ¼ö
+    private int CalculateNextNumber(List<int> existing) // ë¹„ì–´ ìˆëŠ” ë°© ë²ˆí˜¸ë¥¼ ê³„ì‚°í•˜ëŠ” í•¨ìˆ˜
     {
         int num = 1;
         while (existing.Contains(num)) 
@@ -160,7 +160,7 @@ public class LobbyManager : BaseSceneController<LobbyManager>
         return num;
     }
 
-    private void HandlePasswordSubmit(string input)  // ºñ¹Ğ¹øÈ£ ÆĞ³Î¿¡¼­ È®ÀÎ ¹öÆ° Å¬¸¯ ½Ã ½ÇÇàµÇ´Â ÇÔ¼ö 
+    private void HandlePasswordSubmit(string input)  // ë¹„ë°€ë²ˆí˜¸ íŒ¨ë„ì—ì„œ í™•ì¸ ë²„íŠ¼ í´ë¦­ ì‹œ ì‹¤í–‰ë˜ëŠ” í•¨ìˆ˜ 
     {
         if (selectedPrivateRoom == null)
             return;
@@ -172,7 +172,7 @@ public class LobbyManager : BaseSceneController<LobbyManager>
             PopupPanelUIManager.instance?.ShowError(PopupMessage.Error.NotMatchPassword, null);      
     }
 
-    private void EnterPrivateRoom() // ºñ°ø°³ ¹æ¿¡ µé¾î°¡´Â ÇÔ¼ö
+    private void EnterPrivateRoom() // ë¹„ê³µê°œ ë°©ì— ë“¤ì–´ê°€ëŠ” í•¨ìˆ˜
     {
         lobbyUIManager?.HidePasswordPanel();
         PopupPanelUIManager.instance?.ShowWaiting(PopupMessage.Waiting.RoomEntry, null);
@@ -180,17 +180,17 @@ public class LobbyManager : BaseSceneController<LobbyManager>
         selectedPrivateRoom = null;
     }
 
-    private void HandlePasswordCancel() // ºñ¹Ğ¹øÈ£ ÆĞ³Î¿¡¼­ Ãë¼Ò ¹öÆ° Å¬¸¯ ½Ã ½ÇÇàµÇ´Â ÇÔ¼ö
+    private void HandlePasswordCancel() // ë¹„ë°€ë²ˆí˜¸ íŒ¨ë„ì—ì„œ ì·¨ì†Œ ë²„íŠ¼ í´ë¦­ ì‹œ ì‹¤í–‰ë˜ëŠ” í•¨ìˆ˜
     {
         selectedPrivateRoom = null;
     }
 
-    private void HandleRoomListUpdated(List<RoomInfo> list) // ¹æ ¸®½ºÆ® ¾÷µ¥ÀÌÆ®¸¦ Ã³¸®ÇÏ´Â ÇÔ¼ö
+    private void HandleRoomListUpdated(List<RoomInfo> list) // ë°© ë¦¬ìŠ¤íŠ¸ ì—…ë°ì´íŠ¸ë¥¼ ì²˜ë¦¬í•˜ëŠ” í•¨ìˆ˜
     {
         lobbyUIManager?.UpdateRoomListUI(list);
     }
 
-    private void HandleJoinSuccess() // ¹æ ÀÔÀå ¼º°ø ½Ã ½ÇÇàµÇ´Â ÇÔ¼ö
+    private void HandleJoinSuccess() // ë°© ì…ì¥ ì„±ê³µ ì‹œ ì‹¤í–‰ë˜ëŠ” í•¨ìˆ˜
     {
         PopupPanelUIManager.instance?.HideWaiting();
         lobbyUIManager?.HideRoomCreatePanel();
@@ -198,19 +198,19 @@ public class LobbyManager : BaseSceneController<LobbyManager>
         PhotonNetwork.LoadLevel(SceneName.Room);
     }
 
-    private void HandleJoinError(short code, string msg) // ¹æ ÀÔÀå ½ÇÆĞ ½Ã ½ÇÇàµÇ´Â ÇÔ¼ö
+    private void HandleJoinError(short code, string msg) // ë°© ì…ì¥ ì‹¤íŒ¨ ì‹œ ì‹¤í–‰ë˜ëŠ” í•¨ìˆ˜
     {
         string userMsg = ErrorTranslator.GetPhotonErrorMessage(code);
         PopupPanelUIManager.instance?.HideWaiting();
         PopupPanelUIManager.instance?.ShowError(userMsg, null);
     }
 
-    private void HandleConnectedToMaster() // ¸¶½ºÅÍ ¼­¹ö¿¡ ¿¬°áÇÒ ¶§ ½ÇÇàµÇ´Â ÇÔ¼ö
+    private void HandleConnectedToMaster() // ë§ˆìŠ¤í„° ì„œë²„ì— ì—°ê²°í•  ë•Œ ì‹¤í–‰ë˜ëŠ” í•¨ìˆ˜
     {
         PopupPanelUIManager.instance?.ShowWaiting(PopupMessage.Waiting.ServerConnection, null);
     } 
 
-    private void HandleJoinedLobby() // ·Îºñ¿¡ Á¢¼ÓÀ» ¿Ï·áÇÏ¿´À» ¶§ ½ÇÇàµÇ´Â ÇÔ¼ö
+    private void HandleJoinedLobby() // ë¡œë¹„ì— ì ‘ì†ì„ ì™„ë£Œí•˜ì˜€ì„ ë•Œ ì‹¤í–‰ë˜ëŠ” í•¨ìˆ˜
     {
         PopupPanelUIManager.instance?.HideWaiting();
     }

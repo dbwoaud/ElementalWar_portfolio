@@ -6,7 +6,7 @@ using UnityEngine;
 
 public class UnitGizmosDrawer : MonoBehaviour
 {
-    [Header("À¯´Ö °ü·Ã º¯¼ö")]
+    [Header("ìœ ë‹› ê´€ë ¨ ë³€ìˆ˜")]
     [SerializeField] private UnitMovement movement;
     [SerializeField] private UnitStats stats;
 
@@ -30,13 +30,13 @@ public class UnitGizmosDrawer : MonoBehaviour
         DrawAoeBlastRadius(b);
     }
 
-    private void DrawColliderBounds(Bounds b) // À¯´ÖÀÇ Äİ¶óÀÌ´õ °æ°è¸¦ ±×·ÁÁÖ´Â ÇÔ¼ö
+    private void DrawColliderBounds(Bounds b) // ìœ ë‹›ì˜ ì½œë¼ì´ë” ê²½ê³„ë¥¼ ê·¸ë ¤ì£¼ëŠ” í•¨ìˆ˜
     {
         Gizmos.color = new Color(0f, 0.5f, 1f, 0.4f);
         Gizmos.DrawWireCube(b.center, b.size);
     }
 
-    private void DrawAttackRangeBox(Bounds b) // À¯´ÖÀÇ °ø°İ »ç°Å¸®¸¦ ±×·ÁÁÖ´Â ÇÔ¼ö
+    private void DrawAttackRangeBox(Bounds b) // ìœ ë‹›ì˜ ê³µê²© ì‚¬ê±°ë¦¬ë¥¼ ê·¸ë ¤ì£¼ëŠ” í•¨ìˆ˜
     {
         if (stats.AttackRange <= 0)
             return;
@@ -57,7 +57,7 @@ public class UnitGizmosDrawer : MonoBehaviour
         Gizmos.DrawWireCube(center, new Vector3(size.x, size.y, 0));
     }
 
-    private void DrawAoeBlastRadius(Bounds b) // À¯´ÖÀÇ AOE ¹İ°æÀ» ±×·ÁÁÖ´Â ÇÔ¼ö
+    private void DrawAoeBlastRadius(Bounds b) // ìœ ë‹›ì˜ AOE ë°˜ê²½ì„ ê·¸ë ¤ì£¼ëŠ” í•¨ìˆ˜
     {
         if (stats.AoeRadius <= 0)
             return;

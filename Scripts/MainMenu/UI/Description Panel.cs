@@ -3,7 +3,7 @@ using UnityEngine.UI;
 
 public class DescriptionPanel : UIPanel
 {
-    [Header("UI ¿ä¼Ò")]
+    [Header("UI ìš”ì†Œ")]
     [SerializeField] private Button closeButton;
 
 
@@ -17,7 +17,7 @@ public class DescriptionPanel : UIPanel
         closeButton?.onClick.RemoveListener(OnClickCloseButton);
     }
 
-    private void OnClickCloseButton() // ´İ±â ¹öÆ° Å¬¸¯ ½Ã ½ÇÇàµÇ´Â ÇÔ¼ö
+    private void OnClickCloseButton() // ë‹«ê¸° ë²„íŠ¼ í´ë¦­ ì‹œ ì‹¤í–‰ë˜ëŠ” í•¨ìˆ˜
     {
         SoundManager.instance?.Play(SoundKey.ButtonClick);
         Hide();

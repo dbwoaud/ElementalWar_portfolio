@@ -3,10 +3,10 @@ using UnityEngine;
 
 public class CameraInputManager : MonoBehaviour
 {
-    [Header("½ºÅ©·Ñ ¼³Á¤ º¯¼ö")]
+    [Header("ìŠ¤í¬ë¡¤ ì„¤ì • ë³€ìˆ˜")]
     [SerializeField] private float edgeThreshold = 30f;
 
-    [Header("Á¶ÀÛ »óÅÂ ¼³Á¤ º¯¼ö")]
+    [Header("ì¡°ì‘ ìƒíƒœ ì„¤ì • ë³€ìˆ˜")]
     public bool IsInputEnabled { get; set; } = true;
 
     public event Action<float> OnScrollInput;
@@ -29,12 +29,12 @@ public class CameraInputManager : MonoBehaviour
             OnScrollInput?.Invoke(direction);
     }
 
-    private bool CheckOffScreenRight(float mouseX) // ¸¶¿ì½º ÁÂÇ¥°¡ È­¸éÀÇ ¿À¸¥ÂÊ °æ°è¸¦ ¹ş¾î³µ´ÂÁö È®ÀÎÇÏ´Â ÇÔ¼ö
+    private bool CheckOffScreenRight(float mouseX) // ë§ˆìš°ìŠ¤ ì¢Œí‘œê°€ í™”ë©´ì˜ ì˜¤ë¥¸ìª½ ê²½ê³„ë¥¼ ë²—ì–´ë‚¬ëŠ”ì§€ í™•ì¸í•˜ëŠ” í•¨ìˆ˜
     {
         return mouseX >= Screen.width - edgeThreshold;
     }
 
-    private bool CheckOffScreenLeft(float mouseX) // ¸¶¿ì½º ÁÂÇ¥°¡ È­¸éÀÇ ¿ŞÂÊ °æ°è¸¦ ¹ş¾î³µ´ÂÁö È®ÀÎÇÏ´Â ÇÔ¼ö
+    private bool CheckOffScreenLeft(float mouseX) // ë§ˆìš°ìŠ¤ ì¢Œí‘œê°€ í™”ë©´ì˜ ì™¼ìª½ ê²½ê³„ë¥¼ ë²—ì–´ë‚¬ëŠ”ì§€ í™•ì¸í•˜ëŠ” í•¨ìˆ˜
     {
         return mouseX <= edgeThreshold;
     }

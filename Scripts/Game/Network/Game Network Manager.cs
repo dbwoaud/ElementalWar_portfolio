@@ -14,13 +14,13 @@ public class GameNetworkManager : MonoBehaviourPunCallbacks
         StartCoroutine(TryGetMapIndexCoroutine());
     }
 
-    private IEnumerator TryGetMapIndexCoroutine() // ¸Ê ÀÎµ¦½º ¹İÈ¯À» ½ÃµµÇÏ´Â ÄÚ·çÆ¾
+    private IEnumerator TryGetMapIndexCoroutine() // ë§µ ì¸ë±ìŠ¤ ë°˜í™˜ì„ ì‹œë„í•˜ëŠ” ì½”ë£¨í‹´
     {
         yield return null;
         TryGetMapIndex();
     }
 
-    private void TryGetMapIndex() // ¸Ê ÀÎµ¦½º ¹İÈ¯À» ½ÃµµÇÏ´Â ÇÔ¼ö
+    private void TryGetMapIndex() // ë§µ ì¸ë±ìŠ¤ ë°˜í™˜ì„ ì‹œë„í•˜ëŠ” í•¨ìˆ˜
     {
         if (PhotonNetwork.CurrentRoom == null)
             return;
@@ -31,23 +31,23 @@ public class GameNetworkManager : MonoBehaviourPunCallbacks
         OnMapIndexReceived?.Invoke(mapIndex);
     }
 
-    public override void OnPlayerLeftRoom(Player otherPlayer) // »ó´ë¹æÀÇ Å»ÁÖ ½Ã ½ÇÇàµÇ´Â ÇÔ¼ö
+    public override void OnPlayerLeftRoom(Player otherPlayer) // ìƒëŒ€ë°©ì˜ íƒˆì£¼ ì‹œ ì‹¤í–‰ë˜ëŠ” í•¨ìˆ˜
     {
         OnOpponentLeftRoom?.Invoke(otherPlayer);
     }
 
-    public override void OnLeftRoom() // ¹æ ÅğÀåÀÌ ¿Ï·áµÇ¾úÀ» ¶§ ½ÇÇàµÇ´Â ÇÔ¼ö
+    public override void OnLeftRoom() // ë°© í‡´ì¥ì´ ì™„ë£Œë˜ì—ˆì„ ë•Œ ì‹¤í–‰ë˜ëŠ” í•¨ìˆ˜
     {
         OnLeftRoomSuccess?.Invoke();
     }
 
-    public override void OnRoomPropertiesUpdate(ExitGames.Client.Photon.Hashtable propertiesThatChanged) // ¹æÀÇ Á¤º¸°¡ °»½ÅµÉ ¶§ ½ÇÇàµÇ´Â ÇÔ¼ö
+    public override void OnRoomPropertiesUpdate(ExitGames.Client.Photon.Hashtable propertiesThatChanged) // ë°©ì˜ ì •ë³´ê°€ ê°±ì‹ ë  ë•Œ ì‹¤í–‰ë˜ëŠ” í•¨ìˆ˜
     {
         if (TryReadMapIndex(propertiesThatChanged, out int mapIndex))
             OnMapIndexReceived?.Invoke(mapIndex);
     }
 
-    private bool TryReadMapIndex(ExitGames.Client.Photon.Hashtable props, out int mapIndex) // ¹æ ÇÁ·ÎÆÛÆ¼¿¡¼­ ¸Ê ÀÎµ¦½º¸¦ ¾ò´Â ÇÔ¼ö
+    private bool TryReadMapIndex(ExitGames.Client.Photon.Hashtable props, out int mapIndex) // ë°© í”„ë¡œí¼í‹°ì—ì„œ ë§µ ì¸ë±ìŠ¤ë¥¼ ì–»ëŠ” í•¨ìˆ˜
     {
         if (props != null && props.TryGetValue(RoomConstants.Properties.MapIndex, out object value))
         {
@@ -62,7 +62,7 @@ public class GameNetworkManager : MonoBehaviourPunCallbacks
         return false;
     }
 
-    public string[] GetMyDeckNames() // Æ÷Åæ ¼­¹ö¿¡ ÀúÀåµÈ À¯´Ö ÀÌ¸§µéÀ» °¡Á®¿À´Â ÇÔ¼ö
+    public string[] GetMyDeckNames() // í¬í†¤ ì„œë²„ì— ì €ì¥ëœ ìœ ë‹› ì´ë¦„ë“¤ì„ ê°€ì ¸ì˜¤ëŠ” í•¨ìˆ˜
     {
         if (HasDeckProperty(out object deckData))
         {
@@ -72,7 +72,7 @@ public class GameNetworkManager : MonoBehaviourPunCallbacks
         return null;
     }
 
-    private bool HasDeckProperty(out object deckData) // Æ÷Åæ ¼­¹ö¿¡ ÀúÀåµÈ À¯´Ö ÀÌ¸§µéÀÌ ÀÖ´ÂÁö È®ÀÎÇÏ´Â ÇÔ¼ö
+    private bool HasDeckProperty(out object deckData) // í¬í†¤ ì„œë²„ì— ì €ì¥ëœ ìœ ë‹› ì´ë¦„ë“¤ì´ ìˆëŠ”ì§€ í™•ì¸í•˜ëŠ” í•¨ìˆ˜
     {
         return PhotonNetwork.LocalPlayer.CustomProperties.TryGetValue(PlayerConstants.Properties.DeckList, out deckData);
     }

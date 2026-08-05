@@ -14,38 +14,38 @@ public class LobbyNetworkManager : MonoBehaviourPunCallbacks
      public event Action OnJoinedLobbyEvent;
 
 
-    public override void OnRoomListUpdate(List<RoomInfo> roomList) // ¹æ ¸ñ·ÏÀ» ¾÷µ¥ÀÌÆ®ÇÏ´Â ÇÔ¼ö
+    public override void OnRoomListUpdate(List<RoomInfo> roomList) // ë°© ëª©ë¡ì„ ì—…ë°ì´íŠ¸í•˜ëŠ” í•¨ìˆ˜
     {
         OnRoomListUpdated?.Invoke(roomList); 
     }
 
-    public override void OnJoinedRoom() // ¹æ ÀÔÀå ¼º°ø ½Ã ½ÇÇàµÇ´Â ÇÔ¼ö
+    public override void OnJoinedRoom() // ë°© ì…ì¥ ì„±ê³µ ì‹œ ì‹¤í–‰ë˜ëŠ” í•¨ìˆ˜
     {
         OnJoinSuccess?.Invoke();
     }
 
-    public override void OnJoinRoomFailed(short code, string msg) // ¹æ ÀÔÀå ½ÇÆĞ ½Ã ½ÇÇàµÇ´Â ÇÔ¼ö
+    public override void OnJoinRoomFailed(short code, string msg) // ë°© ì…ì¥ ì‹¤íŒ¨ ì‹œ ì‹¤í–‰ë˜ëŠ” í•¨ìˆ˜
     {
         OnJoinFailed?.Invoke(code, msg);
     }
 
-    public override void OnJoinRandomFailed(short code, string msg) // ·£´ı ¹æ ÀÔÀå ½Ã ½ÇÇàµÇ´Â ÇÔ¼ö
+    public override void OnJoinRandomFailed(short code, string msg) // ëœë¤ ë°© ì…ì¥ ì‹œ ì‹¤í–‰ë˜ëŠ” í•¨ìˆ˜
     {
         OnJoinFailed?.Invoke(code, msg);
     }
 
-    public override void OnConnectedToMaster() // ¸¶½ºÅÍ ¼­¹ö¿¡ ¿¬°á ½Ã ½ÇÇàµÇ´Â ÇÔ¼ö
+    public override void OnConnectedToMaster() // ë§ˆìŠ¤í„° ì„œë²„ì— ì—°ê²° ì‹œ ì‹¤í–‰ë˜ëŠ” í•¨ìˆ˜
     {
         OnConnectedToMasterEvent?.Invoke();
         PhotonNetwork.JoinLobby();
     }
 
-    public override void OnJoinedLobby() // ·Îºñ¿¡ ÁøÀÔ ¼º°ø ½Ã ½ÇÇàµÇ´Â ÇÔ¼ö
+    public override void OnJoinedLobby() // ë¡œë¹„ì— ì§„ì… ì„±ê³µ ì‹œ ì‹¤í–‰ë˜ëŠ” í•¨ìˆ˜
     {
         OnJoinedLobbyEvent?.Invoke();
     }
 
-    public void CreateRoom(string roomName, string password, int roomNumber) // ¹æÀ» »ı¼ºÇÏ´Â ÇÔ¼ö
+    public void CreateRoom(string roomName, string password, int roomNumber) // ë°©ì„ ìƒì„±í•˜ëŠ” í•¨ìˆ˜
     {
         string roomPK = Guid.NewGuid().ToString();
         bool isPublic = string.IsNullOrEmpty(password);
@@ -54,7 +54,7 @@ public class LobbyNetworkManager : MonoBehaviourPunCallbacks
         PhotonNetwork.CreateRoom(roomPK, options);
     }
 
-    private Hashtable SetRoomProperties(string roomName, string password, int roomNumber, bool isPublic) // ¹æ ¼Ó¼ºÀ» ¼³Á¤ÇÏ´Â ÇÔ¼ö
+    private Hashtable SetRoomProperties(string roomName, string password, int roomNumber, bool isPublic) // ë°© ì†ì„±ì„ ì„¤ì •í•˜ëŠ” í•¨ìˆ˜
     {
         return new Hashtable()
         {
@@ -66,7 +66,7 @@ public class LobbyNetworkManager : MonoBehaviourPunCallbacks
         };
     }
 
-    private RoomOptions SetRoomOptions(Hashtable props) // ¹æ ¿É¼ÇÀ» ¼³Á¤ÇÏ´Â ÇÔ¼ö
+    private RoomOptions SetRoomOptions(Hashtable props) // ë°© ì˜µì…˜ì„ ì„¤ì •í•˜ëŠ” í•¨ìˆ˜
     {
         return new RoomOptions
         {
@@ -85,18 +85,18 @@ public class LobbyNetworkManager : MonoBehaviourPunCallbacks
         };
     }
 
-    public void JoinRoom(string roomPK) // ¹æ¿¡ ÀÔÀåÇÏ´Â ÇÔ¼ö
+    public void JoinRoom(string roomPK) // ë°©ì— ì…ì¥í•˜ëŠ” í•¨ìˆ˜
     {
         PhotonNetwork.JoinRoom(roomPK);
     }
 
-    public void JoinRandomRoom() // ·£´ı ¹æ¿¡ ÀÔÀåÇÏ´Â ÇÔ¼ö
+    public void JoinRandomRoom() // ëœë¤ ë°©ì— ì…ì¥í•˜ëŠ” í•¨ìˆ˜
     {
         Hashtable expectedRoomProperties = GetPublicRoom();
         PhotonNetwork.JoinRandomRoom(expectedRoomProperties, 0);
     }
 
-    private Hashtable GetPublicRoom() // °ø°³ ¹æÀ» ¾ò´Â ÇÔ¼ö
+    private Hashtable GetPublicRoom() // ê³µê°œ ë°©ì„ ì–»ëŠ” í•¨ìˆ˜
     {
         return new Hashtable()
         {

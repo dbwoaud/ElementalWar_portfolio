@@ -6,7 +6,7 @@ using UnityEngine;
 
 public class GameManager : BaseSceneController<GameManager>
 {
-    [Header("Ä³½Ì º¯¼ö")]
+    [Header("ìºì‹± ë³€ìˆ˜")]
     [SerializeField] private GameUIManager gameUIManager;
     [SerializeField] private GameNetworkManager gameNetworkManager;
     [SerializeField] private MapManager mapManager;
@@ -15,14 +15,14 @@ public class GameManager : BaseSceneController<GameManager>
     [SerializeField] private DeckHotkeyHandler deckHotkeyHandler;
     [SerializeField] private UnitDatabase unitDatabase;
 
-    [Header("µ¦ ¼³Á¤ º¯¼ö")]
+    [Header("ë± ì„¤ì • ë³€ìˆ˜")]
     [SerializeField] private DeckModel deckModel;
 
-    [Header("°ÔÀÓ »óÅÂ º¯¼ö")]
+    [Header("ê²Œì„ ìƒíƒœ ë³€ìˆ˜")]
     [SerializeField] private GameStateModel gameState;
     [SerializeField] private Vector3? destroyedCastlePosition;
 
-    [Header("½ºÆù ¼³Á¤")]
+    [Header("ìŠ¤í° ì„¤ì •")]
     [SerializeField] private Transform myCastleSpawnPoint;
     [SerializeField] private Transform myUnitSpawnPoint;
 
@@ -107,7 +107,7 @@ public class GameManager : BaseSceneController<GameManager>
         SubscribeHotkey();
     }
 
-    private void HandleReturnToRoomRequest() // ¹æÀ¸·Î µ¹¾Æ°¡±â ¹öÆ° Å¬¸¯ ½Ã ½ÇÇàµÇ´Â ÇÔ¼ö
+    private void HandleReturnToRoomRequest() // ë°©ìœ¼ë¡œ ëŒì•„ê°€ê¸° ë²„íŠ¼ í´ë¦­ ì‹œ ì‹¤í–‰ë˜ëŠ” í•¨ìˆ˜
     {
         PopupPanelUIManager.instance?.ShowWaiting(PopupMessage.Waiting.RoomEntry, null);
         ResumeTime();
@@ -115,12 +115,12 @@ public class GameManager : BaseSceneController<GameManager>
         PhotonNetwork.LoadLevel(SceneName.Room);
     }
 
-    private void ResumeTime() // ½Ã°£À» Èå¸£°ÔÇÏ´Â ÇÔ¼ö
+    private void ResumeTime() // ì‹œê°„ì„ íë¥´ê²Œí•˜ëŠ” í•¨ìˆ˜
     {
         Time.timeScale = 1f;
     }
 
-    private void ReopenRoom() // °ÔÀÓÀÌ ³¡³ª°í ¹æÀ» ´Ù½Ã ¿ÀÇÂÇÏ´Â ÇÔ¼ö
+    private void ReopenRoom() // ê²Œì„ì´ ëë‚˜ê³  ë°©ì„ ë‹¤ì‹œ ì˜¤í”ˆí•˜ëŠ” í•¨ìˆ˜
     {
         if (!PhotonNetwork.IsMasterClient || PhotonNetwork.CurrentRoom == null)
             return;
@@ -134,7 +134,7 @@ public class GameManager : BaseSceneController<GameManager>
         PhotonNetwork.CurrentRoom.SetCustomProperties(props);
     }
 
-    private void HandleReturnToLobbyRequest() // ·Îºñ·Î µ¹¾Æ°¡±â ¹öÆ° Å¬¸¯ ½Ã ½ÇÇàµÇ´Â ÇÔ¼ö
+    private void HandleReturnToLobbyRequest() // ë¡œë¹„ë¡œ ëŒì•„ê°€ê¸° ë²„íŠ¼ í´ë¦­ ì‹œ ì‹¤í–‰ë˜ëŠ” í•¨ìˆ˜
     {
         ResumeTime();
         ReopenRoom();
@@ -142,9 +142,15 @@ public class GameManager : BaseSceneController<GameManager>
             PhotonNetwork.LeaveRoom();
     }
 
-    private void HandleUnitSpawnRequest(int slotIndex, UnitStat spawnUnitStat) // À¯´Ö »ı¼º ¿äÃ»À» Ã³¸®ÇÏ´Â ÇÔ¼ö
+    private void HandleUnitSpawnRequest(int slotIndex, UnitStat spawnUnitStat) // ìœ ë‹› ìƒì„± ìš”ì²­ì„ ì²˜ë¦¬í•˜ëŠ” í•¨ìˆ˜
     {
         if (gameState.IsGameOver)
+            return;
+
+        if (spawnUnitStat == null)
+            return;
+
+        if (!CanSpawnFromSlot(slotIndex))
             return;
 
         SetUnitSpawnPoint();
@@ -152,37 +158,37 @@ public class GameManager : BaseSceneController<GameManager>
         if (myUnitSpawnPoint == null)
             return;
 
-        if (!CheckEnoughEnergy(spawnUnitStat))
+        if (!TryEnoughEnergy(spawnUnitStat))
             return;
 
         SpawnUnit(spawnUnitStat);
         gameUIManager?.StartSlotCoolTime(slotIndex);
     }
 
-    private void SetUnitSpawnPoint() // À¯´Ö ¼ÒÈ¯ ÁöÁ¡À» ¼³Á¤ÇÏ´Â ÇÔ¼ö
+    private void SetUnitSpawnPoint() // ìœ ë‹› ì†Œí™˜ ì§€ì ì„ ì„¤ì •í•˜ëŠ” í•¨ìˆ˜
     {
         var playerCastle = CastleAttackManager.instance?.PlayerCastle;
         if (playerCastle != null)
             myUnitSpawnPoint = playerCastle.UnitSpawnPoint;
     }
 
-    private bool CheckEnoughEnergy(UnitStat unitToSpawn) // À¯´ÖÀ» ¼ÒÈ¯ÇÏ±â À§ÇÑ ÃæºĞÇÑ ¿¡³ÊÁö°¡ ÀÖ´ÂÁö È®ÀÎÇÏ´Â ÇÔ¼ö
+    private bool TryEnoughEnergy(UnitStat unitToSpawn) // ìœ ë‹›ì˜ ì†Œí™˜ ë¹„ìš©ë§Œí¼ ì—ë„ˆì§€ ì†Œë¹„ë¥¼ ì‹œë„í•˜ëŠ” í•¨ìˆ˜
     {
         return energyManager!= null && energyManager.TryConsumeEnergy(unitToSpawn.spawnCost);
     }
 
-    private void SpawnUnit(UnitStat spawnUnitStat) // À¯´ÖÀ» ¼ÒÈ¯ÇÏ´Â ÇÔ¼ö
+    private void SpawnUnit(UnitStat spawnUnitStat) // ìœ ë‹›ì„ ì†Œí™˜í•˜ëŠ” í•¨ìˆ˜
     {
         PhotonNetwork.Instantiate(spawnUnitStat.unitPrefab.name, myUnitSpawnPoint.position, Quaternion.identity, 0);
         SoundManager.instance?.Play(SoundKey.UnitSpawn);
     }
 
-    private void HandleMapSelected(int mapIndex) // ¸Ê ¼±ÅÃÀ» Ã³¸®ÇÏ´Â ÇÔ¼ö
+    private void HandleMapSelected(int mapIndex) // ë§µ ì„ íƒì„ ì²˜ë¦¬í•˜ëŠ” í•¨ìˆ˜
     {
         mapManager?.SetupGameEnvironment(mapIndex);
     }
 
-    private void HandleOpponentLeft(Player leftPlayer) // »ó´ë¹æÀÇ Å»ÁÖ¸¦ Ã³¸®ÇÏ´Â ÇÔ¼ö
+    private void HandleOpponentLeft(Player leftPlayer) // ìƒëŒ€ë°©ì˜ íƒˆì£¼ë¥¼ ì²˜ë¦¬í•˜ëŠ” í•¨ìˆ˜
     {
         if (gameState.IsGameOver)
             return;
@@ -190,12 +196,12 @@ public class GameManager : BaseSceneController<GameManager>
         gameState.DeclareGameOver(true);
     }
 
-    private void HandleLeftRoomForLobby() // ¹æ ÅğÀå ¿Ï·á ÈÄ ·Îºñ·Î ÀÌµ¿ÇÏ´Â ÇÔ¼ö
+    private void HandleLeftRoomForLobby() // ë°© í‡´ì¥ ì™„ë£Œ í›„ ë¡œë¹„ë¡œ ì´ë™í•˜ëŠ” í•¨ìˆ˜
     {
         PhotonNetwork.LoadLevel(SceneName.Lobby);
     }
 
-    private void RegisterAllUnitToNetworkPool() // ³×Æ®¿öÅ© Ç®¿¡ ÇÁ¸®ÆÕÀ» µ¿·ÏÇÏ´Â ÇÔ¼ö
+    private void RegisterAllUnitToNetworkPool() // ë„¤íŠ¸ì›Œí¬ í’€ì— í”„ë¦¬íŒ¹ì„ ë™ë¡í•˜ëŠ” í•¨ìˆ˜
     {
         if (NetworkPoolManager.instance == null || unitDatabase == null)
             return;
@@ -207,7 +213,7 @@ public class GameManager : BaseSceneController<GameManager>
         }
     }
 
-    private void LoadMyDeckFromNetwork() // ³×Æ®¿öÅ©¿¡¼­ µ¦ Á¤º¸¸¦ °¡Á®¿À´Â ÇÔ¼ö
+    private void LoadMyDeckFromNetwork() // ë„¤íŠ¸ì›Œí¬ì—ì„œ ë± ì •ë³´ë¥¼ ê°€ì ¸ì˜¤ëŠ” í•¨ìˆ˜
     {
         string[] myDeckNames = gameNetworkManager?.GetMyDeckNames();
 
@@ -225,29 +231,31 @@ public class GameManager : BaseSceneController<GameManager>
         }
     }
 
-    private void SubscribeHotkey() // Å°º¸µå ¼ıÀÚÅ° ÀÔ·Â ÀÌº¥Æ®¸¦ ±¸µ¶ÇÏ´Â ÇÔ¼ö
+    private void SubscribeHotkey() // í‚¤ë³´ë“œ ìˆ«ìí‚¤ ì…ë ¥ ì´ë²¤íŠ¸ë¥¼ êµ¬ë…í•˜ëŠ” í•¨ìˆ˜
     {
         if (deckHotkeyHandler != null)
             deckHotkeyHandler.OnSlotHotkeyPressed += HandleHotkeyUnitSpawn;
     }
 
-    private void HandleHotkeyUnitSpawn(int slotIndex) // ´ÜÃàÅ°·Î À¯´ÖÀ» ¼ÒÈ¯ÇÏ´Â ÇÔ¼ö
+    private void HandleHotkeyUnitSpawn(int slotIndex) // ë‹¨ì¶•í‚¤ë¡œ ìœ ë‹›ì„ ì†Œí™˜í•˜ëŠ” í•¨ìˆ˜
     {
         if (gameState.IsGameOver)
             return;
 
         UnitStat unit = deckModel.GetUnit(slotIndex);
-        if (unit != null)
-            HandleUnitSpawnRequest(slotIndex, unit);
+        if (unit == null)
+            return;
+
+        HandleUnitSpawnRequest(slotIndex, unit);
     }
 
-    private void HandleCastleDestroyed(bool localPlayerLost, Vector3 castlePos) // ÀÚ½ÅÀÇ ¼ºÀÌ ÆÄ±«µÇ¾î °ÔÀÓ ÆĞ¹è¸¦ Ã³¸®ÇÏ´Â ÇÔ¼ö
+    private void HandleCastleDestroyed(bool localPlayerLost, Vector3 castlePos) // ìì‹ ì˜ ì„±ì´ íŒŒê´´ë˜ì–´ ê²Œì„ íŒ¨ë°°ë¥¼ ì²˜ë¦¬í•˜ëŠ” í•¨ìˆ˜
     {
         destroyedCastlePosition = castlePos;
         gameState.DeclareGameOver(!localPlayerLost);
     }
 
-    private void HandleGameOver(bool localPlayerWon) // °ÔÀÓ Á¾·á ¿¬ÃâÀ» Ã³¸®ÇÏ´Â ÇÔ¼ö
+    private void HandleGameOver(bool localPlayerWon) // ê²Œì„ ì¢…ë£Œ ì—°ì¶œì„ ì²˜ë¦¬í•˜ëŠ” í•¨ìˆ˜
     {
         if (deckHotkeyHandler != null)
             deckHotkeyHandler.IsEnabled = false;
@@ -255,7 +263,7 @@ public class GameManager : BaseSceneController<GameManager>
         StartCoroutine(GameEndSequence(localPlayerWon));
     }
 
-    private IEnumerator GameEndSequence(bool localPlayerWon) // °ÔÀÓ Á¾·á ¿¬ÃâÀ» ¼öÇàÇÏ´Â ÄÚ·çÆ¾ 
+    private IEnumerator GameEndSequence(bool localPlayerWon) // ê²Œì„ ì¢…ë£Œ ì—°ì¶œì„ ìˆ˜í–‰í•˜ëŠ” ì½”ë£¨í‹´ 
     {
         cameraController?.DisablePlayerControl();
 
@@ -279,7 +287,7 @@ public class GameManager : BaseSceneController<GameManager>
         gameUIManager?.ShowGameResultPanel(localPlayerWon, PhotonNetwork.NickName);
     }
 
-    private void PauseAllGameSystems() // ¸ğµç °ÔÀÓ ½Ã½ºÅÛÀ» ÁßÁö½ÃÅ°´Â ÇÔ¼ö
+    private void PauseAllGameSystems() // ëª¨ë“  ê²Œì„ ì‹œìŠ¤í…œì„ ì¤‘ì§€ì‹œí‚¤ëŠ” í•¨ìˆ˜
     {
         Time.timeScale = 0f;
         SoundManager.instance?.StopAll();
@@ -287,14 +295,14 @@ public class GameManager : BaseSceneController<GameManager>
         CastleAttackManager.instance?.Stop();
     }
 
-    private void HandleMapSetupCompleted(MapData spawnedMap) // ¸Ê »ı¼º ¿Ï·á ½Ã ½ÇÇàµÇ´Â ÇÔ¼ö
+    private void HandleMapSetupCompleted(MapData spawnedMap) // ë§µ ìƒì„± ì™„ë£Œ ì‹œ ì‹¤í–‰ë˜ëŠ” í•¨ìˆ˜
     {
         SetCameraOnMap(spawnedMap);
         gameUIManager?.HideGameLoadingPanel();
         StartCoroutine(GameStartSequence(spawnedMap?.MapBGM));
     }
 
-    private void SetCameraOnMap(MapData spawnedMap) // ¸ÊÀÇ Ä«¸Ş¶ó¸¦ ¼³Á¤ÇÏ´Â ÇÔ¼ö 
+    private void SetCameraOnMap(MapData spawnedMap) // ë§µì˜ ì¹´ë©”ë¼ë¥¼ ì„¤ì •í•˜ëŠ” í•¨ìˆ˜ 
     {
         if (spawnedMap != null && cameraController != null)
         {
@@ -305,7 +313,7 @@ public class GameManager : BaseSceneController<GameManager>
         }
     }
 
-    private IEnumerator GameStartSequence(AudioClip mapBGM) // °ÔÀÓ ½ÃÀÛ ¿¬ÃâÀ» ¼öÇàÇÏ´Â ÄÚ·çÆ¾
+    private IEnumerator GameStartSequence(AudioClip mapBGM) // ê²Œì„ ì‹œì‘ ì—°ì¶œì„ ìˆ˜í–‰í•˜ëŠ” ì½”ë£¨í‹´
     {
         ShowGameStartPanel();
         PlayGameStartBGM();
@@ -316,7 +324,7 @@ public class GameManager : BaseSceneController<GameManager>
             deckHotkeyHandler.IsEnabled = true;
     }
 
-    private void ShowGameStartPanel() // °ÔÀÓ ½ÃÀÛ ¿¬ÃâÀ» ½ÃÀÛÇÏ´Â ÇÔ¼ö
+    private void ShowGameStartPanel() // ê²Œì„ ì‹œì‘ ì—°ì¶œì„ ì‹œì‘í•˜ëŠ” í•¨ìˆ˜
     {
         string p1 = PhotonNetwork.PlayerList[0].NickName;
         string p2 = PhotonNetwork.PlayerList.Length > 1
@@ -332,7 +340,7 @@ public class GameManager : BaseSceneController<GameManager>
         SoundManager.instance?.Play(SoundKey.GameStartCue);
     }
 
-    private void HideGameStartPanel() // °ÔÀÓ ½ÃÀÛ ¿¬ÃâÀ» ³¡³»´Â ÇÔ¼ö
+    private void HideGameStartPanel() // ê²Œì„ ì‹œì‘ ì—°ì¶œì„ ëë‚´ëŠ” í•¨ìˆ˜
     {
         gameUIManager?.HideGameStartPanel();
     }
@@ -343,12 +351,12 @@ public class GameManager : BaseSceneController<GameManager>
             SoundManager.instance?.PlayDynamicBGM(mapBGM);
     }
 
-    private void HandleMapLoadProgress(float normalized) // ¸Ê ·Îµù ÁøÇàµµ¸¦ UI ¿¡ Àü´Ş
+    private void HandleMapLoadProgress(float normalized) // ë§µ ë¡œë”© ì§„í–‰ë„ë¥¼ UI ì— ì „ë‹¬
     {
         gameUIManager?.UpdateLoadingProgress(normalized);
     }
 
-    private void HandleEnergyChanged(float currentEnergy) // ¿¡³ÊÁö º¯µ¿À» UI ¿¡ ÀüÆÄÇÏ´Â ÇÔ¼ö
+    private void HandleEnergyChanged(float currentEnergy) // ì—ë„ˆì§€ ë³€ë™ì„ UI ì— ì „íŒŒí•˜ëŠ” í•¨ìˆ˜
     {
         gameUIManager?.RefreshSlotsEnergyState(currentEnergy);
     }
@@ -375,5 +383,9 @@ public class GameManager : BaseSceneController<GameManager>
             deckHotkeyHandler.OnSlotHotkeyPressed -= HandleHotkeyUnitSpawn;
         }
         UnitRegistry.Clear();
+    }
+    private bool CanSpawnFromSlot(int slotIndex) // ìŠ¬ë¡¯ì—ì„œ ìœ ë‹›ì„ ì†Œí™˜í•  ìˆ˜ ìˆëŠ”ì§€ í™•ì¸í•˜ëŠ” í•¨ìˆ˜
+    {
+        return gameUIManager != null && gameUIManager.IsSlotSpawnable(slotIndex);
     }
 }

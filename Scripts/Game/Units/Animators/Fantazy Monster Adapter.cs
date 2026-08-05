@@ -5,10 +5,10 @@ using UnityEngine;
 
 public class FantasyMonsterAdapter : BaseUnitAnimator
 {
-    [Header("¾î´ğÅÍ ÄÄÆ÷³ÍÆ®")]
+    [Header("ì–´ëŒ‘í„° ì»´í¬ë„ŒíŠ¸")]
     [SerializeField] private Monster monsterScript;
 
-    [Header("Ä³½Ì º¯¼ö")]
+    [Header("ìºì‹± ë³€ìˆ˜")]
     [SerializeField] private SpriteRenderer[] renderers;
     [SerializeField] private readonly Dictionary<SpriteRenderer, Color> originalColors = new Dictionary<SpriteRenderer, Color>();
 
@@ -19,7 +19,7 @@ public class FantasyMonsterAdapter : BaseUnitAnimator
         base.Awake();
     }
 
-    protected override void CacheRenderers() // ·»´õ·¯¿Í ¿øº» »ö»óÀ» Ä³½ÌÇÏ´Â ÇÔ¼ö
+    protected override void CacheRenderers() // ë Œë”ëŸ¬ì™€ ì›ë³¸ ìƒ‰ìƒì„ ìºì‹±í•˜ëŠ” í•¨ìˆ˜
     {
         renderers = GetComponentsInChildren<SpriteRenderer>(true);
         foreach (var r in renderers)
@@ -29,43 +29,43 @@ public class FantasyMonsterAdapter : BaseUnitAnimator
         }
     }
 
-    public override void PlayIdle() // À¯´ÖÀ» ´ë±â »óÅÂ·Î ¸¸µå´Â ÇÔ¼ö
+    public override void PlayIdle() // ìœ ë‹›ì„ ëŒ€ê¸° ìƒíƒœë¡œ ë§Œë“œëŠ” í•¨ìˆ˜
     {
         monsterScript.SetState(MonsterState.Idle);
     }
 
-    public override void PlayMove() // À¯´ÖÀ» ÀÌµ¿ »óÅÂ·Î ¸¸µå´Â ÇÔ¼ö
+    public override void PlayMove() // ìœ ë‹›ì„ ì´ë™ ìƒíƒœë¡œ ë§Œë“œëŠ” í•¨ìˆ˜
     {
         monsterScript.SetState(MonsterState.Walk);
     }
 
-    public override float PlayAttack() // À¯´ÖÀ» °ø°İ »óÅÂ·Î ¸¸µé°í ¾Ö´Ï¸ŞÀÌ¼Ç ±æÀÌ¸¦ ¹İÈ¯ÇÏ´Â ÇÔ¼ö
+    public override float PlayAttack() // ìœ ë‹›ì„ ê³µê²© ìƒíƒœë¡œ ë§Œë“¤ê³  ì• ë‹ˆë©”ì´ì…˜ ê¸¸ì´ë¥¼ ë°˜í™˜í•˜ëŠ” í•¨ìˆ˜
     {
         monsterScript.Attack();
         return GetAnimationClipDuration(monsterScript.Animator, "Attack");
     }
 
-    public override void SetDirection(bool lookLeft) // À¯´ÖÀÇ ¹æÇâÀ» ¼³Á¤ÇÏ´Â ÇÔ¼ö
+    public override void SetDirection(bool lookLeft) // ìœ ë‹›ì˜ ë°©í–¥ì„ ì„¤ì •í•˜ëŠ” í•¨ìˆ˜
     {
         transform.localRotation = lookLeft ? Quaternion.Euler(0, 180, 0) : Quaternion.identity;
     }
 
-    protected override void OnPlayHitInternal() // ÇÇ°İ ½Ã ½Ã°¢Àû ³Ë¹é ¿¬ÃâÀ» È£ÃâÇÏ´Â ÇÔ¼ö
+    protected override void OnPlayHitInternal() // í”¼ê²© ì‹œ ì‹œê°ì  ë„‰ë°± ì—°ì¶œì„ í˜¸ì¶œí•˜ëŠ” í•¨ìˆ˜
     {
         monsterScript.Spring();
     }
 
-    protected override void OnPlayDeadInternal() // Á×À½ ½Ã Ä³¸¯ÅÍ °íÀ¯ÀÇ Ã³¸®¸¦ È£ÃâÇÏ´Â ÇÔ¼ö
+    protected override void OnPlayDeadInternal() // ì£½ìŒ ì‹œ ìºë¦­í„° ê³ ìœ ì˜ ì²˜ë¦¬ë¥¼ í˜¸ì¶œí•˜ëŠ” í•¨ìˆ˜
     {
         monsterScript.Die();
     }
 
-    protected override void OnResetForReuseInternal() // ³×Æ®¿öÅ© Ç® Àç»ç¿ë ½Ã Ä³¸¯ÅÍ »óÅÂ¸¦ ÃÊ±âÈ­ÇÏ´Â ÇÔ¼ö
+    protected override void OnResetForReuseInternal() // ë„¤íŠ¸ì›Œí¬ í’€ ì¬ì‚¬ìš© ì‹œ ìºë¦­í„° ìƒíƒœë¥¼ ì´ˆê¸°í™”í•˜ëŠ” í•¨ìˆ˜
     {
         monsterScript.SetState(MonsterState.Idle);
     }
 
-    protected override void ApplyFlashColor(Color color) // FlashRed È¿°ú¸¦ Àû¿ëÇÏ´Â ÇÔ¼ö
+    protected override void ApplyFlashColor(Color color) // FlashRed íš¨ê³¼ë¥¼ ì ìš©í•˜ëŠ” í•¨ìˆ˜
     {
         foreach (var r in renderers)
         {
@@ -74,7 +74,7 @@ public class FantasyMonsterAdapter : BaseUnitAnimator
         }
     }
 
-    protected override void RestoreOriginalColors() // Ä³½ÌÇÑ ¿øº» »ö»óÀ¸·Î º¹±¸ÇÏ´Â ÇÔ¼ö
+    protected override void RestoreOriginalColors() // ìºì‹±í•œ ì›ë³¸ ìƒ‰ìƒìœ¼ë¡œ ë³µêµ¬í•˜ëŠ” í•¨ìˆ˜
     {
         foreach (var kvp in originalColors)
         {
@@ -83,7 +83,7 @@ public class FantasyMonsterAdapter : BaseUnitAnimator
         }
     }
 
-    protected override void ApplyAlpha(float alpha) // ÆäÀÌµå ¾Æ¿ô ¾ËÆÄ¸¦ Àû¿ëÇÏ´Â ÇÔ¼ö
+    protected override void ApplyAlpha(float alpha) // í˜ì´ë“œ ì•„ì›ƒ ì•ŒíŒŒë¥¼ ì ìš©í•˜ëŠ” í•¨ìˆ˜
     {
         foreach (var r in renderers)
         {

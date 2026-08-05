@@ -6,11 +6,11 @@ public class UnitStateHit : IUnitState
     public UnitStateType Type => UnitStateType.Hit;
 
 
-    [Header("³»ºÎ »óÅÂ ÃßÀû")]
+    [Header("ë‚´ë¶€ ìƒíƒœ ì¶”ì ")]
     [SerializeField] private float hitTimer;
 
 
-    public void EnterState(Unit unit) // À¯´ÖÀÌ ÇÇ°İ »óÅÂ¿¡ µé¾î¿ÔÀ» ¶§ ½ÇÇàµÇ´Â ÇÔ¼ö
+    public void EnterState(Unit unit) // ìœ ë‹›ì´ í”¼ê²© ìƒíƒœì— ë“¤ì–´ì™”ì„ ë•Œ ì‹¤í–‰ë˜ëŠ” í•¨ìˆ˜
     {
         if (unit == null)
             return;
@@ -21,7 +21,7 @@ public class UnitStateHit : IUnitState
         unit.ApplyKnockback();
     }
 
-    public void UpdateState(Unit unit) // À¯´ÖÀÌ ÇÇ°İ »óÅÂ ÁßÀÏ ¶§ ½ÇÇàµÇ´Â ÇÔ¼ö
+    public void UpdateState(Unit unit) // ìœ ë‹›ì´ í”¼ê²© ìƒíƒœ ì¤‘ì¼ ë•Œ ì‹¤í–‰ë˜ëŠ” í•¨ìˆ˜
     {
         if (unit == null)
             return;
@@ -31,7 +31,7 @@ public class UnitStateHit : IUnitState
             unit?.ChangeState(unit.StateIdle);
     }
 
-    public void ExitState(Unit unit) // À¯´ÖÀÌ °ø°İ »óÅÂ°¡ ³¡³µÀ» ¶§ ½ÇÇàµÇ´Â ÇÔ¼ö
+    public void ExitState(Unit unit) // ìœ ë‹›ì´ í”¼ê²© ìƒíƒœê°€ ëë‚¬ì„ ë•Œ ì‹¤í–‰ë˜ëŠ” í•¨ìˆ˜
     {
         unit?.StopUnit();
     }

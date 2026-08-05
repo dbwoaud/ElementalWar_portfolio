@@ -3,12 +3,12 @@ using UnityEngine.UI;
 
 public class GameLoadingPanel : UIPanel
 {
-    [Header("UI ¿ä¼Ò")]
+    [Header("UI ìš”ì†Œ")]
     [SerializeField] private Text loadingText;
     [SerializeField] private Image progressFill;
 
-    [Header("¿¬Ãâ ¼³Á¤")]
-    [SerializeField] private string defaultMessage = "¸ÊÀ» ºÒ·¯¿À´Â ÁßÀÔ´Ï´Ù";
+    [Header("ì—°ì¶œ ì„¤ì •")]
+    [SerializeField] private string defaultMessage = "ë§µì„ ë¶ˆëŸ¬ì˜¤ëŠ” ì¤‘ì…ë‹ˆë‹¤";
      
 
     protected override void InitializeListener() { }
@@ -19,7 +19,7 @@ public class GameLoadingPanel : UIPanel
             progressFill.fillAmount = 0f;
     }
 
-    public void ShowImmediate(string message = null) // ÆäÀÌµå ¿¬Ãâ ¾øÀÌ Áï½Ã ÆĞ³ÎÀ» º¸¿©ÁÖ´Â ÇÔ¼ö
+    public void ShowImmediate(string message = null) // í˜ì´ë“œ ì—°ì¶œ ì—†ì´ ì¦‰ì‹œ íŒ¨ë„ì„ ë³´ì—¬ì£¼ëŠ” í•¨ìˆ˜
     {
         if (canvasGroup == null)
             canvasGroup = GetComponent<CanvasGroup>();
@@ -35,7 +35,7 @@ public class GameLoadingPanel : UIPanel
         ResetUI();
     }
 
-    public void UpdateProgress(float normalized) // ÁøÇàµµ¸¦ °»½ÅÇÏ´Â ÇÔ¼ö
+    public void UpdateProgress(float normalized) // ì§„í–‰ë„ë¥¼ ê°±ì‹ í•˜ëŠ” í•¨ìˆ˜
     {   
         if (progressFill != null)
             progressFill.fillAmount = Mathf.Clamp01(normalized);

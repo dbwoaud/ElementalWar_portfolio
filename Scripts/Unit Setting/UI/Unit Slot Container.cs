@@ -6,10 +6,10 @@ using UnityEngine.UI;
 
 public class UnitSlotContainer : MonoBehaviour, IDropHandler
 {
-    [Header("UI ¿ä¼Ò")]
+    [Header("UI ìš”ì†Œ")]
     [SerializeField] private Button backButton;
 
-    [Header("À¯´Ö ½½·Ô °ü¸®")]
+    [Header("ìœ ë‹› ìŠ¬ë¡¯ ê´€ë¦¬")]
     [SerializeField] private UnitSlotItem[] unitSlots;
 
     public event Action<UnitStat> OnUnitLeftClicked;
@@ -20,7 +20,7 @@ public class UnitSlotContainer : MonoBehaviour, IDropHandler
     public event Action OnBackButtonClicked;
 
 
-    public void InitializeSlots() // ½½·Ô ÀÌº¥Æ®¸¦ ÃÊ±âÈ­ÇÏ´Â ÇÔ¼ö
+    public void InitializeSlots() // ìŠ¬ë¡¯ ì´ë²¤íŠ¸ë¥¼ ì´ˆê¸°í™”í•˜ëŠ” í•¨ìˆ˜
     {
         backButton?.onClick.AddListener(HandleBackButtonClicked);
         for (int i = 0; i< unitSlots.Length; i++) 
@@ -32,32 +32,32 @@ public class UnitSlotContainer : MonoBehaviour, IDropHandler
         }
     }
 
-    private void HandleBackButtonClicked() // µ¹¾Æ°¡±â ¹öÆ° Å¬¸¯ ½Ã ½ÇÇàµÇ´Â ÇÔ¼ö
+    private void HandleBackButtonClicked() // ëŒì•„ê°€ê¸° ë²„íŠ¼ í´ë¦­ ì‹œ ì‹¤í–‰ë˜ëŠ” í•¨ìˆ˜
     {
         OnBackButtonClicked?.Invoke();
     }
 
-    private void HandleUnitLeftClicked(UnitStat stat) // À¯´Ö ½½·Ô¿¡ ¿ŞÂÊ ¹öÆ° Å¬¸¯ ½Ã ½ÇÇàµÇ´Â ÇÔ¼ö
+    private void HandleUnitLeftClicked(UnitStat stat) // ìœ ë‹› ìŠ¬ë¡¯ì— ì™¼ìª½ ë²„íŠ¼ í´ë¦­ ì‹œ ì‹¤í–‰ë˜ëŠ” í•¨ìˆ˜
     { 
         OnUnitLeftClicked?.Invoke(stat); 
     }
 
-    private void HandleBeginDrag(UnitSlotItem item) // À¯´Ö ½½·Ô¿¡ µå·¡±× ½ÃÀÛ ½Ã ½ÇÇàµÇ´Â ÇÔ¼ö
+    private void HandleBeginDrag(UnitSlotItem item) // ìœ ë‹› ìŠ¬ë¡¯ì— ë“œë˜ê·¸ ì‹œì‘ ì‹œ ì‹¤í–‰ë˜ëŠ” í•¨ìˆ˜
     { 
         OnBeginDragEvent?.Invoke(item); 
     }
 
-    private void HandleDrag(PointerEventData data) // À¯´Ö ½½·Ô¿¡ µå·¡±× ÁøÇà ½Ã ½ÇÇàµÇ´Â ÇÔ¼ö
+    private void HandleDrag(PointerEventData data) // ìœ ë‹› ìŠ¬ë¡¯ì— ë“œë˜ê·¸ ì§„í–‰ ì‹œ ì‹¤í–‰ë˜ëŠ” í•¨ìˆ˜
     { 
         OnDragEvent?.Invoke(data); 
     }
 
-    private void HandleEndDrag() // À¯´Ö ½½·Ô¿¡ µå·¡±× ¿Ï·á ½Ã ½ÇÇàµÇ´Â ÇÔ¼ö
+    private void HandleEndDrag() // ìœ ë‹› ìŠ¬ë¡¯ì— ë“œë˜ê·¸ ì™„ë£Œ ì‹œ ì‹¤í–‰ë˜ëŠ” í•¨ìˆ˜
     { 
         OnEndDragEvent?.Invoke(); 
     }
 
-    public void UpdateSlots(List<UnitStat> elementUnits) // À¯´Ö ½½·Ô UI¸¦ ¼Ó¼º¿¡ ¸Â°Ô ¾÷µ¥ÀÌÆ®ÇÏ´Â ÇÔ¼ö
+    public void UpdateSlots(List<UnitStat> elementUnits) // ìœ ë‹› ìŠ¬ë¡¯ UIë¥¼ ì†ì„±ì— ë§ê²Œ ì—…ë°ì´íŠ¸í•˜ëŠ” í•¨ìˆ˜
     {
         for (int i = 0; i < unitSlots.Length; i++)
         {
@@ -68,7 +68,7 @@ public class UnitSlotContainer : MonoBehaviour, IDropHandler
         }
     }
 
-    public void RefreshState(List<UnitStat> equippedUnits, UnitStat selectedUnit) // À¯´Ö ½½·Ô »óÅÂ¸¦ ¾÷µ¥ÀÌÆ®ÇÏ´Â ÇÔ¼ö
+    public void RefreshState(List<UnitStat> equippedUnits, UnitStat selectedUnit) // ìœ ë‹› ìŠ¬ë¡¯ ìƒíƒœë¥¼ ì—…ë°ì´íŠ¸í•˜ëŠ” í•¨ìˆ˜
     {
         foreach (var slot in unitSlots)
         {
@@ -81,7 +81,7 @@ public class UnitSlotContainer : MonoBehaviour, IDropHandler
         }
     }
 
-    public void OnDrop(PointerEventData eventData) // ¸¶¿ì½º µå·Ó ½Ã ½ÇÇàµÇ´Â ÇÔ¼ö
+    public void OnDrop(PointerEventData eventData) // ë§ˆìš°ìŠ¤ ë“œë¡­ ì‹œ ì‹¤í–‰ë˜ëŠ” í•¨ìˆ˜
     {
         DeckSlotItem draggedSlot = eventData.pointerDrag?.GetComponent<DeckSlotItem>();
 

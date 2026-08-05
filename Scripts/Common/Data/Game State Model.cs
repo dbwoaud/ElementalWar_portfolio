@@ -6,7 +6,7 @@ public class GameStateModel
     public bool LocalPlayerWon { get; private set; } = false;
     public event Action<bool> OnGameOver;
 
-    public void DeclareGameOver(bool localPlayerWon) // °ÔÀÓ Á¾·á ½Ã ½ÇÇàµÇ´Â ÇÔ¼ö
+    public void DeclareGameOver(bool localPlayerWon) // ê²Œì„ ì¢…ë£Œ ì‹œ ì‹¤í–‰ë˜ëŠ” í•¨ìˆ˜
     {
         if (IsGameOver) 
             return;
@@ -17,7 +17,7 @@ public class GameStateModel
         OnGameOver?.Invoke(localPlayerWon);
     }
 
-    public void Reset() // °ÔÀÓ °á°ú¸¦ ¸®¼ÂÇÏ´Â ÇÔ¼ö
+    public void Reset() // ê²Œì„ ê²°ê³¼ë¥¼ ë¦¬ì…‹í•˜ëŠ” í•¨ìˆ˜
     {
         IsGameOver = false;
         LocalPlayerWon = false;

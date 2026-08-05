@@ -6,14 +6,14 @@ using UnityEngine.UI;
 
 public class WaitingPopupPanel : BasePopupPanel
 {
-    [Header("UI ¿ä¼Ò")]
+    [Header("UI ìš”ì†Œ")]
     [SerializeField] private Button cancelButton;
     [SerializeField] private string message;
 
-    [Header("¹öÆ° Å¬¸¯ ÀÌº¥Æ®")]
+    [Header("ë²„íŠ¼ í´ë¦­ ì´ë²¤íŠ¸")]
     private Action onCancelAction;
 
-    [Header("·Îµù ¿¬Ãâ ÄÚ·çÆ¾")]
+    [Header("ë¡œë”© ì—°ì¶œ ì½”ë£¨í‹´")]
     private Coroutine textAnimationCoroutine;
 
     protected override void InitializeListener()
@@ -53,32 +53,32 @@ public class WaitingPopupPanel : BasePopupPanel
         }
     }
 
-    public override void SetMessage(string message) // ¸Ş½ÃÁö ¼³Á¤ ÇÔ¼ö
+    public override void SetMessage(string message) // ë©”ì‹œì§€ ì„¤ì • í•¨ìˆ˜
     {
         this.message = message;
         if (messageText != null)
             messageText.text = this.message;  
     }
 
-    private void OnClickCancelButton() // Ãë¼Ò ¹öÆ° Å¬¸¯ ½Ã ½ÇÇàµÇ´Â ÇÔ¼ö
+    private void OnClickCancelButton() // ì·¨ì†Œ ë²„íŠ¼ í´ë¦­ ì‹œ ì‹¤í–‰ë˜ëŠ” í•¨ìˆ˜
     {
         SoundManager.instance?.Play(SoundKey.ButtonClick);
         onCancelAction?.Invoke();
         Hide();
     }
 
-    public void Setup(string message, Action onCancel = null) // ·Îµù ÆË¾÷ ÆĞ³ÎÀ» È°¼ºÈ­ÇÏ´Â ÇÔ¼ö
+    public void Setup(string message, Action onCancel = null) // ë¡œë”© íŒì—… íŒ¨ë„ì„ í™œì„±í™”í•˜ëŠ” í•¨ìˆ˜
     {
         onCancelAction = onCancel;
         ShowPopup(message);
     }
 
-    public void Close() // ·Îµù ¿Ï·á ½Ã °­Á¦·Î ½ÇÇàÇÏ´Â ÇÔ¼ö
+    public void Close() // ë¡œë”© ì™„ë£Œ ì‹œ ê°•ì œë¡œ ì‹¤í–‰í•˜ëŠ” í•¨ìˆ˜
     {
         HideImmediate();
     }
 
-    private IEnumerator AnimateTextCoroutine() // ÅØ½ºÆ® ¾Ö´Ï¸ŞÀÌ¼ÇÀ» ¿¬ÃâÇÏ´Â ÄÚ·çÆ¾
+    private IEnumerator AnimateTextCoroutine() // í…ìŠ¤íŠ¸ ì• ë‹ˆë©”ì´ì…˜ì„ ì—°ì¶œí•˜ëŠ” ì½”ë£¨í‹´
     {
         int dotCount = 0;
         WaitForSeconds waitTime = new WaitForSeconds(0.4f);

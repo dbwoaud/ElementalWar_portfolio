@@ -5,12 +5,12 @@ public class UnitStateDead : IUnitState
 {
     public UnitStateType Type => UnitStateType.Dead;
 
-    [Header("Á×À½ ¿¬Ãâ ¼³Á¤")]
-    [SerializeField] private const float FadeOutDuration = 1.5f;
-    [SerializeField] private const float DestroyDelay = 2.0f;
+    [Header("ì£½ìŒ ì—°ì¶œ ì„¤ì •")]
+    private const float FadeOutDuration = 1.5f;
+    private const float DestroyDelay = 2.0f;
 
 
-    public void EnterState(Unit unit) // À¯´ÖÀÌ Á×À½ »óÅÂ¿¡ µé¾î¿ÔÀ» ¶§ ½ÇÇàµÇ´Â ÇÔ¼ö
+    public void EnterState(Unit unit) // ìœ ë‹›ì´ ì£½ìŒ ìƒíƒœì— ë“¤ì–´ì™”ì„ ë•Œ ì‹¤í–‰ë˜ëŠ” í•¨ìˆ˜
     {
         if (unit == null)
             return;
@@ -22,6 +22,6 @@ public class UnitStateDead : IUnitState
         unit.ScheduleDestruction(DestroyDelay);
     }
 
-    public void UpdateState(Unit unit) { } // À¯´ÖÀÌ Á×À½ »óÅÂ ÁßÀÏ ¶§ ½ÇÇàµÇ´Â ÇÔ¼ö
-    public void ExitState(Unit unit) { } // À¯´ÖÀÌ Á×À½ »óÅÂ°¡ ³¡³µÀ» ¶§ ½ÇÇàµÇ´Â ÇÔ¼ö
+    public void UpdateState(Unit unit) { } // ìœ ë‹›ì´ ì£½ìŒ ìƒíƒœ ì¤‘ì¼ ë•Œ ì‹¤í–‰ë˜ëŠ” í•¨ìˆ˜
+    public void ExitState(Unit unit) { } // ìœ ë‹›ì´ ì£½ìŒ ìƒíƒœê°€ ëë‚¬ì„ ë•Œ ì‹¤í–‰ë˜ëŠ” í•¨ìˆ˜
 }

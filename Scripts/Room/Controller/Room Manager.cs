@@ -4,11 +4,11 @@ using Photon.Realtime;
 
 public class RoomManager : BaseSceneController<RoomManager>
 {
-    [Header("Ä³½Ì º¯¼ö")]
+    [Header("ìºì‹± ë³€ìˆ˜")]
     [SerializeField] private RoomUIManager roomUIManager;
     [SerializeField] private RoomNetworkManager roomNetworkManager;
 
-    [Header("°ÔÀÓ ¼³Á¤ º¯¼ö")]
+    [Header("ê²Œì„ ì„¤ì • ë³€ìˆ˜")]
     [SerializeField] private bool isLocalReady = false;
 
 
@@ -67,7 +67,7 @@ public class RoomManager : BaseSceneController<RoomManager>
         roomNetworkManager.InitializeRoomState();
     }
 
-    private void InitializeRoomInfo() // ¹æ Á¤º¸¸¦ ÃÊ±âÈ­ÇÏ´Â ÇÔ¼ö
+    private void InitializeRoomInfo() // ë°© ì •ë³´ë¥¼ ì´ˆê¸°í™”í•˜ëŠ” í•¨ìˆ˜
     {
         Room room = PhotonNetwork.CurrentRoom;
         if (room == null)
@@ -78,7 +78,7 @@ public class RoomManager : BaseSceneController<RoomManager>
         roomUIManager?.SetRoomNameUI($" {roomNum}: {roomName}");
     }
 
-    private int GetRoomNumber(Room room) // ¹æÀÇ Á¤º¸¿¡¼­ ¹æ ¼ıÀÚ¸¦ ¾ò´Â ÇÔ¼ö
+    private int GetRoomNumber(Room room) // ë°©ì˜ ì •ë³´ì—ì„œ ë°© ìˆ«ìë¥¼ ì–»ëŠ” í•¨ìˆ˜
     {
         int roomNum = 0;
         if (room.CustomProperties.ContainsKey(RoomConstants.Properties.RoomNumber))
@@ -86,7 +86,7 @@ public class RoomManager : BaseSceneController<RoomManager>
         return roomNum;
     }
 
-    private string GetRoomName(Room room) // ¹æÀÇ Á¤º¸¿¡¼­ ¹æ ÀÌ¸§À» ¾ò´Â ÇÔ¼ö
+    private string GetRoomName(Room room) // ë°©ì˜ ì •ë³´ì—ì„œ ë°© ì´ë¦„ì„ ì–»ëŠ” í•¨ìˆ˜
     {
         string roomName = "";
         if (room.CustomProperties.ContainsKey(RoomConstants.Properties.RoomName))
@@ -94,7 +94,7 @@ public class RoomManager : BaseSceneController<RoomManager>
         return roomName;
     }
 
-    private void HandleLeaveRoom() // ¹æ ³ª°¡±â ¹öÆ°À» Ã³¸®ÇÏ´Â ÇÔ¼ö
+    private void HandleLeaveRoom() // ë°© ë‚˜ê°€ê¸° ë²„íŠ¼ì„ ì²˜ë¦¬í•˜ëŠ” í•¨ìˆ˜
     {
         PopupPanelUIManager.instance?.ShowSelection
         (
@@ -104,13 +104,13 @@ public class RoomManager : BaseSceneController<RoomManager>
         );
     }
 
-    private void ExitRoom() // ¹æ¿¡¼­ ÅğÀåÇÏ´Â ÇÔ¼ö
+    private void ExitRoom() // ë°©ì—ì„œ í‡´ì¥í•˜ëŠ” í•¨ìˆ˜
     {
         PopupPanelUIManager.instance?.ShowWaiting(PopupMessage.Waiting.ServerConnection, null);
         roomNetworkManager?.LeaveRoom();
     }
 
-    private void HandleActionButton() // °ÔÀÓ ½ÃÀÛ ¹öÆ° Å¬¸¯ ½Ã ½ÇÇàµÇ´Â ÇÔ¼ö
+    private void HandleActionButton() // ê²Œì„ ì‹œì‘ ë²„íŠ¼ í´ë¦­ ì‹œ ì‹¤í–‰ë˜ëŠ” í•¨ìˆ˜
     {
         if(PhotonNetwork.IsMasterClient)
         {
@@ -126,7 +126,7 @@ public class RoomManager : BaseSceneController<RoomManager>
         }
     }
 
-    private bool CanStartGame() // °ÔÀÓ ½ÃÀÛ °¡´É ¿©ºÎ¸¦ È®ÀÎÇÏ´Â ÇÔ¼ö
+    private bool CanStartGame() // ê²Œì„ ì‹œì‘ ê°€ëŠ¥ ì—¬ë¶€ë¥¼ í™•ì¸í•˜ëŠ” í•¨ìˆ˜
     {
         if (PhotonNetwork.CurrentRoom.PlayerCount < 2)
         {
@@ -148,7 +148,7 @@ public class RoomManager : BaseSceneController<RoomManager>
         return true;
     }
 
-    private void ResetRoomState() // ¹æ »óÅÂ¸¦ ÃÊ±âÈ­ÇÏ´Â ÇÔ¼ö
+    private void ResetRoomState() // ë°© ìƒíƒœë¥¼ ì´ˆê¸°í™”í•˜ëŠ” í•¨ìˆ˜
     {
         if (PhotonNetwork.CurrentRoom == null)
             return;
@@ -161,7 +161,7 @@ public class RoomManager : BaseSceneController<RoomManager>
         UpdateActionButtontText(players.Length, isMaster, allGuestsReady);
     }
 
-    private bool UpdatePlayerSlotAndCheckReady(Player[] players) // ½½·ÔÀ» ¾÷µ¥ÀÌÆ®ÇÏ°í ÇÃ·¹ÀÌ¾îÀÇ ÁØºñ »óÅÂ¸¦ È®ÀÎÇÏ´Â ÇÔ¼ö
+    private bool UpdatePlayerSlotAndCheckReady(Player[] players) // ìŠ¬ë¡¯ì„ ì—…ë°ì´íŠ¸í•˜ê³  í”Œë ˆì´ì–´ì˜ ì¤€ë¹„ ìƒíƒœë¥¼ í™•ì¸í•˜ëŠ” í•¨ìˆ˜
     {
         bool allGuestsReady = true;
         foreach (Player p in players)
@@ -178,13 +178,13 @@ public class RoomManager : BaseSceneController<RoomManager>
         return allGuestsReady;
     }
 
-    private bool IsPlayerReady(Player p) // ÇÃ·¹ÀÌ¾î ÁØºñ »óÅÂ¸¦ È®ÀÎÇÏ´Â ÇÔ¼ö
+    private bool IsPlayerReady(Player p) // í”Œë ˆì´ì–´ ì¤€ë¹„ ìƒíƒœë¥¼ í™•ì¸í•˜ëŠ” í•¨ìˆ˜
     {
         return p.CustomProperties.ContainsKey(PlayerConstants.Properties.GameReady) &&
             (bool)p.CustomProperties[PlayerConstants.Properties.GameReady];
     }
 
-    private void UpdateActionButtontText(int playerCount, bool isMaster, bool allGuestsReady) // ½ÃÀÛ ¹öÆ° ÅØ½ºÆ®¸¦ ¾÷µ¥ÀÌÆ®ÇÏ´Â ÇÔ¼ö
+    private void UpdateActionButtontText(int playerCount, bool isMaster, bool allGuestsReady) // ì‹œì‘ ë²„íŠ¼ í…ìŠ¤íŠ¸ë¥¼ ì—…ë°ì´íŠ¸í•˜ëŠ” í•¨ìˆ˜
     {
         if (isMaster)
             roomUIManager?.SetActionButtonText(RoomConstants.ButtonText.Start);
@@ -192,19 +192,19 @@ public class RoomManager : BaseSceneController<RoomManager>
             roomUIManager?.SetActionButtonText(isLocalReady ? RoomConstants.ButtonText.CancelReady : RoomConstants.ButtonText.Ready);
     }
 
-    private void HandleLeftRoomSuccess() // ¹æ ÅğÀåÀÌ ¼º°øÇÒ ½Ã ½ÇÇàµÇ´Â ÇÔ¼ö
+    private void HandleLeftRoomSuccess() // ë°© í‡´ì¥ì´ ì„±ê³µí•  ì‹œ ì‹¤í–‰ë˜ëŠ” í•¨ìˆ˜
     {
         PopupPanelUIManager.instance?.HideWaiting();
         PhotonNetwork.LoadLevel(SceneName.Lobby);
     }
 
-    private void HandleGameStart() // °ÔÀÓ ½ÃÀÛÀ» Ã³¸®ÇÏ´Â ÇÔ¼ö
+    private void HandleGameStart() // ê²Œì„ ì‹œì‘ì„ ì²˜ë¦¬í•˜ëŠ” í•¨ìˆ˜
     {
         if (PhotonNetwork.IsMasterClient)
             PhotonNetwork.LoadLevel(SceneName.UnitSetting);
     }
 
-    private void HandleBecameMasterClient(Player newMaster) // ¹æÀå ±³Ã¼ ½Ã »õ ¹æÀåÀÌ ¹æ »óÅÂ¸¦ ¾÷µ¥ÀÌÆ®ÇÏ´Â ÇÔ¼ö
+    private void HandleBecameMasterClient(Player newMaster) // ë°©ì¥ êµì²´ ì‹œ ìƒˆ ë°©ì¥ì´ ë°© ìƒíƒœë¥¼ ì—…ë°ì´íŠ¸í•˜ëŠ” í•¨ìˆ˜
     {
         if (!newMaster.IsLocal)
             return;

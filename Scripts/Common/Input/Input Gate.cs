@@ -20,7 +20,7 @@ public static class InputGate
         }
     }
 
-    private static bool IsTextInputFocused() // Å°º¸µå Æ÷Ä¿½º°¡ UI ÀÔ·Â ÇÊµå¿¡ ÀÖ´ÂÁö È®ÀÎÇÏ´Â ÇÔ¼ö
+    private static bool IsTextInputFocused() // í‚¤ë³´ë“œ í¬ì»¤ìŠ¤ê°€ UI ì…ë ¥ í•„ë“œì— ìˆëŠ”ì§€ í™•ì¸í•˜ëŠ” í•¨ìˆ˜
     {
         if (EventSystem.current == null)
             return false;

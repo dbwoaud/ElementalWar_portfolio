@@ -4,13 +4,13 @@ using UnityEngine;
 
 public class MapSpawner : MonoBehaviour
 {
-    [Header("ÇÁ¸®ÆÕ µ¥ÀÌÅÍº£ÀÌ½º")]
+    [Header("í”„ë¦¬íŒ¹ ë°ì´í„°ë² ì´ìŠ¤")]
     [SerializeField] private List<MapData> mapPrefabList;
  
     public event Action<MapData> OnMapSpawned; 
 
 
-    public MapData SpawnMap(int mapIndex) // ¸ÊÀ» »ı¼ºÇÏ´Â ÇÔ¼ö
+    public MapData SpawnMap(int mapIndex) // ë§µì„ ìƒì„±í•˜ëŠ” í•¨ìˆ˜
     {
         if (CheckInValidIndex(mapIndex))
             return null;
@@ -20,7 +20,7 @@ public class MapSpawner : MonoBehaviour
         return mapInstance;
     }
 
-    private bool CheckInValidIndex(int mapIndex) // À¯È¿ÇÑ ÀÎµ¦½ºÀÎÁö È®ÀÎÇÏ´Â ÇÔ¼ö
+    private bool CheckInValidIndex(int mapIndex) // ìœ íš¨í•œ ì¸ë±ìŠ¤ì¸ì§€ í™•ì¸í•˜ëŠ” í•¨ìˆ˜
     {
         return mapIndex < 0 || mapIndex >= mapPrefabList.Count;
     }

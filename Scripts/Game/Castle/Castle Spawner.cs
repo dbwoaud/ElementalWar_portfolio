@@ -5,7 +5,7 @@ using System;
 
 public class CastleSpawner : MonoBehaviour
 {
-    [Header("¼º ÇÁ¸®ÆÕ ¼³Á¤")]
+    [Header("ì„± í”„ë¦¬íŒ¹ ì„¤ì •")]
     [SerializeField] private GameObject castlePrefab;
 
     public event Action<GameObject> OnCastleSpawned;
@@ -17,7 +17,7 @@ public class CastleSpawner : MonoBehaviour
             NetworkPoolManager.instance.RegisterNetworkPrefab(castlePrefab);
     }
 
-    public void SpawnCastle(Transform spawnPoint) // ¼ºÀ» Á¤ÇØÁø À§Ä¡¿¡ »ı¼ºÇÏ´Â ÇÔ¼ö
+    public void SpawnCastle(Transform spawnPoint) // ì„±ì„ ì •í•´ì§„ ìœ„ì¹˜ì— ìƒì„±í•˜ëŠ” í•¨ìˆ˜
     {
         if (spawnPoint == null || castlePrefab == null)
             return;

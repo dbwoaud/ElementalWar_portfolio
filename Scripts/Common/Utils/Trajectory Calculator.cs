@@ -2,7 +2,7 @@ using UnityEngine;
 
 public static class TrajectoryCalculator
 {
-    public static Vector2 CalculateLaunchForce(Vector2 startPos, Vector2 targetPos, float angleDeg) // ½ÃÀÛ À§Ä¡, ¸ñÇ¥ À§Ä¡, °¢µµ·Î ¹ß»ç ÈûÀ» °è»êÇÏ´Â ÇÔ¼ö
+    public static Vector2 CalculateLaunchForce(Vector2 startPos, Vector2 targetPos, float angleDeg) // ì‹œì‘ ìœ„ì¹˜, ëª©í‘œ ìœ„ì¹˜, ê°ë„ë¡œ ë°œì‚¬ í˜ì„ ê³„ì‚°í•˜ëŠ” í•¨ìˆ˜
     {
         float D = Mathf.Abs(targetPos.x - startPos.x);
         float h = targetPos.y - startPos.y;

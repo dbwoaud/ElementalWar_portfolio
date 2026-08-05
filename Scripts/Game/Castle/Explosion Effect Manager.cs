@@ -4,18 +4,18 @@ using UnityEngine;
 
 public class ExplosionEffectManager: Singleton<ExplosionEffectManager>
 {
-    [Header("Ä³½Ì º¯¼ö")]
+    [Header("ìºì‹± ë³€ìˆ˜")]
     [SerializeField] private float cachedGroundMinX;
     [SerializeField] private float cachedGroundMaxX;
     [SerializeField] private bool hasCachedBounds;
 
-    [Header("Æø¹ß ¿¬Ãâ ¼³Á¤")]
+    [Header("í­ë°œ ì—°ì¶œ ì„¤ì •")]
     [SerializeField] private GameObject explosionPrefab;
     [SerializeField] private float spacing = 0.5f; 
     [SerializeField] private float delay = 0.2f;
     [SerializeField] private float effectLifeTime;
 
-    [Header("¿ÀºêÁ§Æ® Ç®")]
+    [Header("ì˜¤ë¸Œì íŠ¸ í’€")]
     [SerializeField] private Queue<GameObject> explosionPool = new Queue<GameObject>();
     [SerializeField] private int initialiPoolsize = 40;
     [SerializeField] private int maxPoolSize = 80;
@@ -32,7 +32,7 @@ public class ExplosionEffectManager: Singleton<ExplosionEffectManager>
         PreloadExplosions(initialiPoolsize);
     }
 
-    private void PreloadExplosions(int count) // Æø¹ß ÇÁ¸®ÆÕÀ» Ç®¿¡ ¹Ì¸® ³Ö´Â ÇÔ¼ö
+    private void PreloadExplosions(int count) // í­ë°œ í”„ë¦¬íŒ¹ì„ í’€ì— ë¯¸ë¦¬ ë„£ëŠ” í•¨ìˆ˜
     {
         for (int i = 0; i < count; i++)
         {
@@ -42,12 +42,12 @@ public class ExplosionEffectManager: Singleton<ExplosionEffectManager>
         }
     }
 
-    public void PlayChainExplosion(Vector3 startPos) // ¿¬¼â Æø¹ß ¿¬ÃâÀ» Àç»ıÇÏ´Â ÇÔ¼ö
+    public void PlayChainExplosion(Vector3 startPos) // ì—°ì‡„ í­ë°œ ì—°ì¶œì„ ì¬ìƒí•˜ëŠ” í•¨ìˆ˜
     {
         StartCoroutine(ChainExplosionCoroutine(startPos));
     }
 
-    private IEnumerator ChainExplosionCoroutine(Vector3 startPos) // ¿¬¼â Æø¹ß ¿¬ÃâÀ» Àç»ıÇÏ´Â ÄÚ·çÆ¾
+    private IEnumerator ChainExplosionCoroutine(Vector3 startPos) // ì—°ì‡„ í­ë°œ ì—°ì¶œì„ ì¬ìƒí•˜ëŠ” ì½”ë£¨í‹´
     {
         SpawnExplosion(startPos);
         yield return new WaitForSeconds(delay);
@@ -58,7 +58,7 @@ public class ExplosionEffectManager: Singleton<ExplosionEffectManager>
         }
     }
 
-    private void SpawnExplosion(Vector3 pos) // Æø¹ß ÇÁ¸®ÆÕÀ» »ı¼ºÇÏ´Â ÇÔ¼ö
+    private void SpawnExplosion(Vector3 pos) // í­ë°œ í”„ë¦¬íŒ¹ì„ ìƒì„±í•˜ëŠ” í•¨ìˆ˜
     {
         GameObject effect;
         if (explosionPool.Count > 0)
@@ -70,7 +70,7 @@ public class ExplosionEffectManager: Singleton<ExplosionEffectManager>
         StartCoroutine(ReturnPrefabToPoolAfterDelay(effect, effectLifeTime));
     }
 
-    private GameObject GetPrefabFromPool(Vector3 pos) // Æø¹ß ÇÁ¸®ÆÕÀ» ¿ÀºêÁ§Æ® Ç®¿¡¼­ °¡Á®¿À´Â ÇÔ¼ö
+    private GameObject GetPrefabFromPool(Vector3 pos) // í­ë°œ í”„ë¦¬íŒ¹ì„ ì˜¤ë¸Œì íŠ¸ í’€ì—ì„œ ê°€ì ¸ì˜¤ëŠ” í•¨ìˆ˜
     {
         GameObject effect = explosionPool.Dequeue();
         effect.transform.position = pos;
@@ -78,7 +78,7 @@ public class ExplosionEffectManager: Singleton<ExplosionEffectManager>
         return effect;
     }
 
-    private bool TryGetGroundBounds(out float minX, out float maxX) // ÁöÇüÀÇ xÃà °æ°è °ªÀ» °è»êÇÏ´Â ÇÔ¼ö
+    private bool TryGetGroundBounds(out float minX, out float maxX) // ì§€í˜•ì˜ xì¶• ê²½ê³„ ê°’ì„ ê³„ì‚°í•˜ëŠ” í•¨ìˆ˜
     {
         if (hasCachedBounds)
         {
@@ -103,7 +103,7 @@ public class ExplosionEffectManager: Singleton<ExplosionEffectManager>
         return false;
     }
 
-    private IEnumerator ExpandExplosionsRoutine(float startX, float startY, float startZ, float minX, float maxX) // ÁöÇüÀÇ °æ°è ³¡±îÁö ¿¬¼â Æø¹ß ¿¬ÃâÀ» Àç»ıÇÏ´Â ÄÚ·çÆ¾                                                                                                         
+    private IEnumerator ExpandExplosionsRoutine(float startX, float startY, float startZ, float minX, float maxX) // ì§€í˜•ì˜ ê²½ê³„ ëê¹Œì§€ ì—°ì‡„ í­ë°œ ì—°ì¶œì„ ì¬ìƒí•˜ëŠ” ì½”ë£¨í‹´                                                                                                         
     {
         int step = 1;
         bool canExpandLeft = true;
@@ -130,7 +130,7 @@ public class ExplosionEffectManager: Singleton<ExplosionEffectManager>
         }
     }
 
-    private IEnumerator ReturnPrefabToPoolAfterDelay(GameObject effect, float time) // Æø¹ß ÇÁ¸®ÆÕÀ» ÀÏÁ¤½Ã°£ ÀÌÈÄ¿¡ ¿ÀºêÁ§Æ® Ç®·Î ¹İÈ¯ÇÏ´Â ÄÚ·çÆ¾
+    private IEnumerator ReturnPrefabToPoolAfterDelay(GameObject effect, float time) // í­ë°œ í”„ë¦¬íŒ¹ì„ ì¼ì •ì‹œê°„ ì´í›„ì— ì˜¤ë¸Œì íŠ¸ í’€ë¡œ ë°˜í™˜í•˜ëŠ” ì½”ë£¨í‹´
     {
         yield return new WaitForSeconds(time);
 

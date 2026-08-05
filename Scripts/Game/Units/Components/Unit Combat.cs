@@ -5,15 +5,17 @@ using UnityEngine;
 [DisallowMultipleComponent]
 public class UnitCombat : MonoBehaviour
 {
-    [Header("À¯´Ö °ü·Ã º¯¼ö")]
+    [Header("ìœ ë‹› ê´€ë ¨ ë³€ìˆ˜")]
     [SerializeField] private UnitStats stats;
     [SerializeField] private UnitMovement movement;
     [SerializeField] private UnitNetworkSync networkSync;
 
-    [Header("Àû À¯´Ö ÀúÀå º¯¼ö")]
-    private readonly Collider2D[] scanBuffer = new Collider2D[16];
-    private readonly Collider2D[] aoeBuffer = new Collider2D[32];
-    [SerializeField] private readonly List<Collider2D> reusableTargets = new List<Collider2D>(8);
+    [Header("ì  ìœ ë‹› ì €ì¥ ë³€ìˆ˜")]
+    private const int ScanBufferSize = 16;
+    private const int AoeBufferSize = 32;
+    private readonly Collider2D[] scanBuffer = new Collider2D[ScanBufferSize];
+    private readonly Collider2D[] aoeBuffer = new Collider2D[AoeBufferSize];
+    private readonly List<Collider2D> reusableTargets = new List<Collider2D>(8);
 
     public int TargetLayerMask { get; set; }
 
@@ -28,12 +30,12 @@ public class UnitCombat : MonoBehaviour
             networkSync = GetComponent<UnitNetworkSync>();
     }
 
-    public bool HasValidTarget() // »ç°Å¸® ¾È¿¡ °ø°İ °¡´ÉÇÑ ÀûÀÌ ÀÖ´ÂÁö È®ÀÎÇÏ´Â ÇÔ¼ö
+    public bool HasValidTarget() // ì‚¬ê±°ë¦¬ ì•ˆì— ê³µê²© ê°€ëŠ¥í•œ ì ì´ ìˆëŠ”ì§€ í™•ì¸í•˜ëŠ” í•¨ìˆ˜
     {
         return AcquirePrimaryTarget() != null;
     }
 
-    public Collider2D AcquirePrimaryTarget() // »ç°Å¸® ¾ÈÀÇ ¿ì¼± ÀûÀ» ¹İÈ¯ÇÏ´Â ÇÔ¼ö
+    public Collider2D AcquirePrimaryTarget() // ì‚¬ê±°ë¦¬ ì•ˆì˜ ìš°ì„  ì ì„ ë°˜í™˜í•˜ëŠ” í•¨ìˆ˜
     {
         var col = movement.UnitCollider;
         if (col == null)
@@ -43,7 +45,7 @@ public class UnitCombat : MonoBehaviour
         return FindOverlappingEnemy(b) ?? FindFrontEnemy(b);
     }
 
-    public bool IsTargetInRange(Collider2D target) // ÁöÁ¤µÈ Å¸°ÙÀÌ ÇöÀç »ç°Å¸® ³»¿¡ ÀÖ´ÂÁö È®ÀÎÇÏ´Â ÇÔ¼ö
+    public bool IsTargetInRange(Collider2D target) // ì§€ì •ëœ íƒ€ê²Ÿì´ í˜„ì¬ ì‚¬ê±°ë¦¬ ë‚´ì— ìˆëŠ”ì§€ í™•ì¸í•˜ëŠ” í•¨ìˆ˜
     {
         if (target == null || !target.gameObject.activeInHierarchy)
             return false;
@@ -61,14 +63,14 @@ public class UnitCombat : MonoBehaviour
         return ComputeAttackBox(attacker).Intersects(defender);
     }
 
-    public bool IsColliderTargetable(Collider2D col) // ÇöÀç Å¸°ÙÀÇ Äİ¶óÀÌ´õ°¡ µ¥¹ÌÁö¸¦ ¹ŞÀ» ¼ö ÀÖ´Â »óÅÂÀÎÁö È®ÀÎÇÏ´Â ÇÔ¼ö
+    public bool IsColliderTargetable(Collider2D col) // í˜„ì¬ íƒ€ê²Ÿì˜ ì½œë¼ì´ë”ê°€ ë°ë¯¸ì§€ë¥¼ ë°›ì„ ìˆ˜ ìˆëŠ” ìƒíƒœì¸ì§€ í™•ì¸í•˜ëŠ” í•¨ìˆ˜
     {
         if (col == null)
             return false;
         return IsAttackableEnemy(col.GetComponent<IDamagable>());
     }
 
-    public void ApplyDamageFromAttack(Collider2D epicenter) // °ø°İÀ¸·ÎºÎÅÍ ½ÇÁ¦ µ¥¹ÌÁö¸¦ Àû¿ëÇÏ´Â ÇÔ¼ö
+    public void ApplyDamageFromAttack(Collider2D epicenter) // ê³µê²©ìœ¼ë¡œë¶€í„° ì‹¤ì œ ë°ë¯¸ì§€ë¥¼ ì ìš©í•˜ëŠ” í•¨ìˆ˜
     {
         if (epicenter == null)
             return;
@@ -82,7 +84,7 @@ public class UnitCombat : MonoBehaviour
         ApplyDamageToTargets(reusableTargets);
     }
 
-    private void ApplyDamageToTargets(List<Collider2D> targets) // °ø°İ µ¥¹ÌÁö¸¦ ¸ğµç ÇÃ·¹ÀÌ¾î¿¡°Ô µ¿±âÈ­ÇÏ´Â ÇÔ¼ö
+    private void ApplyDamageToTargets(List<Collider2D> targets) // ê³µê²© ë°ë¯¸ì§€ë¥¼ ëª¨ë“  í”Œë ˆì´ì–´ì—ê²Œ ë™ê¸°í™”í•˜ëŠ” í•¨ìˆ˜
     {
         foreach (var target in targets)
         {
@@ -94,7 +96,7 @@ public class UnitCombat : MonoBehaviour
         }
     }
 
-    private bool TryGetValidEnemy(Collider2D col, out PhotonView enemyView, out IDamagable enemy) // Àû À¯´ÖÀÇ Äİ¶óÀÌ´õ¿¡¼­ À¯È¿ÇÑ Àû Á¤º¸¸¦ ¾ò´Â ÇÔ¼ö
+    private bool TryGetValidEnemy(Collider2D col, out PhotonView enemyView, out IDamagable enemy) // ì  ìœ ë‹›ì˜ ì½œë¼ì´ë”ì—ì„œ ìœ íš¨í•œ ì  ì •ë³´ë¥¼ ì–»ëŠ” í•¨ìˆ˜
     {
         enemyView = col.GetComponent<PhotonView>();
         enemy = col.GetComponent<IDamagable>();
@@ -107,7 +109,7 @@ public class UnitCombat : MonoBehaviour
         return true;
     }
 
-    private float CalculateDamage(IDamagable enemy) // ¼Ó¼º »ó¼ºÀ» Àû¿ëÇÑ ÃÖÁ¾ µ¥¹ÌÁö¸¦ °è»êÇÏ´Â ÇÔ¼ö
+    private float CalculateDamage(IDamagable enemy) // ì†ì„± ìƒì„±ì„ ì ìš©í•œ ìµœì¢… ë°ë¯¸ì§€ë¥¼ ê³„ì‚°í•˜ëŠ” í•¨ìˆ˜
     {
         if (enemy is Unit enemyUnit)
         {
@@ -118,18 +120,18 @@ public class UnitCombat : MonoBehaviour
         return stats.AttackDamage;
     }
 
-    private Collider2D FindOverlappingEnemy(Bounds b) // ÀÚ½Å°ú °ãÃÄ ÀÖ´Â ÀûÀ» Ã£´Â ÇÔ¼ö
+    private Collider2D FindOverlappingEnemy(Bounds b) // ìì‹ ê³¼ ê²¹ì³ ìˆëŠ” ì ì„ ì°¾ëŠ” í•¨ìˆ˜
     {
         return FindEnemyInBox(b.center, b.size);
     }
 
-    private Collider2D FindFrontEnemy(Bounds b) // °ø°İ »ç°Å¸® ³»ÀÇ ÀûÀ» Ã£´Â ÇÔ¼ö
+    private Collider2D FindFrontEnemy(Bounds b) // ê³µê²© ì‚¬ê±°ë¦¬ ë‚´ì˜ ì ì„ ì°¾ëŠ” í•¨ìˆ˜
     {
         Bounds attackBox = ComputeAttackBox(b);
         return FindEnemyInBox(attackBox.center, attackBox.size);
     }
 
-    private Bounds ComputeAttackBox(Bounds attackerBounds) // °ø°İ »ç°Å¸®¸¦ °è»êÇÏ´Â ÇÔ¼ö
+    private Bounds ComputeAttackBox(Bounds attackerBounds) // ê³µê²© ì‚¬ê±°ë¦¬ë¥¼ ê³„ì‚°í•˜ëŠ” í•¨ìˆ˜
     {
         float dir = movement.DirectionMultiplier;
         float forwardX = dir > 0 ? attackerBounds.max.x : attackerBounds.min.x;
@@ -143,12 +145,13 @@ public class UnitCombat : MonoBehaviour
         return new Bounds(center, size);
     }
 
-    private Collider2D FindEnemyInBox(Vector2 center, Vector2 size) // °ø°İ »ç°Å¸® ³»¿¡¼­ Ã¹ ¹øÂ° °ø°İ °¡´ÉÇÑ ÀûÀ» ¹İÈ¯ÇÏ´Â ÇÔ¼ö
+    private Collider2D FindEnemyInBox(Vector2 center, Vector2 size) // ê³µê²© ì‚¬ê±°ë¦¬ ë‚´ì—ì„œ ì²« ë²ˆì§¸ ê³µê²© ê°€ëŠ¥í•œ ì ì„ ë°˜í™˜í•˜ëŠ” í•¨ìˆ˜
     {
         ContactFilter2D filter = new ContactFilter2D();
         filter.useLayerMask = true;
         filter.layerMask = TargetLayerMask;
         int count = Physics2D.OverlapBox(center, size, 0f, filter, scanBuffer);
+        count = Mathf.Min(count, scanBuffer.Length);
 
         for (int i = 0; i < count; i++)
         {
@@ -162,7 +165,7 @@ public class UnitCombat : MonoBehaviour
         return null;
     }
 
-    private bool IsAttackableEnemy(IDamagable enemy) // ÀûÀÌ µ¥¹ÌÁö¸¦ ¹ŞÀ» ¼ö ÀÖ´Â »óÅÂÀÎÁö È®ÀÎÇÏ´Â ÇÔ¼ö
+    private bool IsAttackableEnemy(IDamagable enemy) // ì ì´ ë°ë¯¸ì§€ë¥¼ ë°›ì„ ìˆ˜ ìˆëŠ” ìƒíƒœì¸ì§€ í™•ì¸í•˜ëŠ” í•¨ìˆ˜
     {
         if (enemy == null)
             return false;
@@ -173,7 +176,7 @@ public class UnitCombat : MonoBehaviour
         return enemy.IsAlive;
     }
 
-    private void FindAllEnemiesInAoeRadius(Collider2D epicenter, List<Collider2D> results) // AOE ¹üÀ§ ³»ÀÇ ¸ğµç ÀûÀ» Ã£´Â ÇÔ¼ö
+    private void FindAllEnemiesInAoeRadius(Collider2D epicenter, List<Collider2D> results) // AOE ë²”ìœ„ ë‚´ì˜ ëª¨ë“  ì ì„ ì°¾ëŠ” í•¨ìˆ˜
     {
         ContactFilter2D filter = new ContactFilter2D();
         filter.useLayerMask = true;

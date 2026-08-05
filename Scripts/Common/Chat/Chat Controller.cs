@@ -2,10 +2,10 @@ using UnityEngine;
 
 public class ChatController : MonoBehaviour
 {
-    [Header("Àü¼Û ÄÄÆ÷³ÍÆ®")]
+    [Header("ì „ì†¡ ì»´í¬ë„ŒíŠ¸")]
     [SerializeField] private MonoBehaviour transportComponent;
 
-    [Header("Ã¤ÆÃ UI")]
+    [Header("ì±„íŒ… UI")]
     [SerializeField] private ChatPanelUI viewComponent;
 
     private IChatTransport transport;
@@ -45,12 +45,12 @@ public class ChatController : MonoBehaviour
         transport?.Connect();
     }
 
-    private void HandleSendMessageRequest(string message) // ÀÔ·ÂÃ¢¿¡¼­ ¼Û½Å ¿äÃ»ÀÌ µé¾î¿ÔÀ» ¶§ ½ÇÇàµÇ´Â ÇÔ¼ö
+    private void HandleSendMessageRequest(string message) // ì…ë ¥ì°½ì—ì„œ ì†¡ì‹  ìš”ì²­ì´ ë“¤ì–´ì™”ì„ ë•Œ ì‹¤í–‰ë˜ëŠ” í•¨ìˆ˜
     {
         transport?.Send(message);
     }
 
-    private void HandleMessageReceived(string sender, string message) // ¸Ş½ÃÁö ¼ö½Å ½Ã ½ÇÇàµÇ´Â ÇÔ¼ö
+    private void HandleMessageReceived(string sender, string message) // ë©”ì‹œì§€ ìˆ˜ì‹  ì‹œ ì‹¤í–‰ë˜ëŠ” í•¨ìˆ˜
     {
         if (view == null)
             return;
@@ -60,7 +60,7 @@ public class ChatController : MonoBehaviour
         view.AppendMessage(formatted);
     }
 
-    private void HandleSystemMessage(string message) // ½Ã½ºÅÛ ¸Ş½ÃÁö ¼ö½Å ½Ã ½ÇÇàµÇ´Â ÇÔ¼ö
+    private void HandleSystemMessage(string message) // ì‹œìŠ¤í…œ ë©”ì‹œì§€ ìˆ˜ì‹  ì‹œ ì‹¤í–‰ë˜ëŠ” í•¨ìˆ˜
     {
         if (view == null)
             return;

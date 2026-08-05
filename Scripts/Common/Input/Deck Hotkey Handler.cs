@@ -3,7 +3,7 @@ using UnityEngine;
 
 public class DeckHotkeyHandler : MonoBehaviour
 {
-    [Header("ÀÔ·Â È°¼ºÈ­ ¿©ºÎ")]
+    [Header("ì…ë ¥ í™œì„±í™” ì—¬ë¶€")]
     [SerializeField] private bool isEnabled = true;
     public bool IsEnabled
     {
@@ -22,7 +22,7 @@ public class DeckHotkeyHandler : MonoBehaviour
         DetectHotkey();
     }
 
-    private void DetectHotkey() // ´ÜÃàÅ° ÀÔ·ÂÀ» °¨ÁöÇØ ÀÌº¥Æ®¸¦ ¹ßÇàÇÏ´Â ÇÔ¼ö
+    private void DetectHotkey() // ë‹¨ì¶•í‚¤ ì…ë ¥ì„ ê°ì§€í•´ ì´ë²¤íŠ¸ë¥¼ ë°œí–‰í•˜ëŠ” í•¨ìˆ˜
     {
         if (InputGate.IsBlocked)
             return;

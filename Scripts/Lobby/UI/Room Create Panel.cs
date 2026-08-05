@@ -4,7 +4,7 @@ using System;
 
 public class RoomCreatePanel : UIPanel
 {
-    [Header("UI ¿ä¼Ò")]
+    [Header("UI ìš”ì†Œ")]
     [SerializeField] private InputField roomNameInputField;
     [SerializeField] private Toggle publicRoomToggle;
     [SerializeField] private Toggle privateRoomToggle;
@@ -27,43 +27,43 @@ public class RoomCreatePanel : UIPanel
         UnRegisterToggleListener();
     }
 
-    private void InitializeButtonListener() // ¹öÆ° ¸®½º³Ê¸¦ ÃÊ±âÈ­ÇÏ´Â ÇÔ¼ö
+    private void InitializeButtonListener() // ë²„íŠ¼ ë¦¬ìŠ¤ë„ˆë¥¼ ì´ˆê¸°í™”í•˜ëŠ” í•¨ìˆ˜
     {
         confirmButton?.onClick.AddListener(OnClickConfirmButton);
         cancelButton?.onClick.AddListener(OnClickCancelButton);
     }
 
-    private void InitializeToggleListener() // Åä±Û ¸®½º³Ê¸¦ ÃÊ±âÈ­ÇÏ´Â ÇÔ¼ö
+    private void InitializeToggleListener() // í† ê¸€ ë¦¬ìŠ¤ë„ˆë¥¼ ì´ˆê¸°í™”í•˜ëŠ” í•¨ìˆ˜
     {
         publicRoomToggle?.onValueChanged.AddListener(OnPublicToggleChanged);
         privateRoomToggle?.onValueChanged.AddListener(OnPrivateToggleChanged);
     }
 
-    private void UnregisterButtonListener() // ¹öÆ° ¸®½º³Ê¸¦ ÇØÁ¦ÇÏ´Â ÇÔ¼ö
+    private void UnregisterButtonListener() // ë²„íŠ¼ ë¦¬ìŠ¤ë„ˆë¥¼ í•´ì œí•˜ëŠ” í•¨ìˆ˜
     {
         confirmButton?.onClick.RemoveListener(OnClickConfirmButton);
         cancelButton?.onClick.RemoveListener(OnClickCancelButton);
     }
 
-    private void UnRegisterToggleListener() // Åä±Û ¸®½º³Ê¸¦ ÇØÁ¦ÇÏ´Â ÇÔ¼ö
+    private void UnRegisterToggleListener() // í† ê¸€ ë¦¬ìŠ¤ë„ˆë¥¼ í•´ì œí•˜ëŠ” í•¨ìˆ˜
     {
         publicRoomToggle?.onValueChanged.RemoveListener(OnPublicToggleChanged);
         privateRoomToggle?.onValueChanged.RemoveListener(OnPrivateToggleChanged);
     }
 
-    private void OnClickConfirmButton() // È®ÀÎ ¹öÆ° Å¬¸¯ ½Ã ½ÇÇàµÇ´Â ÇÔ¼ö
+    private void OnClickConfirmButton() // í™•ì¸ ë²„íŠ¼ í´ë¦­ ì‹œ ì‹¤í–‰ë˜ëŠ” í•¨ìˆ˜
     {
         SoundManager.instance?.Play(SoundKey.ButtonClick);
         OnCreateSubmit?.Invoke(roomNameInputField.text, roomPasswordInputField.text);
     }
 
-    private void OnClickCancelButton() // Ãë¼Ò ¹öÆ° Å¬¸¯ ½Ã ½ÇÇàµÇ´Â ÇÔ¼ö
+    private void OnClickCancelButton() // ì·¨ì†Œ ë²„íŠ¼ í´ë¦­ ì‹œ ì‹¤í–‰ë˜ëŠ” í•¨ìˆ˜
     {
         SoundManager.instance?.Play(SoundKey.ButtonClick);
         Hide();
     }
 
-    private void OnPublicToggleChanged(bool isOn) // °ø°³¹æ Åä±Û Å¬¸¯ ½Ã ½ÇÇàµÇ´Â ÇÔ¼ö
+    private void OnPublicToggleChanged(bool isOn) // ê³µê°œë°© í† ê¸€ í´ë¦­ ì‹œ ì‹¤í–‰ë˜ëŠ” í•¨ìˆ˜
     {
         if (isOn)
         {
@@ -73,7 +73,7 @@ public class RoomCreatePanel : UIPanel
         }
     }
 
-    private void OnPrivateToggleChanged(bool isOn) // ºñ°ø°³¹æ Åä±Û Å¬¸¯ ½Ã ½ÇÇàµÇ´Â ÇÔ¼ö
+    private void OnPrivateToggleChanged(bool isOn) // ë¹„ê³µê°œë°© í† ê¸€ í´ë¦­ ì‹œ ì‹¤í–‰ë˜ëŠ” í•¨ìˆ˜
     {
         if (isOn)
         {

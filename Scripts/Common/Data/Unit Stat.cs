@@ -5,7 +5,7 @@ public enum ElementType { Void, Wind, Forest, Fire, Mountain }
 [CreateAssetMenu(fileName = "UnitStat", menuName = "Scriptable Objects/UnitStat")]
 public class UnitStat : ScriptableObject
 {
-    [Header("±âº» Á¤º¸")]
+    [Header("ê¸°ë³¸ ì •ë³´")]
     [SerializeField] public GameObject unitPrefab;
     [SerializeField] public Sprite unitIcon;
     [SerializeField] public string unitName;
@@ -14,7 +14,7 @@ public class UnitStat : ScriptableObject
     [SerializeField] public int spawnCost;
     [SerializeField] public float spawnCoolTime;
 
-    [Header("ÀüÅõ ´É·ÂÄ¡")]
+    [Header("ì „íˆ¬ ëŠ¥ë ¥ì¹˜")]
     [SerializeField] public float maxHP;
     [SerializeField] public float attackDamage;
     [SerializeField] public float firstAttackDelay;
@@ -24,7 +24,7 @@ public class UnitStat : ScriptableObject
     [SerializeField] public float aoeRadius;
 
 
-    public float CalculateDamage(ElementType attacker, ElementType defender, float baseDamage) // ¼Ó¼º¿¡ µû¸¥ µ¥¹ÌÁö¸¦ °è»êÇÏ´Â ÇÔ¼ö
+    public float CalculateDamage(ElementType attacker, ElementType defender, float baseDamage) // ì†ì„±ì— ë”°ë¥¸ ë°ë¯¸ì§€ë¥¼ ê³„ì‚°í•˜ëŠ” í•¨ìˆ˜
     {
         float multiplier = 1.0f;
         if (attacker == ElementType.Wind)

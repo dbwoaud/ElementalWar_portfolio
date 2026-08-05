@@ -4,11 +4,11 @@ using UnityEngine.UI;
 
 public class SelectionPopupPanel : BasePopupPanel
 {
-    [Header("UI ¿ä¼Ò")]
+    [Header("UI ìš”ì†Œ")]
     [SerializeField] private Button yesButton;
     [SerializeField] private Button noButton;
 
-    [Header("¹öÆ° Å¬¸¯ ÀÌº¥Æ®")]
+    [Header("ë²„íŠ¼ í´ë¦­ ì´ë²¤íŠ¸")]
     private Action onYesAction;
     private Action onNoAction;
 
@@ -30,21 +30,21 @@ public class SelectionPopupPanel : BasePopupPanel
         messageText.text = "";
     }
 
-    private void OnClickYesButton() // ³× ¹öÆ°À» ´­·¶À» ¶§ ½ÇÇàµÇ´Â ÇÔ¼ö
+    private void OnClickYesButton() // ë„¤ ë²„íŠ¼ì„ ëˆŒë €ì„ ë•Œ ì‹¤í–‰ë˜ëŠ” í•¨ìˆ˜
     {
         SoundManager.instance?.Play(SoundKey.ButtonClick);
         onYesAction?.Invoke();
         Hide();
     }
 
-    private void OnClickNoButton() // ¾Æ´Ï¿À ¹öÆ°À» ´­·¶À» ¶§ ½ÇÇàµÇ´Â ÇÔ¼ö
+    private void OnClickNoButton() // ì•„ë‹ˆì˜¤ ë²„íŠ¼ì„ ëˆŒë €ì„ ë•Œ ì‹¤í–‰ë˜ëŠ” í•¨ìˆ˜
     {
         SoundManager.instance?.Play(SoundKey.ButtonClick);
         onNoAction?.Invoke();
         Hide();
     }
 
-    public void Setup(string message, Action onYes, Action onNo) // ¼±ÅÃ ÆË¾÷ ÆĞ³ÎÀ» È°¼ºÈ­ÇÏ´Â ÇÔ¼ö
+    public void Setup(string message, Action onYes, Action onNo) // ì„ íƒ íŒì—… íŒ¨ë„ì„ í™œì„±í™”í•˜ëŠ” í•¨ìˆ˜
     {
         onYesAction = onYes;
         onNoAction = onNo;

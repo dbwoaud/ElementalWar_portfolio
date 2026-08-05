@@ -4,7 +4,7 @@ using UnityEngine.UI;
 
 public class LoginPanel : UIPanel
 {
-    [Header("UI ¿ä¼Ò")]
+    [Header("UI ìš”ì†Œ")]
     [SerializeField] private InputField emailInputField;
     [SerializeField] private InputField passwordInputField;
     [SerializeField] private Button closeButton;
@@ -29,20 +29,20 @@ public class LoginPanel : UIPanel
         signUpButton?.onClick.RemoveListener(OnClickSignUpButton);
     }
 
-    private void OnClickCloseButton() // ´İ±â ¹öÆ° Å¬¸¯ ½Ã ½ÇÇàµÇ´Â ÇÔ¼ö
+    private void OnClickCloseButton() // ë‹«ê¸° ë²„íŠ¼ í´ë¦­ ì‹œ ì‹¤í–‰ë˜ëŠ” í•¨ìˆ˜
     {
         SoundManager.instance?.Play(SoundKey.ButtonClick);
         Hide();
     }
 
-    private void OnClickLoginButton() // ·Î±×ÀÎ ¹öÆ° Å¬¸¯ ½Ã ½ÇÇàµÇ´Â ÇÔ¼ö
+    private void OnClickLoginButton() // ë¡œê·¸ì¸ ë²„íŠ¼ í´ë¦­ ì‹œ ì‹¤í–‰ë˜ëŠ” í•¨ìˆ˜
     {
         SoundManager.instance?.Play(SoundKey.ButtonClick);
         OnLoginSubmit?.Invoke(emailInputField.text, passwordInputField.text);
     }
 
 
-    private void OnClickSignUpButton() // È¸¿ø°¡ÀÔ ¹öÆ° Å¬¸¯ ½Ã ½ÇÇàµÇ´Â ÇÔ¼ö
+    private void OnClickSignUpButton() // íšŒì›ê°€ì… ë²„íŠ¼ í´ë¦­ ì‹œ ì‹¤í–‰ë˜ëŠ” í•¨ìˆ˜
     {
         SoundManager.instance?.Play(SoundKey.ButtonClick);
         OnSignUpClicked?.Invoke();

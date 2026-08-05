@@ -4,7 +4,7 @@ using UnityEngine.UI;
 
 public class RegisterPanel : UIPanel
 {
-    [Header("UI ¿ä¼Ò")]
+    [Header("UI ìš”ì†Œ")]
     [SerializeField] private InputField nicknameInputField;
     [SerializeField] private InputField registerEmailInputField;
     [SerializeField] private InputField registerPasswordInputField;
@@ -26,7 +26,7 @@ public class RegisterPanel : UIPanel
         cancelButton?.onClick.RemoveListener(OnClickCancelButton);
     }
 
-    private void OnClickRegisterButton() // È¸¿ø µî·Ï ¹öÆ° Å¬¸¯ ½Ã ½ÇÇàµÇ´Â ÇÔ¼ö
+    private void OnClickRegisterButton() // íšŒì› ë“±ë¡ ë²„íŠ¼ í´ë¦­ ì‹œ ì‹¤í–‰ë˜ëŠ” í•¨ìˆ˜
     {
         SoundManager.instance?.Play(SoundKey.ButtonClick);
         OnRegisterSubmit?.Invoke
@@ -37,7 +37,7 @@ public class RegisterPanel : UIPanel
         );
     }
 
-    private void OnClickCancelButton() // Ãë¼Ò ¹öÆ° Å¬¸¯ ½Ã ½ÇÇàµÇ´Â ÇÔ¼ö
+    private void OnClickCancelButton() // ì·¨ì†Œ ë²„íŠ¼ í´ë¦­ ì‹œ ì‹¤í–‰ë˜ëŠ” í•¨ìˆ˜
     {
         SoundManager.instance?.Play(SoundKey.ButtonClick);
         Hide();

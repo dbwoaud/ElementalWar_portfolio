@@ -4,7 +4,7 @@ using System;
 
 public class GameUIManager : BaseUIManager<GameUIManager>
 {
-    [Header("ÇÏÀ§ ÆĞ³Î °ü¸®")]
+    [Header("í•˜ìœ„ íŒ¨ë„ ê´€ë¦¬")]
     [SerializeField] private GameStartPanel gameStartPanel;
     [SerializeField] private GameResultPanel gameResultPanel;
     [SerializeField] private GameLoadingPanel gameLoadingPanel;
@@ -50,67 +50,70 @@ public class GameUIManager : BaseUIManager<GameUIManager>
 
     }
 
-    private void HandleReturnToRoomRequest() // ¹æÀ¸·Î µ¹¾Æ°¡±â ¹öÆ° Å¬¸¯ ½Ã ½ÇÇàµÇ´Â ÇÔ¼ö
+    private void HandleReturnToRoomRequest() // ë°©ìœ¼ë¡œ ëŒì•„ê°€ê¸° ë²„íŠ¼ í´ë¦­ ì‹œ ì‹¤í–‰ë˜ëŠ” í•¨ìˆ˜
     {
         OnReturnToRoomRequested?.Invoke();
     }
 
-    private void HandleReturnToLobbyRequest() // ·Îºñ·Î µ¹¾Æ°¡±â ¹öÆ° Å¬¸¯ ½Ã ½ÇÇàµÇ´Â ÇÔ¼ö
+    private void HandleReturnToLobbyRequest() // ë¡œë¹„ë¡œ ëŒì•„ê°€ê¸° ë²„íŠ¼ í´ë¦­ ì‹œ ì‹¤í–‰ë˜ëŠ” í•¨ìˆ˜
     {
         OnReturnToLobbyRequested?.Invoke();
     }
 
-    private void HandleUnitSlotClick(int index, UnitStat stat) // À¯´Ö ½½·Ô Å¬¸¯ ½Ã ½ÇÇàµÇ´Â ÇÔ¼ö
+    private void HandleUnitSlotClick(int index, UnitStat stat) // ìœ ë‹› ìŠ¬ë¡¯ í´ë¦­ ì‹œ ì‹¤í–‰ë˜ëŠ” í•¨ìˆ˜
     {
         OnUnitSlotClicked?.Invoke(index, stat);
     }
 
-    public void ShowGameStartPanel(string player1Name, string player2Name) // °ÔÀÓ ½ÃÀÛ ÆĞ³ÎÀ» È°¼ºÈ­ÇÏ´Â ÇÔ¼ö
+    public void ShowGameStartPanel(string player1Name, string player2Name) // ê²Œì„ ì‹œì‘ íŒ¨ë„ì„ í™œì„±í™”í•˜ëŠ” í•¨ìˆ˜
     {
         gameStartPanel?.SetPlayerNames(player1Name, player2Name);
         gameStartPanel?.Show();
     }
 
-    public void HideGameStartPanel() // °ÔÀÓ ½ÃÀÛ ÆĞ³ÎÀ» ºñÈ°¼ºÈ­ÇÏ´Â ÇÔ¼ö
+    public void HideGameStartPanel() // ê²Œì„ ì‹œì‘ íŒ¨ë„ì„ ë¹„í™œì„±í™”í•˜ëŠ” í•¨ìˆ˜
     {
         gameStartPanel?.HideImmediate();
     }
 
-    public void ShowGameResultPanel(bool localPlayerWon, string playerName) // °ÔÀÓ °á°ú ÆĞ³ÎÀ» È°¼ºÈ­ÇÏ´Â ÇÔ¼ö
+    public void ShowGameResultPanel(bool localPlayerWon, string playerName) // ê²Œì„ ê²°ê³¼ íŒ¨ë„ì„ í™œì„±í™”í•˜ëŠ” í•¨ìˆ˜
     {
         gameResultPanel?.DisplayResult(playerName, localPlayerWon);
         gameResultPanel?.Show();
     }
 
-    public void ShowGameLoadingPanel(string message = null) // °ÔÀÓ ·Îµù ÆĞ³ÎÀ» È°¼ºÈ­ÇÏ´Â ÇÔ¼ö
+    public void ShowGameLoadingPanel(string message = null) // ê²Œì„ ë¡œë”© íŒ¨ë„ì„ í™œì„±í™”í•˜ëŠ” í•¨ìˆ˜
     {
         gameLoadingPanel?.ShowImmediate(message);
     }
 
-    public void UpdateLoadingProgress(float normalized) // ·Îµù ÁøÇàµµ¸¦ °»½ÅÇÏ´Â ÇÔ¼ö
+    public void UpdateLoadingProgress(float normalized) // ë¡œë”© ì§„í–‰ë„ë¥¼ ê°±ì‹ í•˜ëŠ” í•¨ìˆ˜
     {
         gameLoadingPanel?.UpdateProgress(normalized);
     }
 
-    public void HideGameLoadingPanel() // °ÔÀÓ ·Îµù ÆĞ³ÎÀ» ºñÈ°¼ºÈ­ÇÏ´Â ÇÔ¼ö
+    public void HideGameLoadingPanel() // ê²Œì„ ë¡œë”© íŒ¨ë„ì„ ë¹„í™œì„±í™”í•˜ëŠ” í•¨ìˆ˜
     {
         gameLoadingPanel?.Hide();
     }
 
-    public void UpdateDeckSlotsUI(int index, UnitStat stat) // Æ¯Á¤ ½½·Ô¿¡ À¯´Ö Á¤º¸¸¦ Ç¥½ÃÇÏ´Â ÇÔ¼ö
+    public void UpdateDeckSlotsUI(int index, UnitStat stat) // íŠ¹ì • ìŠ¬ë¡¯ì— ìœ ë‹› ì •ë³´ë¥¼ í‘œì‹œí•˜ëŠ” í•¨ìˆ˜
     {
         slotContainer?.ShowUnitSlot(index, stat);
     }
 
-    public void StartSlotCoolTime(int index) // ½½·ÔÀÇ ÄğÅ¸ÀÓÀ» ¼³Á¤ÇÏ´Â ÇÔ¼ö
+    public void StartSlotCoolTime(int index) // ìŠ¬ë¡¯ì˜ ì¿¨íƒ€ì„ì„ ì„¤ì •í•˜ëŠ” í•¨ìˆ˜
     {
         slotContainer?.StartSlotCoolTime(index);
     }
 
-    public void RefreshSlotsEnergyState(float currentEnergy) //  ¸ğµç ½½·ÔÀ» ¿¡³ÊÁö »óÅÂ¿¡ ¸ÂÃç ¾÷µ¥ÀÌÆ®ÇÏ´Â ÇÔ¼ö
+    public void RefreshSlotsEnergyState(float currentEnergy) //  ëª¨ë“  ìŠ¬ë¡¯ì„ ì—ë„ˆì§€ ìƒíƒœì— ë§ì¶° ì—…ë°ì´íŠ¸í•˜ëŠ” í•¨ìˆ˜
     {
         slotContainer?.RefreshSlotsEnergyState(currentEnergy);
     }
 
-
+    public bool IsSlotSpawnable(int index) // ìŠ¬ë¡¯ ìœ ë‹›ì„ ìƒì„±í•  ìˆ˜ ìˆëŠ”ì§€ í™•ì¸í•˜ëŠ” í•¨ìˆ˜
+    {
+        return slotContainer != null && slotContainer.IsSlotSpawnable(index);
+    }
 }

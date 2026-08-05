@@ -5,14 +5,13 @@ using UnityEngine;
 
 public class Cannonball : MonoBehaviour
 {
-    [Header("³×Æ®¿öÅ© ¼³Á¤")]
+    [Header("ë„¤íŠ¸ì›Œí¬ ì„¤ì •")]
     [SerializeField] private PhotonView castleView;
-    [SerializeField] private float damage;
     [SerializeField] private float hpDamagePercent = 0.5f;
     [SerializeField] private bool hasDetonated;
-    [SerializeField] private static readonly List<Unit> unitBuffer = new List<Unit>(64);
+    private static readonly List<Unit> unitBuffer = new List<Unit>(64);
 
-    public void Init(PhotonView ownerCastleView) // ´ëÆ÷¸¦ ¹ß»çÇÑ ·ÎÄÃ ÇÃ·¹ÀÌ¾î¸¦ ¼³Á¤ÇÏ´Â ÇÔ¼ö
+    public void Init(PhotonView ownerCastleView) // ëŒ€í¬ë¥¼ ë°œì‚¬í•œ ë¡œì»¬ í”Œë ˆì´ì–´ë¥¼ ì„¤ì •í•˜ëŠ” í•¨ìˆ˜
     {
         castleView = ownerCastleView;
     }
@@ -36,7 +35,7 @@ public class Cannonball : MonoBehaviour
         Destroy(gameObject);
     }
 
-    private void ApplyNetworkDamage() // Àû À¯´Ö¿¡°Ô µ¥¹ÌÁö¸¦ Àû¿ëÇÏ´Â ÇÔ¼ö
+    private void ApplyNetworkDamage() // ì  ìœ ë‹›ì—ê²Œ ë°ë¯¸ì§€ë¥¼ ì ìš©í•˜ëŠ” í•¨ìˆ˜
     {
         UnitRegistry.CopyTo(unitBuffer);
         for (int i = 0; i < unitBuffer.Count; i++)
@@ -52,8 +51,8 @@ public class Cannonball : MonoBehaviour
             if (targetView.IsMine == castleView.IsMine)
                 continue;
 
-            damage = unit.MaxHP * hpDamagePercent;
-            targetView.RPC(nameof(Unit.RPC_TakeDamage), targetView.Owner, damage);
+            float damage = unit.MaxHP * hpDamagePercent;
+            targetView.RPC(nameof(Unit.RPC_TakeDamage), RpcTarget.All, damage);
         }
     }
 }

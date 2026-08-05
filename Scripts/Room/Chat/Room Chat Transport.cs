@@ -6,7 +6,7 @@ using UnityEngine;
 [RequireComponent(typeof(PhotonView))]
 public class RoomChatTransport : MonoBehaviourPunCallbacks, IChatTransport
 {
-    [Header("Ä³½Ì º¯¼ö")]
+    [Header("ìºì‹± ë³€ìˆ˜")]
     [SerializeField] private RoomNetworkManager roomNetworkManager;
 
     public event Action<string, string> OnMessageReceived;
@@ -33,30 +33,30 @@ public class RoomChatTransport : MonoBehaviourPunCallbacks, IChatTransport
         }
     }
 
-    public void Connect() // ÇÃ·¹ÀÌ¾î ÀÔÀå ¸Ş½ÃÁö ÀÌº¥Æ®¸¦ ¼öÇàÇÏ´Â ÇÔ¼ö
+    public void Connect() // í”Œë ˆì´ì–´ ì…ì¥ ë©”ì‹œì§€ ì´ë²¤íŠ¸ë¥¼ ìˆ˜í–‰í•˜ëŠ” í•¨ìˆ˜
     {
         OnSystemMessage?.Invoke(PhotonNetwork.LocalPlayer.NickName + ChattingSystem.SystemMessage.PlayerEntered);
     }
 
     public void Disconnect() { }
 
-    public void Send(string message) // ·ë ³» ¸ğµç ÇÃ·¹ÀÌ¾î¿¡°Ô ¸Ş½ÃÁö¸¦ ¼Û½ÅÇÏ´Â ÇÔ¼ö
+    public void Send(string message) // ë£¸ ë‚´ ëª¨ë“  í”Œë ˆì´ì–´ì—ê²Œ ë©”ì‹œì§€ë¥¼ ì†¡ì‹ í•˜ëŠ” í•¨ìˆ˜
     {
         photonView.RPC(nameof(RPC_ReceiveChat), RpcTarget.All, PhotonNetwork.LocalPlayer.NickName, message);
     }
 
     [PunRPC]
-    private void RPC_ReceiveChat(string sender, string message) // ¸ğµç ÇÃ·¹ÀÌ¾î°¡ ¸Ş½ÃÁö¸¦ ¼ö½ÅÇÏ´Â RPC
+    private void RPC_ReceiveChat(string sender, string message) // ëª¨ë“  í”Œë ˆì´ì–´ê°€ ë©”ì‹œì§€ë¥¼ ìˆ˜ì‹ í•˜ëŠ” RPC
     {
         OnMessageReceived?.Invoke(sender, message);
     }
 
-    private void HandlePlayerJoined(Player player) // ´Ù¸¥ ÇÃ·¹ÀÌ¾î ÀÔÀå ½Ã ½Ã½ºÅÛ ¸Ş½ÃÁö ¹ßÇà
+    private void HandlePlayerJoined(Player player) // ë‹¤ë¥¸ í”Œë ˆì´ì–´ ì…ì¥ ì‹œ ì‹œìŠ¤í…œ ë©”ì‹œì§€ ë°œí–‰
     {
         OnSystemMessage?.Invoke(player.NickName + ChattingSystem.SystemMessage.PlayerEntered);
     }
 
-    private void HandlePlayerLeft(Player player) // ´Ù¸¥ ÇÃ·¹ÀÌ¾î ÅğÀå ½Ã ½Ã½ºÅÛ ¸Ş½ÃÁö ¹ßÇà
+    private void HandlePlayerLeft(Player player) // ë‹¤ë¥¸ í”Œë ˆì´ì–´ í‡´ì¥ ì‹œ ì‹œìŠ¤í…œ ë©”ì‹œì§€ ë°œí–‰
     {
         OnSystemMessage?.Invoke(player.NickName + ChattingSystem.SystemMessage.PlayerExited);
     }

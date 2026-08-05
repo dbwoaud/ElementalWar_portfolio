@@ -39,15 +39,15 @@ public static class RoomConstants
 
     public static class Status
     {
-        public static readonly string OnGoing = "ÁøÇà Áß";
-        public static readonly string Waiting = "´ë±â Áß";
+        public static readonly string OnGoing = "ì§„í–‰ ì¤‘";
+        public static readonly string Waiting = "ëŒ€ê¸° ì¤‘";
     }
 
     public static class ButtonText
     {
-        public static readonly string Start = "°ÔÀÓ ½ÃÀÛ";
-        public static readonly string Ready = "ÁØºñ ¿Ï·á";
-        public static readonly string CancelReady = "ÁØºñ Ãë¼Ò";
+        public static readonly string Start = "ê²Œì„ ì‹œì‘";
+        public static readonly string Ready = "ì¤€ë¹„ ì™„ë£Œ";
+        public static readonly string CancelReady = "ì¤€ë¹„ ì·¨ì†Œ";
     }
 }
 
@@ -55,37 +55,37 @@ public static class PopupMessage
 {
     public static class Waiting
     {
-        public static readonly string Login = "·Î±×ÀÎ ÁßÀÔ´Ï´Ù";
-        public static readonly string ServerConnection = "°ÔÀÓ ¼­¹ö¿¡ Á¢¼Ó ÁßÀÔ´Ï´Ù";
-        public static readonly string LobbyConnection = "·Îºñ¿¡ Á¢¼Ó ÁßÀÔ´Ï´Ù";
-        public static readonly string RandomMatching = "·£´ı ¸ÅÄª ÁßÀÔ´Ï´Ù";
-        public static readonly string RoomEntry = "¹æ¿¡ ÀÔÀå ÁßÀÔ´Ï´Ù";
-        public static readonly string RoomCreate = "¹æÀ» »ı¼º ÁßÀÔ´Ï´Ù";
-        public static readonly string WaitingOpponent = "»ó´ë¹æÀÇ À¯´Ö ¼±ÅÃÀ» ±â´Ù¸®°í ÀÖ½À´Ï´Ù";
-        public static readonly string GameLoading = "°ÔÀÓÀ» ·Îµù ÁßÀÔ´Ï´Ù";
+        public static readonly string Login = "ë¡œê·¸ì¸ ì¤‘ì…ë‹ˆë‹¤";
+        public static readonly string ServerConnection = "ê²Œì„ ì„œë²„ì— ì ‘ì† ì¤‘ì…ë‹ˆë‹¤";
+        public static readonly string LobbyConnection = "ë¡œë¹„ì— ì ‘ì† ì¤‘ì…ë‹ˆë‹¤";
+        public static readonly string RandomMatching = "ëœë¤ ë§¤ì¹­ ì¤‘ì…ë‹ˆë‹¤";
+        public static readonly string RoomEntry = "ë°©ì— ì…ì¥ ì¤‘ì…ë‹ˆë‹¤";
+        public static readonly string RoomCreate = "ë°©ì„ ìƒì„± ì¤‘ì…ë‹ˆë‹¤";
+        public static readonly string WaitingOpponent = "ìƒëŒ€ë°©ì˜ ìœ ë‹› ì„ íƒì„ ê¸°ë‹¤ë¦¬ê³  ìˆìŠµë‹ˆë‹¤";
+        public static readonly string GameLoading = "ê²Œì„ì„ ë¡œë”© ì¤‘ì…ë‹ˆë‹¤";
     }
 
     public static class Error
     {
-        public static readonly string InvalidNickname = "´Ğ³×ÀÓÀº °ø¹é°ú Æ¯¼ö¹®ÀÚ¸¦ Á¦¿ÜÇÑ\nÇÑ±Û/¿µ¹®/¼ıÀÚ 2~12ÀÚ·Î ÀÔ·ÂÇØ ÁÖ¼¼¿ä";
-        public static readonly string InvalidRoomName = "¹æ ÀÌ¸§Àº 2ÀÚ ÀÌ»ó, 16ÀÚ ÀÌÇÏ·Î ÀÔ·ÂÇØ ÁÖ¼¼¿ä";
-        public static readonly string InvalidPassword = "ºñ¹Ğ¹øÈ£´Â 4ÀÚ¸® ¼ıÀÚ·Î ÀÔ·ÂÇØ ÁÖ¼¼¿ä";
-        public static readonly string NotMatchPassword = "ºñ¹Ğ¹øÈ£°¡ ÀÏÄ¡ÇÏÁö ¾Ê½À´Ï´Ù";
-        public static readonly string NeedMorePlayer = "È¥ÀÚ¼­´Â °ÔÀÓÀ» ½ÃÀÛÇÒ ¼ö ¾ø½À´Ï´Ù";
-        public static readonly string NeedAllReady = "¸ğµç ÇÃ·¹ÀÌ¾î°¡ ÁØºñ¸¦ ¿Ï·áÇØ¾ß ÇÕ´Ï´Ù";
-        public static readonly string NeedDeckFull = "10¸íÀÇ À¯´ÖÀ» ¸ğµÎ ¼³Á¤ÇØ¾ß ÇÕ´Ï´Ù";
-        public static readonly string OpponentLeft = "»ó´ë¹æÀÌ ¹æÀ» ³ª°¬½À´Ï´Ù. ¹æÀ¸·Î µ¹¾Æ°©´Ï´Ù";
+        public static readonly string InvalidNickname = "ë‹‰ë„¤ì„ì€ ê³µë°±ê³¼ íŠ¹ìˆ˜ë¬¸ìë¥¼ ì œì™¸í•œ\ní•œê¸€/ì˜ë¬¸/ìˆ«ì 2~12ìë¡œ ì…ë ¥í•´ ì£¼ì„¸ìš”";
+        public static readonly string InvalidRoomName = "ë°© ì´ë¦„ì€ 2ì ì´ìƒ, 16ì ì´í•˜ë¡œ ì…ë ¥í•´ ì£¼ì„¸ìš”";
+        public static readonly string InvalidPassword = "ë¹„ë°€ë²ˆí˜¸ëŠ” 4ìë¦¬ ìˆ«ìë¡œ ì…ë ¥í•´ ì£¼ì„¸ìš”";
+        public static readonly string NotMatchPassword = "ë¹„ë°€ë²ˆí˜¸ê°€ ì¼ì¹˜í•˜ì§€ ì•ŠìŠµë‹ˆë‹¤";
+        public static readonly string NeedMorePlayer = "í˜¼ìì„œëŠ” ê²Œì„ì„ ì‹œì‘í•  ìˆ˜ ì—†ìŠµë‹ˆë‹¤";
+        public static readonly string NeedAllReady = "ëª¨ë“  í”Œë ˆì´ì–´ê°€ ì¤€ë¹„ë¥¼ ì™„ë£Œí•´ì•¼ í•©ë‹ˆë‹¤";
+        public static readonly string NeedDeckFull = "10ëª…ì˜ ìœ ë‹›ì„ ëª¨ë‘ ì„¤ì •í•´ì•¼ í•©ë‹ˆë‹¤";
+        public static readonly string OpponentLeft = "ìƒëŒ€ë°©ì´ ë°©ì„ ë‚˜ê°”ìŠµë‹ˆë‹¤. ë°©ìœ¼ë¡œ ëŒì•„ê°‘ë‹ˆë‹¤";
     }
 
     public static class Confirm
     {
-        public static readonly string SuccessRegister = "È¸¿ø °¡ÀÔ¿¡ ¼º°øÇÏ¿´½À´Ï´Ù";
+        public static readonly string SuccessRegister = "íšŒì› ê°€ì…ì— ì„±ê³µí•˜ì˜€ìŠµë‹ˆë‹¤";
     }
 
     public static class Selection
     {
-        public static readonly string GameExit = "°ÔÀÓÀ» Á¤¸» Á¾·áÇÏ½Ã°Ú½À´Ï±î?";
-        public static readonly string RoomExit = "¹æ¿¡¼­ Á¤¸» ³ª°¡½Ã°Ú½À´Ï±î?";
+        public static readonly string GameExit = "ê²Œì„ì„ ì •ë§ ì¢…ë£Œí•˜ì‹œê² ìŠµë‹ˆê¹Œ?";
+        public static readonly string RoomExit = "ë°©ì—ì„œ ì •ë§ ë‚˜ê°€ì‹œê² ìŠµë‹ˆê¹Œ?";
     }
 }
 
@@ -93,7 +93,7 @@ public static class RegexPattern
 {
     public static class User
     {
-        public static readonly string ValidNickname = @"^[a-zA-Z°¡-ÆR0-9]{2,12}$";
+        public static readonly string ValidNickname = @"^[a-zA-Zê°€-í£0-9]{2,12}$";
     }
 
     public static class Room
@@ -106,14 +106,14 @@ public static class GameSystem
 {
     public static class Cost
     {
-        public static string GetUnitCostText(int spawnCost) => $"{spawnCost} ¿ø";
+        public static string GetUnitCostText(int spawnCost) => $"{spawnCost} ì›";
     }
 
     public static class Energy
     {
-        public static string GetEnergyText(int current, int max) => $"{current} / {max}¿ø";
+        public static string GetEnergyText(int current, int max) => $"{current} / {max}ì›";
         public static string GetLevelText(int level, bool isMax) => isMax ? "Lv. Max" : $"Lv. {level}";
-        public static string GetUpgradeCostText(int cost, bool isMax) => isMax ? "MAX" : $"{cost} ¿ø";
+        public static string GetUpgradeCostText(int cost, bool isMax) => isMax ? "MAX" : $"{cost} ì›";
     }
 
     public static class CastleConstants
@@ -138,7 +138,7 @@ public static class GameSystem
     {
         public static string GetGameResultText(string playerName, bool isWinner)
         {
-            return $"{playerName} : {(isWinner ? "½Â¸®" : "ÆĞ¹è")}";
+            return $"{playerName} : {(isWinner ? "ìŠ¹ë¦¬" : "íŒ¨ë°°")}";
         }
     }
 }
@@ -149,7 +149,7 @@ public static class ChattingSystem
     {
         public enum ChatColor { White, Red, Yellow, Green, Blue, Purple, Black }
 
-        public static string GetColor(ChatColor colorType) // Ã¤ÆÃ »ö»óÀ» HEX ÄÚµå·Î ¹İÈ¯ÇÏ´Â ÇÔ¼ö
+        public static string GetColor(ChatColor colorType) // ì±„íŒ… ìƒ‰ìƒì„ HEX ì½”ë“œë¡œ ë°˜í™˜í•˜ëŠ” í•¨ìˆ˜
         {
             switch (colorType)
             {
@@ -172,67 +172,67 @@ public static class ChattingSystem
 
     public static class SystemMessage
     {
-        public static readonly string PlayerEntered = " ´ÔÀÌ ¹æ¿¡ Âü°¡Çß½À´Ï´Ù";
-        public static readonly string PlayerExited = " ´ÔÀÌ ¹æ¿¡¼­ ³ª°¬½À´Ï´Ù";
+        public static readonly string PlayerEntered = " ë‹˜ì´ ë°©ì— ì°¸ê°€í–ˆìŠµë‹ˆë‹¤";
+        public static readonly string PlayerExited = " ë‹˜ì´ ë°©ì—ì„œ ë‚˜ê°”ìŠµë‹ˆë‹¤";
     }
 }
 
 public static class ErrorTranslator
 {
-    public static string GetPhotonErrorMessage(short returnCode) // ¹æ »ı¼º ¹× ÀÔÀå °ü·Ã ¿À·ù ¸Ş½ÃÁö¸¦ ¾ò´Â ÇÔ¼ö
+    public static string GetPhotonErrorMessage(short returnCode) // ë°© ìƒì„± ë° ì…ì¥ ê´€ë ¨ ì˜¤ë¥˜ ë©”ì‹œì§€ë¥¼ ì–»ëŠ” í•¨ìˆ˜
     {
         switch (returnCode)
         {
             case ErrorCode.GameIdAlreadyExists:
-                return "ÀÌ¹Ì Á¸ÀçÇÏ´Â ¹æ ÀÌ¸§ÀÔ´Ï´Ù.";
+                return "ì´ë¯¸ ì¡´ì¬í•˜ëŠ” ë°© ì´ë¦„ì…ë‹ˆë‹¤.";
             case ErrorCode.GameFull:
-                return "¹æÀÌ °¡µæ Â÷¼­ ÀÔÀåÇÒ ¼ö ¾ø½À´Ï´Ù.";
+                return "ë°©ì´ ê°€ë“ ì°¨ì„œ ì…ì¥í•  ìˆ˜ ì—†ìŠµë‹ˆë‹¤.";
             case ErrorCode.GameClosed:
-                return "ÇöÀç ÀÔÀåÇÒ ¼ö ¾ø´Â ¹æÀÔ´Ï´Ù.";
+                return "í˜„ì¬ ì…ì¥í•  ìˆ˜ ì—†ëŠ” ë°©ì…ë‹ˆë‹¤.";
             case ErrorCode.GameDoesNotExist:
-                return "Á¸ÀçÇÏÁö ¾Ê´Â ¹æÀÔ´Ï´Ù.";
+                return "ì¡´ì¬í•˜ì§€ ì•ŠëŠ” ë°©ì…ë‹ˆë‹¤.";
             case ErrorCode.MaxCcuReached:
-                return "¼­¹ö Á¢¼Ó ÃÖ´ë ÀÎ¿øÀÌ ÃÊ°úµÇ¾ú½À´Ï´Ù. Àá½Ã ÈÄ ´Ù½Ã ½ÃµµÇØ ÁÖ¼¼¿ä.";
+                return "ì„œë²„ ì ‘ì† ìµœëŒ€ ì¸ì›ì´ ì´ˆê³¼ë˜ì—ˆìŠµë‹ˆë‹¤. ì ì‹œ í›„ ë‹¤ì‹œ ì‹œë„í•´ ì£¼ì„¸ìš”.";
             case ErrorCode.InvalidOperation:
-                return "Àß¸øµÈ ¿äÃ»ÀÔ´Ï´Ù.";
+                return "ì˜ëª»ëœ ìš”ì²­ì…ë‹ˆë‹¤.";
             case ErrorCode.NoRandomMatchFound:
-                return "ÀÔÀå °¡´ÉÇÑ °ø°³ ¹æÀÌ ¾ø½À´Ï´Ù.";
+                return "ì…ì¥ ê°€ëŠ¥í•œ ê³µê°œ ë°©ì´ ì—†ìŠµë‹ˆë‹¤.";
             default:
-                return $"³×Æ®¿öÅ© ¿äÃ» Ã³¸®¿¡ ½ÇÆĞÇß½À´Ï´Ù. (¿¡·¯ ÄÚµå: {returnCode})";
+                return $"ë„¤íŠ¸ì›Œí¬ ìš”ì²­ ì²˜ë¦¬ì— ì‹¤íŒ¨í–ˆìŠµë‹ˆë‹¤. (ì—ëŸ¬ ì½”ë“œ: {returnCode})";
         }
     }
 
-    public static string GetDisconnectMessage(DisconnectCause cause) // Æ÷Åæ ¼­¹öÀÇ ¿¬°á ²÷±è °ü·Ã ¿À·ù ¸Ş½ÃÁö¸¦ ¾ò´Â ÇÔ¼ö
+    public static string GetDisconnectMessage(DisconnectCause cause) // í¬í†¤ ì„œë²„ì˜ ì—°ê²° ëŠê¹€ ê´€ë ¨ ì˜¤ë¥˜ ë©”ì‹œì§€ë¥¼ ì–»ëŠ” í•¨ìˆ˜
     {
         switch (cause)
         {
             case DisconnectCause.ClientTimeout:
             case DisconnectCause.ServerTimeout:
-                return "³×Æ®¿öÅ© »óÅÂ°¡ ºÒ¾ÈÁ¤ÇÏ¿© ¼­¹ö¿ÍÀÇ ¿¬°áÀÌ Áö¿¬/²÷¾îÁ³½À´Ï´Ù.";
+                return "ë„¤íŠ¸ì›Œí¬ ìƒíƒœê°€ ë¶ˆì•ˆì •í•˜ì—¬ ì„œë²„ì™€ì˜ ì—°ê²°ì´ ì§€ì—°/ëŠì–´ì¡ŒìŠµë‹ˆë‹¤.";
             case DisconnectCause.DisconnectByServerLogic:
             case DisconnectCause.DisconnectByServerReasonUnknown:
-                return "¼­¹ö Ãø ¹®Á¦·Î ÀÎÇØ ¿¬°áÀÌ Á¾·áµÇ¾ú½À´Ï´Ù.";
+                return "ì„œë²„ ì¸¡ ë¬¸ì œë¡œ ì¸í•´ ì—°ê²°ì´ ì¢…ë£Œë˜ì—ˆìŠµë‹ˆë‹¤.";
             case DisconnectCause.InvalidAuthentication:
-                return "ÀÎÁõ¿¡ ½ÇÆĞÇÏ¿© ¿¬°áÀÌ ²÷¾îÁ³½À´Ï´Ù.";
+                return "ì¸ì¦ì— ì‹¤íŒ¨í•˜ì—¬ ì—°ê²°ì´ ëŠì–´ì¡ŒìŠµë‹ˆë‹¤.";
             case DisconnectCause.MaxCcuReached:
-                return "¼­¹ö Á¢¼Ó ÇÑµµ¸¦ ÃÊ°úÇÏ¿© ¿¬°áÀÌ Á¾·áµÇ¾ú½À´Ï´Ù.";
+                return "ì„œë²„ ì ‘ì† í•œë„ë¥¼ ì´ˆê³¼í•˜ì—¬ ì—°ê²°ì´ ì¢…ë£Œë˜ì—ˆìŠµë‹ˆë‹¤.";
             default:
-                return $"¼­¹ö¿ÍÀÇ ¿¬°áÀÌ ²÷¾îÁ³½À´Ï´Ù. (¿øÀÎ: {cause})";
+                return $"ì„œë²„ì™€ì˜ ì—°ê²°ì´ ëŠì–´ì¡ŒìŠµë‹ˆë‹¤. (ì›ì¸: {cause})";
         }
     }
 
-    public static string GetPlayFabErrorMessage(PlayFabErrorCode errorCode) // PlayFab ¼­¹öÀÇ °ü·Ã ¿À·ù ¸Ş½ÃÁö¸¦ ¾ò´Â ÇÔ¼ö
+    public static string GetPlayFabErrorMessage(PlayFabErrorCode errorCode) // PlayFab ì„œë²„ì˜ ê´€ë ¨ ì˜¤ë¥˜ ë©”ì‹œì§€ë¥¼ ì–»ëŠ” í•¨ìˆ˜
     {
         switch (errorCode)
         {
-            case PlayFabErrorCode.InvalidParams: return "ÀÔ·ÂÇÏ½Å Á¤º¸ÀÇ Çü½ÄÀÌ ¿Ã¹Ù¸£Áö ¾Ê½À´Ï´Ù.";
-            case PlayFabErrorCode.InvalidEmailAddress: return "ÀÌ¸ŞÀÏ Çü½ÄÀÌ ¿Ã¹Ù¸£Áö ¾Ê½À´Ï´Ù.";
-            case PlayFabErrorCode.InvalidPassword: return "ºñ¹Ğ¹øÈ£´Â 6ÀÚ¸® ÀÌ»óÀÌ¾î¾ß ÇÕ´Ï´Ù.";
-            case PlayFabErrorCode.AccountNotFound: return "°¡ÀÔµÇÁö ¾ÊÀº ÀÌ¸ŞÀÏÀÔ´Ï´Ù.";
-            case PlayFabErrorCode.InvalidEmailOrPassword: return "ÀÌ¸ŞÀÏ ¶Ç´Â ºñ¹Ğ¹øÈ£°¡ ÀÏÄ¡ÇÏÁö ¾Ê½À´Ï´Ù.";
-            case PlayFabErrorCode.EmailAddressNotAvailable: return "ÀÌ¹Ì »ç¿ë ÁßÀÎ ÀÌ¸ŞÀÏÀÔ´Ï´Ù.";
-            case PlayFabErrorCode.UsernameNotAvailable: return "ÀÌ¹Ì »ç¿ë ÁßÀÎ ´Ğ³×ÀÓÀÔ´Ï´Ù.";
-            default: return $"ÀÎÁõ ¼­¹ö Åë½Å ¿À·ù°¡ ¹ß»ıÇß½À´Ï´Ù. ({errorCode})";
+            case PlayFabErrorCode.InvalidParams: return "ì…ë ¥í•˜ì‹  ì •ë³´ì˜ í˜•ì‹ì´ ì˜¬ë°”ë¥´ì§€ ì•ŠìŠµë‹ˆë‹¤.";
+            case PlayFabErrorCode.InvalidEmailAddress: return "ì´ë©”ì¼ í˜•ì‹ì´ ì˜¬ë°”ë¥´ì§€ ì•ŠìŠµë‹ˆë‹¤.";
+            case PlayFabErrorCode.InvalidPassword: return "ë¹„ë°€ë²ˆí˜¸ëŠ” 6ìë¦¬ ì´ìƒì´ì–´ì•¼ í•©ë‹ˆë‹¤.";
+            case PlayFabErrorCode.AccountNotFound: return "ê°€ì…ë˜ì§€ ì•Šì€ ì´ë©”ì¼ì…ë‹ˆë‹¤.";
+            case PlayFabErrorCode.InvalidEmailOrPassword: return "ì´ë©”ì¼ ë˜ëŠ” ë¹„ë°€ë²ˆí˜¸ê°€ ì¼ì¹˜í•˜ì§€ ì•ŠìŠµë‹ˆë‹¤.";
+            case PlayFabErrorCode.EmailAddressNotAvailable: return "ì´ë¯¸ ì‚¬ìš© ì¤‘ì¸ ì´ë©”ì¼ì…ë‹ˆë‹¤.";
+            case PlayFabErrorCode.UsernameNotAvailable: return "ì´ë¯¸ ì‚¬ìš© ì¤‘ì¸ ë‹‰ë„¤ì„ì…ë‹ˆë‹¤.";
+            default: return $"ì¸ì¦ ì„œë²„ í†µì‹  ì˜¤ë¥˜ê°€ ë°œìƒí–ˆìŠµë‹ˆë‹¤. ({errorCode})";
         }
     }
 }

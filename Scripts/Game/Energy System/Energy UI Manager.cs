@@ -4,7 +4,7 @@ using System;
 
 public class EnergyUIManager : BaseUIManager<EnergyUIManager>
 {
-    [Header("UI ¿¬°á")]
+    [Header("UI ì—°ê²°")]
     [SerializeField] private Text currentEnergyText;
     [SerializeField] private string lastEnergyText;
     [SerializeField] private Text currentLevelText;
@@ -31,12 +31,12 @@ public class EnergyUIManager : BaseUIManager<EnergyUIManager>
         upgradeButton?.onClick.RemoveListener(HandleUpgradeButtonClicked);
     }
 
-    private void HandleUpgradeButtonClicked() // ¾÷±×·¹ÀÌµå ¹öÆ° Å¬¸¯ ½Ã ½ÇÇàµÇ´Â ÇÔ¼ö
+    private void HandleUpgradeButtonClicked() // ì—…ê·¸ë ˆì´ë“œ ë²„íŠ¼ í´ë¦­ ì‹œ ì‹¤í–‰ë˜ëŠ” í•¨ìˆ˜
     {
         OnUpgradeRequested?.Invoke();
     }
 
-    public void UpdateEnergyText(int currentEnergy, int maxEnergy) // ÇöÀç ¿¡³ÊÁö ÅØ½ºÆ®¸¦ ¾÷µ¥ÀÌÆ®ÇÏ´Â ÇÔ¼ö
+    public void UpdateEnergyText(int currentEnergy, int maxEnergy) // í˜„ì¬ ì—ë„ˆì§€ í…ìŠ¤íŠ¸ë¥¼ ì—…ë°ì´íŠ¸í•˜ëŠ” í•¨ìˆ˜
     {
         if (currentEnergyText == null)
             return;
@@ -49,7 +49,7 @@ public class EnergyUIManager : BaseUIManager<EnergyUIManager>
         currentEnergyText.text = newText;
     }
 
-    public void UpdateLevelText(int level, bool isMaxLevel) // ÇöÀç ¿¡³ÊÁö ·¹º§ ÅØ½ºÆ®¸¦ ¾÷µ¥ÀÌÆ®ÇÏ´Â ÇÔ¼ö
+    public void UpdateLevelText(int level, bool isMaxLevel) // í˜„ì¬ ì—ë„ˆì§€ ë ˆë²¨ í…ìŠ¤íŠ¸ë¥¼ ì—…ë°ì´íŠ¸í•˜ëŠ” í•¨ìˆ˜
     {
         if (currentLevelText == null)
             return;
@@ -62,7 +62,7 @@ public class EnergyUIManager : BaseUIManager<EnergyUIManager>
         currentLevelText.text = newText;
     }
 
-    public void UpdateUpgradeCostText(int cost, bool isMaxLevel) // ÇöÀç ¾÷±×·¹ÀÌµå ºñ¿ë ÅØ½ºÆ®¸¦ ¾÷µ¥ÀÌÆ®ÇÏ´Â ÇÔ¼ö
+    public void UpdateUpgradeCostText(int cost, bool isMaxLevel) // í˜„ì¬ ì—…ê·¸ë ˆì´ë“œ ë¹„ìš© í…ìŠ¤íŠ¸ë¥¼ ì—…ë°ì´íŠ¸í•˜ëŠ” í•¨ìˆ˜
     {
         if (upgradeCostText == null)
             return;
@@ -75,7 +75,7 @@ public class EnergyUIManager : BaseUIManager<EnergyUIManager>
         upgradeCostText.text = newText;
     }
 
-    public void SetUpgradeButtonState(bool canUpgrade, bool isMaxLevel) // ¾÷±×·¹ÀÌµå ¹öÆ° UI¸¦ ¼³Á¤ÇÏ´Â ÇÔ¼ö
+    public void SetUpgradeButtonState(bool canUpgrade, bool isMaxLevel) // ì—…ê·¸ë ˆì´ë“œ ë²„íŠ¼ UIë¥¼ ì„¤ì •í•˜ëŠ” í•¨ìˆ˜
     {
         if (isMaxLevel)
         {

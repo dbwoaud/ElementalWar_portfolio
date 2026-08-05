@@ -2,13 +2,13 @@ using UnityEngine;
 
 public class CameraBoundManager : MonoBehaviour
 {
-    [Header("Ä«¸Ş¶ó °æ°è ¼³Á¤ º¯¼ö")]
+    [Header("ì¹´ë©”ë¼ ê²½ê³„ ì„¤ì • ë³€ìˆ˜")]
     public float MinX { get; private set; }
     public float MaxX { get; private set; }
     public bool IsInitialized { get; private set; }
 
 
-    public void SetBounds(Camera cam, PolygonCollider2D boundsCollider) // Ä«¸Ş¶óÀÇ °æ°è¸¦ ¼³Á¤ÇÏ´Â ÇÔ¼ö
+    public void SetBounds(Camera cam, PolygonCollider2D boundsCollider) // ì¹´ë©”ë¼ì˜ ê²½ê³„ë¥¼ ì„¤ì •í•˜ëŠ” í•¨ìˆ˜
     {
         if (cam == null || boundsCollider == null)
             return;
@@ -26,7 +26,7 @@ public class CameraBoundManager : MonoBehaviour
         IsInitialized = true;
     }
 
-    public float ClampX(float currentX) // ÇöÀç x°ªÀ» °æ°è ³»·Î Á¦ÇÑÇÏ´Â ÇÔ¼ö
+    public float ClampX(float currentX) // í˜„ì¬ xê°’ì„ ê²½ê³„ ë‚´ë¡œ ì œí•œí•˜ëŠ” í•¨ìˆ˜
     {
         if (!IsInitialized)
             return currentX;

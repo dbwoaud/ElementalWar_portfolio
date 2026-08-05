@@ -3,14 +3,14 @@ using UnityEngine.UI;
 
 public class PlayerSlot : MonoBehaviour
 {
-    [Header("UI ¿ä¼Ò")]
+    [Header("UI ìš”ì†Œ")]
     [SerializeField] private GameObject playerSlot;
     [SerializeField] private Text playerNameText;
     [SerializeField] private Text readyStateText;
     [SerializeField] private Image roomManagerIcon;
 
 
-    public void ClearSlot() // ÇÃ·¹ÀÌ¾î ½½·Ô Á¤º¸¸¦ ÃÊ±âÈ­ÇÏ´Â ÇÔ¼ö
+    public void ClearSlot() // í”Œë ˆì´ì–´ ìŠ¬ë¡¯ ì •ë³´ë¥¼ ì´ˆê¸°í™”í•˜ëŠ” í•¨ìˆ˜
     {
         playerNameText.text = "";
         playerNameText.gameObject.SetActive(false);
@@ -18,7 +18,7 @@ public class PlayerSlot : MonoBehaviour
         roomManagerIcon.gameObject.SetActive(false);
     }
 
-    public void SetSlot(string name, bool isMaster, bool isReady) // ÇÃ·¹ÀÌ¾î ½½·Ô Á¤º¸¸¦ ¼³Á¤ÇÏ´Â ÇÔ¼ö
+    public void SetSlot(string name, bool isMaster, bool isReady) // í”Œë ˆì´ì–´ ìŠ¬ë¡¯ ì •ë³´ë¥¼ ì„¤ì •í•˜ëŠ” í•¨ìˆ˜
     {
         playerNameText.text = name;
         playerNameText.gameObject.SetActive(true);
