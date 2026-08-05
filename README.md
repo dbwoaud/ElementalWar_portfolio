@@ -11,7 +11,11 @@
 - **개발 기간**: 2026.04 ~ 2026.05
 - **기술 스택**: Unity, C#, Photon PUN2, Photon Chat, PlayFab, ScriptableObject
 - **핵심 컨셉**: 풍/림/화/산/무 5속성 상성 시스템을 기반으로 한 실시간 1v1 멀티플레이 타워 디펜스
-- **주요 성과**: 씬 전반에 걸친 MVC 아키텍처 적용, 다수의 GoF 디자인 패턴 실전 구현, 네트워크 동기화 기반 멀티플레이 구현
+- **주요 성과**
+  1. 5개 씬 전체에 **MVC 아키텍처**를 일관 적용해 UI · 게임 로직 · 네트워크의 책임을 분리
+  2. Composite · State · Adapter · Strategy · Registry 등 **GoF 패턴을 문제 상황에 맞춰 선택 적용**
+  3. `IPunPrefabPool`을 직접 구현한 **네트워크 오브젝트 풀**과 **논할당(Non-Alloc) 물리 질의**로 런타임 GC 부하 제거
+  4. Photon PUN2의 **RPC · CustomProperties · Prefab Pool**을 조합해 별도 전용 서버 없이 1v1 실시간 대전 구현
 
 ---
 
@@ -144,9 +148,9 @@ IUnitAnimator (Target)
 
 ### **5. 채팅 시스템의 Strategy 패턴 — `IChatTransport` / `LobbyChatTransport` / `RoomChatTransport`**
   
-로비와 방이라는 서로 다른 네트워크 환경에서 채팅을 동작시키기 위해 **Strategy 패턴**을 적용했습니다. 전송 방식을 `IChatTransport` 인터페이스로 추상화하여, `ChatController가 구체적인 전송 방식을 알지 못하더라도 동일하게 동작하도록 설계했습니다.
+로비와 방이라는 서로 다른 네트워크 환경에서 채팅을 동작시키기 위해 **Strategy 패턴**을 적용했습니다. 전송 방식을 `IChatTransport` 인터페이스로 추상화하여, `ChatController`가 구체적인 전송 방식을 알지 못하더라도 동일하게 동작하도록 설계했습니다.
 
-**패턴 사용 이유**: 로비 채팅(Photon Chat)과 방 채팅(RPC 브로드캐스트)은 전송 방식이 완전히 다르기 때문에, 전송 방식을 인터페이스로 추상화하여, ChatController가 구체 방식을 몰라도 동일하게 동작하고 씬에 따라 구현체만 교체하면 되도록 했습니다.
+**패턴 사용 이유**: 로비 채팅(Photon Chat)과 방 채팅(RPC 브로드캐스트)은 전송 방식이 완전히 다르기 때문에, 전송 방식을 인터페이스로 추상화하여, `ChatController`가 구체 방식을 몰라도 동일하게 동작하고 씬에 따라 구현체만 교체하면 되도록 했습니다.
 
 - **`LobbyChatTransport`**: Photon Chat SDK를 사용해 글로벌 로비 채널에 접속합니다. 모든 로비 유저가 동일한 채널을 구독하여 메시지를 주고받습니다.
 - **`RoomChatTransport`** : 별도의 Chat 서버 연결 없이 `PhotonView.RPC(RpcTarget.All)`로 방 내 모든 플레이어에게 메시지를 브로드캐스트합니다. `RoomNetworkManager`의 입/퇴장 이벤트를 구독하여 시스템 메시지도 함께 처리합니다.
@@ -206,7 +210,46 @@ https://github.com/dbwoaud/ElementalWar_portfolio/blob/0638aee21f53ed2cc79a7bf07
 
 ---
 
-## **⚠️ 트러블 슈팅: HeroEditor 에셋 연동 이슈**
+## **📈 최적화 & 성능 계측**
+
+실시간 1v1 대전에서는 양측 유닛이 동시에 수십 개까지 늘어나기 때문에, **매 프레임 반복되는 탐색과 런타임 할당**이 병목이 될 것으로 판단했습니다. 이에 따라 다음 네 가지를 설계 단계에서 적용했습니다.
+
+### 1. 네트워크 오브젝트 풀 — `Instantiate` / `Destroy` 제거
+`IPunPrefabPool`을 직접 구현해 Photon의 생성·파괴 사이클을 큐 기반 풀로 대체했습니다. 유닛이 사망할 때마다 발생하던 `Destroy` 호출이 `SetActive(false)` + 큐 반환으로 바뀌어, 대전 중 반복되는 인스턴스 생성 비용과 GC 스파이크를 제거했습니다.
+[🔗 **NetworkPoolManager.cs 코드 보기**](https://github.com/dbwoaud/ElementalWar_portfolio/blob/0638aee21f53ed2cc79a7bf0713c79ff427f1a53/Scripts/Game/Network/Network%20Pool%20Manager.cs)
+
+### 2. 논할당(Non-Alloc) 물리 질의 — 전투 탐색의 GC 제거
+적 탐색은 유닛마다 초당 여러 번 실행되므로, 배열을 새로 반환하는 `Physics2D.OverlapBox(...)` / `OverlapCircle(...)` 오버로드 대신 **미리 할당한 버퍼와 `ContactFilter2D`를 받는 오버로드**를 사용했습니다. AOE 대상 수집도 매번 새 `List`를 만들지 않고 재사용 리스트에 담습니다.
+
+| 대상 | 버퍼 | 목적 |
+|---|---|---|
+| 사거리 스캔 | `Collider2D[16]` | 근접·원거리 타겟 탐색 |
+| 광역 피해 수집 | `Collider2D[32]` | AOE 반경 내 적 수집 |
+| 피해 적용 대상 | 재사용 `List<Collider2D>` | 프레임당 리스트 재할당 방지 |
+
+[🔗 **UnitCombat.cs 코드 보기**](https://github.com/dbwoaud/ElementalWar_portfolio/blob/0638aee21f53ed2cc79a7bf0713c79ff427f1a53/Scripts/Game/Units/Components/Unit%20Combat.cs)
+
+### 3. 탐색 주기 분리 — 매 프레임 스캔 제거
+Idle · Move 상태의 적 탐색을 매 프레임 수행하지 않고 **0.1초 간격으로 스로틀링**했습니다. 유닛 이동은 매 프레임 갱신하되 물리 질의만 주기를 분리해, 유닛 수가 늘어나도 물리 질의 횟수가 선형으로 폭증하지 않도록 했습니다.
+
+또한 `Unit.Update()`는 **자신이 소유한 유닛에서만** 상태 머신을 Tick하고, 상대 유닛은 RPC로 전달된 상태만 재생합니다. 양측 유닛 전체를 각 클라이언트가 시뮬레이션하지 않으므로 프레임당 상태 머신 연산이 절반으로 줄어듭니다.
+
+### 4. 조회 자료구조 교체 — 선형 탐색 제거
+
+| 대상 | 기존 방식의 비용 | 적용한 자료구조 | 복잡도 |
+|---|---|---|---|
+| 씬 내 활성 유닛 조회 | `FindObjectsOfType` *O(N)* | `UnitRegistry`의 `HashSet<Unit>` | 등록/해제 *O(1)* |
+| 상태 전이 | `switch` 분기 | `Dictionary<UnitStateType, IUnitState>` | 조회 *O(1)* |
+| 유닛 이름 조회 | `List` 선형 탐색 | `Dictionary<string, UnitStat>` | *O(1)* |
+| 속성별 유닛 필터링 | 매번 `Where` 순회 | `Dictionary<ElementType, List<UnitStat>>` 캐시 | *O(1)* |
+
+성 체력 UI도 매 피격마다 문자열을 새로 만들지 않고, 직전 문자열과 동일하면 갱신을 건너뛰어 불필요한 문자열 할당과 UI 리빌드를 줄였습니다.
+
+> **계측에 대한 한계**: 본 프로젝트에는 [지하 10층](https://github.com/dbwoaud/Basement10_portfolio)의 `PerformanceLogger`와 같은 **정량 계측 도구를 적용하지 않았습니다.** 위 항목들은 프로파일링 결과에 근거한 수치가 아니라, 병목이 예상되는 지점에 대해 설계 단계에서 선택한 구조적 최적화입니다. 개선 효과를 수치로 제시하지 못하는 점이 이 프로젝트의 명확한 한계이며, 이후 프로젝트에서는 `ProfilerRecorder` 기반 계측을 먼저 붙이고 최적화를 진행했습니다.
+
+---
+
+## **⚠️ 트러블슈팅: HeroEditor 에셋 연동 이슈**
  
 ### **이슈 1. 죽음 애니메이션 재생 시 그래픽 깨짐**
 
@@ -247,8 +290,13 @@ HeroEditor `Character`는 내부적으로 장비 레이어링을 위해 `SpriteM
 
 ---
 
+## **📐 클래스 다이어그램**
+전체 구조는 [**Docs/ClassDiagram.md**](Docs/ClassDiagram.md)에서 확인할 수 있습니다.
+
+---
+
 ## **🔗 참조**
 
 - **Notion**: [[엘리멘탈 워 Notion 링크]](https://pinnate-earthworm-118.notion.site/35cfaf7d496e801c870ece488cbb2c5c)
 - **YouTube**: [[기술 데모 영상 링크]](https://www.youtube.com/watch?v=EoBB8FgUPCY)
-- **GamePlay** [[엘리멘탈 워 게임 플레이링크]](https://play.unity.com/en/games/b00590fc-0f6b-461a-aa6a-c77404829354/7zkn66a87zmu7ikwioyghoyfgq)
+- **GamePlay**: [[엘리멘탈 워 게임 플레이 링크]](https://play.unity.com/en/games/b00590fc-0f6b-461a-aa6a-c77404829354/7zkn66a87zmu7ikwioyghoyfgq)
