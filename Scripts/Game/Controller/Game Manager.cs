@@ -71,6 +71,7 @@ public class GameManager : BaseSceneController<GameManager>
             gameNetworkManager.OnMapIndexReceived += HandleMapSelected;
             gameNetworkManager.OnOpponentLeftRoom += HandleOpponentLeft;
             gameNetworkManager.OnLeftRoomSuccess += HandleLeftRoomForLobby;
+            gameNetworkManager.OnReturnToRoomRequestedByGuest += HandleGuestReturnRequest;
         }
     }
 
@@ -91,6 +92,7 @@ public class GameManager : BaseSceneController<GameManager>
             gameNetworkManager.OnMapIndexReceived -= HandleMapSelected;
             gameNetworkManager.OnOpponentLeftRoom -= HandleOpponentLeft;
             gameNetworkManager.OnLeftRoomSuccess -= HandleLeftRoomForLobby;
+            gameNetworkManager.OnReturnToRoomRequestedByGuest -= HandleGuestReturnRequest;
         }
     }
 
@@ -403,5 +405,15 @@ public class GameManager : BaseSceneController<GameManager>
     private bool CanSpawnFromSlot(int slotIndex) // 슬롯에서 유닛을 소환할 수 있는지 확인하는 함수
     {
         return gameUIManager != null && gameUIManager.IsSlotSpawnable(slotIndex);
+    }
+
+    private void HandleGuestReturnRequest() // 손님의 방 복귀 요청을 처리하는 함수
+    {
+        if (!PhotonNetwork.IsMasterClient)
+            return;
+
+        ResumeTime();
+        ReopenRoom();
+        PhotonNetwork.LoadLevel(SceneName.Room);
     }
 }
