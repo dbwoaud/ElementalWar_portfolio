@@ -10,7 +10,7 @@ public class FantasyMonsterAdapter : BaseUnitAnimator
 
     [Header("캐싱 변수")]
     [SerializeField] private SpriteRenderer[] renderers;
-    [SerializeField] private readonly Dictionary<SpriteRenderer, Color> originalColors = new Dictionary<SpriteRenderer, Color>();
+    private readonly Dictionary<SpriteRenderer, Color> originalColors = new Dictionary<SpriteRenderer, Color>();
 
     protected override void Awake() 
     { 
