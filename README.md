@@ -14,7 +14,7 @@
 - **주요 성과**
   1. 5개 씬 전체에 **MVC 아키텍처**를 일관 적용해 UI · 게임 로직 · 네트워크의 책임을 분리
   2. Composite · State · Adapter · Strategy · Registry 등 **GoF 패턴을 문제 상황에 맞춰 선택 적용**
-  3. `IPunPrefabPool`을 직접 구현한 **네트워크 오브젝트 풀**과 **논할당(Non-Alloc) 물리 질의**로 런타임 GC 부하 제거
+  3. 탐색 주기 분리와 소유 유닛 한정 Tick으로 **유닛 800명 환경에서 프레임 타임 51.6% 단축**, 논할당 물리 질의로 **GC 수집 횟수 94.7% 감소** (계측 기반)
   4. Photon PUN2의 **RPC · CustomProperties · Prefab Pool**을 조합해 별도 전용 서버 없이 1v1 실시간 대전 구현
 
 ---
