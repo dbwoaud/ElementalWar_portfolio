@@ -47,6 +47,8 @@ public class UnitNetworkSync : MonoBehaviour
     {
         if (stateMachine != null)
             stateMachine.OnStateChanged -= BroadcastStateChange;
+
+        pendingState = null;
     }
 
     public void ConfigureNetworkRole() // 네트워크 풀에서 생성된 이후 방향과 레이어를 설정하는 함수
@@ -87,14 +89,24 @@ public class UnitNetworkSync : MonoBehaviour
     {
         if (!IsOwnedByLocalPlayer)
             return;
-        PhotonView.RPC(nameof(Unit.RPC_SyncAnimation), RpcTarget.Others, (int)UnitStateType.Attack);
+
+        SendStateRpc(UnitStateType.Attack);
     }
 
     private void BroadcastStateChange(IUnitState nextState) // 상태 전이를 다른 플레이어에 동기화하는 함수
     {
         if (!IsOwnedByLocalPlayer || nextState == null)
             return;
-        PhotonView.RPC(nameof(Unit.RPC_SyncAnimation), RpcTarget.Others, (int)nextState.Type);
+
+        if (nextState.Type == UnitStateType.Idle)
+        {
+            pendingState = nextState;
+            pendingSince = Time.time;
+            return;
+        }
+
+        pendingState = null;
+        SendStateRpc(nextState.Type);
     }
 
     public void ScheduleDestruction(float delay) // 일정 딜레이 후 오브젝트 파괴를 예약하는 함수
@@ -112,5 +124,33 @@ public class UnitNetworkSync : MonoBehaviour
     private void SetPhysicsRole() // 물리 역할을 설정하는 함수
     {
         movement.SetPhysicsRole(IsOwnedByLocalPlayer);
+    }
+
+    [Header("경유 상태 전송 지연")]
+    private IUnitState pendingState;
+    private float pendingSince;
+    private const float IdleBroadcastDelay = 0.05f;
+
+    /* Idle 은 진입 즉시 스캔해 Move 나 Attack 으로 빠지는 경유 상태다.
+       1프레임만 머무는 전이까지 전송하면 상대 화면에 보이지도 않는 RPC 가 낭비되므로,
+       짧은 지연 후에도 여전히 Idle 이면 그때 전송한다. */
+
+
+    private void Update()
+    {
+        if (pendingState == null)
+            return;
+
+        if (Time.time - pendingSince < IdleBroadcastDelay)
+            return;
+
+        SendStateRpc(pendingState.Type);
+        pendingState = null;
+    }
+
+    private void SendStateRpc(UnitStateType type) // 상태 전이 RPC 를 실제로 발행하는 함수
+    {
+        ProfilingCounters.CountRpcSent();
+        PhotonView.RPC(nameof(Unit.RPC_SyncAnimation), RpcTarget.Others, (int)type);
     }
 }

@@ -100,4 +100,20 @@ public class GameNetworkManager : MonoBehaviourPunCallbacks
     {
         OnReturnToRoomRequestedByGuest?.Invoke();
     }
+
+
+
+    /* 계측 */
+    public event Action<int> OnProfilingStartSignal;
+
+    public void BroadcastProfilingStart(int scenarioSeed) // 계측 시작을 양쪽에 전파하는 함수
+    {
+        photonView.RPC(nameof(RPC_StartProfiling), RpcTarget.All, scenarioSeed);
+    }
+
+    [PunRPC]
+    private void RPC_StartProfiling(int scenarioSeed) // 계측 시작 신호를 받는 함수
+    {
+        OnProfilingStartSignal?.Invoke(scenarioSeed);
+    }
 }

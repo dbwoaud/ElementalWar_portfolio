@@ -6,7 +6,7 @@ public class UnitStateIdle : IUnitState
     public UnitStateType Type => UnitStateType.Idle;
 
     [Header("스캔 변수")]
-    private const float ScanInterval = 0.1f;
+    private static float ScanInterval => ProfilingSwitches.ScanInterval;
     [SerializeField] private float lastScanTime;
 
     public void EnterState(Unit unit) // 유닛이 대기 상태에 들어왔을 때 실행되는 함수

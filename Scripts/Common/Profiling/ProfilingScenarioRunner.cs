@@ -7,6 +7,7 @@ public class ProfilingScenarioRunner : MonoBehaviour
     [Header("의존 컴포넌트")]
     [SerializeField] private NetworkPerformanceLogger logger;
     [SerializeField] private UnitDatabase unitDatabase;
+    [SerializeField] private GameNetworkManager gameNetworkManager;
 
     [Header("시나리오 설정")]
     [SerializeField] private string scenarioName = "spawn60";
@@ -28,10 +29,30 @@ public class ProfilingScenarioRunner : MonoBehaviour
             logger = GetComponent<NetworkPerformanceLogger>();
     }
 
+    private void OnEnable()
+    {
+        if (gameNetworkManager != null)
+            gameNetworkManager.OnProfilingStartSignal += HandleStartSignal;
+    }
+
+    private void OnDisable()
+    {
+        if (gameNetworkManager != null)
+            gameNetworkManager.OnProfilingStartSignal -= HandleStartSignal;
+    }
+
     private void Update()
     {
         if (!isRunning && Input.GetKeyDown(startKey))
-            StartCoroutine(RunScenario());
+            gameNetworkManager?.BroadcastProfilingStart(0);
+    }
+
+    private void HandleStartSignal(int scenarioSeed) // 계측 시작 신호를 처리하는 함수
+    {
+        if (isRunning)
+            return;
+
+        StartCoroutine(RunScenario());
     }
 
     private IEnumerator RunScenario() // 계측 시나리오를 실행하는 코루틴

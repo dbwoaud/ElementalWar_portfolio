@@ -104,9 +104,12 @@ public class Unit : MonoBehaviourPun, IDamagable, IPunInstantiateMagicCallback
 
     private void Update()
     {
-        if (!networkSync.IsOwnedByLocalPlayer)
+        /* 계측용: 스위치를 끄면 원격 유닛까지 상태 머신을 돌려
+           "양측 전부 시뮬레이션할 때"의 CPU 비용을 측정한다. */
+        if (ProfilingSwitches.TickOnlyOwnedUnits && !networkSync.IsOwnedByLocalPlayer)
             return;
 
+        ProfilingCounters.CountUnitTick();
         stateMachine.Tick();
     }
 
@@ -241,6 +244,8 @@ public class Unit : MonoBehaviourPun, IDamagable, IPunInstantiateMagicCallback
     [PunRPC]
     public void RPC_TakeDamage(float damage) // 유닛에게 적용된 데미지를 동기화하는 함수
     {
+        ProfilingCounters.CountRpcReceivedDamage();
+
         if (!stats.IsAlive)
             return;
 

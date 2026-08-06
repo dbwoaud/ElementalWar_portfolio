@@ -92,6 +92,7 @@ public class UnitCombat : MonoBehaviour
                 continue;
 
             float finalDamage = CalculateDamage(enemy);
+            ProfilingCounters.CountRpcSent();
             enemyView.RPC(nameof(Unit.RPC_TakeDamage), RpcTarget.All, finalDamage);
         }
     }
@@ -147,6 +148,22 @@ public class UnitCombat : MonoBehaviour
 
     private Collider2D FindEnemyInBox(Vector2 center, Vector2 size) // 공격 사거리 내에서 첫 번째 공격 가능한 적을 반환하는 함수
     {
+        ProfilingCounters.CountPhysicsQuery();
+
+        /* 계측용 before 경로: 호출마다 새 배열을 반환하는 오버로드 */
+        if (!ProfilingSwitches.UseNonAllocQueries)
+        {
+            Collider2D[] allocated = Physics2D.OverlapBoxAll(center, size, 0f, TargetLayerMask);
+            for (int i = 0; i < allocated.Length; i++)
+            {
+                if (allocated[i] == null || allocated[i] == movement.UnitCollider)
+                    continue;
+                if (IsAttackableEnemy(allocated[i].GetComponent<IDamagable>()))
+                    return allocated[i];
+            }
+            return null;
+        }
+
         ContactFilter2D filter = new ContactFilter2D();
         filter.useLayerMask = true;
         filter.layerMask = TargetLayerMask;
@@ -178,6 +195,20 @@ public class UnitCombat : MonoBehaviour
 
     private void FindAllEnemiesInAoeRadius(Collider2D epicenter, List<Collider2D> results) // AOE 범위 내의 모든 적을 찾는 함수
     {
+        ProfilingCounters.CountPhysicsQuery();
+
+        if (!ProfilingSwitches.UseNonAllocQueries)
+        {
+            Collider2D[] allocated = Physics2D.OverlapCircleAll(
+                epicenter.bounds.center, stats.AoeRadius, TargetLayerMask);
+            foreach (var hit in allocated)
+            {
+                if (hit != null && IsAttackableEnemy(hit.GetComponent<IDamagable>()))
+                    results.Add(hit);
+            }
+            return;
+        }
+
         ContactFilter2D filter = new ContactFilter2D();
         filter.useLayerMask = true;
         filter.layerMask = TargetLayerMask;

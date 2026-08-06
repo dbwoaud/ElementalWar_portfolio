@@ -46,8 +46,11 @@ public class NetworkPoolManager : Singleton<NetworkPoolManager>, IPunPrefabPool
         {
             Debug.LogWarning($"[NetworkPoolManager] 미등록 프리팹 생성 요청: {prefabId} " +
                              $"/ scene={UnityEngine.SceneManagement.SceneManager.GetActiveScene().name}");
-            return new GameObject(prefabId);   // null 반환 시 PUN 내부에서 예외 발생
+            return new GameObject(prefabId); 
         }
+        
+        if (!ProfilingSwitches.UsePooling)
+            return CreateNewInstance(sourcePrefab, position, rotation);
 
         if (!objectPool.TryGetValue(prefabId, out Queue<GameObject> pool))
         {
@@ -64,6 +67,12 @@ public class NetworkPoolManager : Singleton<NetworkPoolManager>, IPunPrefabPool
     {
         if (obj == null)
             return;
+
+        if (!ProfilingSwitches.UsePooling)
+        {
+            UnityEngine.Object.Destroy(obj);
+            return;
+        }
 
         obj.SetActive(false);
         ReturnToPool(obj);
