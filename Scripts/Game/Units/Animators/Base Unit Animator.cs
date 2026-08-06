@@ -12,7 +12,7 @@ public abstract class BaseUnitAnimator : MonoBehaviour, IUnitAnimator
     protected Coroutine dieCoroutine;
 
     [Header("캐싱 변수")]
-    [SerializeField] private readonly Dictionary<string, float> animationDurationCache = new Dictionary<string, float>(8);
+    private readonly Dictionary<string, float> animationDurationCache = new Dictionary<string, float>(8);
 
     protected virtual void Awake()
     {
