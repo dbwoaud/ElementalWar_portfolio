@@ -11,8 +11,8 @@ public class HeroEditorAdapter : BaseUnitAnimator
 
     [Header("캐싱 변수")]
     [SerializeField] private SpriteRenderer[] renderers;
-    [SerializeField] private readonly Dictionary<SpriteRenderer, Color> originalColors = new Dictionary<SpriteRenderer, Color>();
-    [SerializeField] private readonly Dictionary<SpriteRenderer, Material> originalMaterials = new Dictionary<SpriteRenderer, Material>();
+    private readonly Dictionary<SpriteRenderer, Color> originalColors = new Dictionary<SpriteRenderer, Color>();
+    private readonly Dictionary<SpriteRenderer, Material> originalMaterials = new Dictionary<SpriteRenderer, Material>();
     private static Material defaultSpriteMaterial;
 
     [Header("공격 애니메이션 매핑")]
