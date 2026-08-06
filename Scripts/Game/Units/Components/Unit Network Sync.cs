@@ -118,7 +118,8 @@ public class UnitNetworkSync : MonoBehaviour
     private IEnumerator DestroyAfterDelay(float delay) // 일정 딜레이 후 오브젝트 파괴를 예약하는 코루틴
     {
         yield return new WaitForSeconds(delay);
-        PhotonNetwork.Destroy(gameObject);
+        if (PhotonView.IsMine && gameObject.activeInHierarchy)
+            PhotonNetwork.Destroy(gameObject);
     }
 
     private void SetPhysicsRole() // 물리 역할을 설정하는 함수
