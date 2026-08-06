@@ -35,8 +35,8 @@
 - **View**: `BaseUIManager<T>`를 상속한 각 씬의 UI 매니저(`MainMenuUIManager`, `LobbyUIManager`, `RoomUIManager`, `UnitSettingUIManager`, `GameUIManager`)가 화면 출력만 담당하며, 직접적인 로직 처리 없이 이벤트를 발행하여 Controller에 상태를 전달합니다.
 - **Controller**: `BaseSceneController<T>`를 상속한 각 씬의 매니저(`MainMenuManager`, `LobbyManager`, `RoomManager`, `UnitSettingManager`, `GameManager`)가 게임 로직과 상태를 담당합니다.
 
-https://github.com/dbwoaud/ElementalWar_portfolio/blob/0638aee21f53ed2cc79a7bf0713c79ff427f1a53/Scripts/Common/Abstractions/Base%20Classes/Base%20Scene%20Controller.cs#L3-L45
-https://github.com/dbwoaud/ElementalWar_portfolio/blob/0638aee21f53ed2cc79a7bf0713c79ff427f1a53/Scripts/Common/Abstractions/Base%20Classes/Base%20UI%20Manager.cs#L4-L43
+https://github.com/dbwoaud/ElementalWar_portfolio/blob/2ffeb1072c5449a83ce88f6e002821254c725c4a/Scripts/Common/Abstractions/Base%20Classes/Base%20Scene%20Controller.cs#L3-L45
+https://github.com/dbwoaud/ElementalWar_portfolio/blob/2ffeb1072c5449a83ce88f6e002821254c725c4a/Scripts/Common/Abstractions/Base%20Classes/Base%20UI%20Manager.cs#L4-L43
 - [🔗 **LobbyNetworkManager.cs 코드 보기**](https://github.com/dbwoaud/ElementalWar_portfolio/blob/main/Scripts/Lobby/Network/Lobby%20Network%20Manager.cs)
 - [🔗 **BaseUIManager를 상속한 LobbyUIManager.cs 코드 보기**](https://github.com/dbwoaud/ElementalWar_portfolio/blob/main/Scripts/Lobby/UI/Lobby%20UI%20Manager.cs)
 - [🔗 **BaseSceneController를 상속한 LobbyManager.cs 코드 보기**](https://github.com/dbwoaud/ElementalWar_portfolio/blob/main/Scripts/Lobby/Controller/Lobby%20Manager.cs)
@@ -61,8 +61,8 @@ GameUIManager (최상위 조합자)
 - `Container`: 여러 개의 Item을 보유하며 이벤트를 집계하는 클래스로, 상위 매니저는 Container 내부의 구체적인 아이템 개수나 종류를 몰라도 단일 인터페이스를 통해 전체 아이템을 갱신하거나 조작할 수 있습니다.
 - `GameUnitSlotItem`: 실제 UI를 구성하는 최소 단위 클래스로, 한 Item의 관리를 담당하며, 여기서 발생하는 모든 상호작용은 이벤트를 통해 부모 컨테이너로 전달되어 객체 간의 결합도를 낮췄습니다.
 
-https://github.com/dbwoaud/ElementalWar_portfolio/blob/0638aee21f53ed2cc79a7bf0713c79ff427f1a53/Scripts/Game/UI/Game%20UI%20Manager.cs#L5-L15
-https://github.com/dbwoaud/ElementalWar_portfolio/blob/0638aee21f53ed2cc79a7bf0713c79ff427f1a53/Scripts/Common/Abstractions/Base%20Classes/UIPanel.cs#L1-L129
+https://github.com/dbwoaud/ElementalWar_portfolio/blob/2ffeb1072c5449a83ce88f6e002821254c725c4a/Scripts/Game/UI/Game%20UI%20Manager.cs#L5-L15
+https://github.com/dbwoaud/ElementalWar_portfolio/blob/2ffeb1072c5449a83ce88f6e002821254c725c4a/Scripts/Common/Abstractions/Base%20Classes/UIPanel.cs#L1-L129
 
 - [🔗 **GameUIManager.cs 전체 코드 보기**](https://github.com/dbwoaud/ElementalWar_portfolio/blob/main/Scripts/Game/UI/Game%20UI%20Manager.cs)
 - [🔗 **UIPanel을 상속한 GameResultPanel.cs 코드 보기**](https://github.com/dbwoaud/ElementalWar_portfolio/blob/main/Scripts/Game/UI/Game%20Result%20Panel.cs)
@@ -81,7 +81,7 @@ https://github.com/dbwoaud/ElementalWar_portfolio/blob/0638aee21f53ed2cc79a7bf07
 
 **패턴 사용 이유**: Unit 하나에 로직을 모두 넣으면 거대한 God Class가 되어 유지보수가 어려워집니다. 기능별 컴포넌트로 책임을 위임하고 Unit은 퍼사드 역할만 맡겨, 각 기능을 독립적으로 수정과 테스트를 할ㅂ 수 있게 했습니다.
 
-https://github.com/dbwoaud/ElementalWar_portfolio/blob/0638aee21f53ed2cc79a7bf0713c79ff427f1a53/Scripts/Game/Units/Unit.cs#L4-L54
+https://github.com/dbwoaud/ElementalWar_portfolio/blob/2ffeb1072c5449a83ce88f6e002821254c725c4a/Scripts/Game/Units/Unit.cs#L4-L54
 
 - [🔗 **Unit.cs 전체 코드 보기**](https://github.com/dbwoaud/ElementalWar_portfolio/blob/main/Scripts/Game/Units/Unit.cs)  
 - [🔗 **UnitStats.cs 코드 보기**](https://github.com/dbwoaud/ElementalWar_portfolio/blob/main/Scripts/Game/Units/Components/Unit%20Stats.cs)  
@@ -99,7 +99,7 @@ https://github.com/dbwoaud/ElementalWar_portfolio/blob/0638aee21f53ed2cc79a7bf07
 
 **패턴 사용 이유**: 유닛 행동을 if/switch로 처리하면 상태가 추가될 때마다 분기문 전체를 수정해야 합니다. 상태를 독립 클래스로 분리하여 새 상태 추가 시 기존 코드 수정 없이 클래스만 추가하면 되도록 했습니다.
 
-https://github.com/dbwoaud/ElementalWar_portfolio/blob/0638aee21f53ed2cc79a7bf0713c79ff427f1a53/Scripts/Game/Units/States/IUnitState.cs#L1-L8
+https://github.com/dbwoaud/ElementalWar_portfolio/blob/2ffeb1072c5449a83ce88f6e002821254c725c4a/Scripts/Game/Units/States/IUnitState.cs#L1-L8
 
 - [🔗 **UnitStateIdle.cs 코드 보기**](https://github.com/dbwoaud/ElementalWar_portfolio/blob/main/Scripts/Game/Units/States/Unit%20State%20Idle.cs)  
 - [🔗 **UnitStateMove.cs 코드 보기**](https://github.com/dbwoaud/ElementalWar_portfolio/blob/main/Scripts/Game/Units/States/Unit%20State%20Move.cs)  
@@ -144,10 +144,10 @@ IUnitAnimator (Target)
 ```
 
 유닛의 `Unit` 클래스와 `UnitStateMachine`은 `IUnitAnimator` 인터페이스만 바라보기 때문에, 어떤 에셋을 사용하는 유닛이든 코드 수정 없이 동일하게 동작합니다. 새로운 에셋 추가 시에도 Adapter 클래스 하나만 추가하면 됩니다.  
-- [🔗 **BaseUnitAnimator.cs 코드 보기**](https://github.com/dbwoaud/ElementalWar_portfolio/blob/0638aee21f53ed2cc79a7bf0713c79ff427f1a53/Scripts/Game/Units/Animators/Base%20Unit%20Animator.cs)  
-- [🔗 **HeroEditorAdapter.cs 코드 보기**](https://github.com/dbwoaud/ElementalWar_portfolio/blob/0638aee21f53ed2cc79a7bf0713c79ff427f1a53/Scripts/Game/Units/Animators/Hero%20Editor%20Adapter.cs)  
-- [🔗 **FantazyMonsterAdapter.cs 코드 보기**](https://github.com/dbwoaud/ElementalWar_portfolio/blob/0638aee21f53ed2cc79a7bf0713c79ff427f1a53/Scripts/Game/Units/Animators/Fantazy%20Monster%20Adapter.cs)  
-- [🔗 **SpineMonsterAdapter.cs 코드 보기**](https://github.com/dbwoaud/ElementalWar_portfolio/blob/0638aee21f53ed2cc79a7bf0713c79ff427f1a53/Scripts/Game/Units/Animators/Spine%20Monster%20Adapter.cs)  
+- [🔗 **BaseUnitAnimator.cs 코드 보기**](https://github.com/dbwoaud/ElementalWar_portfolio/blob/2ffeb1072c5449a83ce88f6e002821254c725c4a/Scripts/Game/Units/Animators/Base%20Unit%20Animator.cs)  
+- [🔗 **HeroEditorAdapter.cs 코드 보기**](https://github.com/dbwoaud/ElementalWar_portfolio/blob/2ffeb1072c5449a83ce88f6e002821254c725c4a/Scripts/Game/Units/Animators/Hero%20Editor%20Adapter.cs)  
+- [🔗 **FantazyMonsterAdapter.cs 코드 보기**](https://github.com/dbwoaud/ElementalWar_portfolio/blob/2ffeb1072c5449a83ce88f6e002821254c725c4a/Scripts/Game/Units/Animators/Fantazy%20Monster%20Adapter.cs)  
+- [🔗 **SpineMonsterAdapter.cs 코드 보기**](https://github.com/dbwoaud/ElementalWar_portfolio/blob/2ffeb1072c5449a83ce88f6e002821254c725c4a/Scripts/Game/Units/Animators/Spine%20Monster%20Adapter.cs)  
 
 ---
 
@@ -170,8 +170,8 @@ ChatController (Context)
 └─ ChatPanelUI → ScrollRect 기반 채팅창 UI
 ```
 
-https://github.com/dbwoaud/ElementalWar_portfolio/blob/0638aee21f53ed2cc79a7bf0713c79ff427f1a53/Scripts/Common/Chat/IChatTransport.cs#L1-L13
-https://github.com/dbwoaud/ElementalWar_portfolio/blob/0638aee21f53ed2cc79a7bf0713c79ff427f1a53/Scripts/Common/Chat/IChatView.cs#L1-L8
+https://github.com/dbwoaud/ElementalWar_portfolio/blob/2ffeb1072c5449a83ce88f6e002821254c725c4a/Scripts/Common/Chat/IChatTransport.cs#L1-L13
+https://github.com/dbwoaud/ElementalWar_portfolio/blob/2ffeb1072c5449a83ce88f6e002821254c725c4a/Scripts/Common/Chat/IChatView.cs#L1-L8
 
 - [🔗 **LobbyChatTransport.cs 코드 보기**](https://github.com/dbwoaud/ElementalWar_portfolio/blob/main/Scripts/Lobby/Chat/Lobby%20Chat%20Transport.cs)  
 - [🔗 **RoomChatTransport.cs 코드 보기**](https://github.com/dbwoaud/ElementalWar_portfolio/blob/main/Scripts/Room/Chat/Room%20Chat%20Transport.cs)
@@ -189,10 +189,10 @@ https://github.com/dbwoaud/ElementalWar_portfolio/blob/2ffeb1072c5449a83ce88f6e0
 - [🔗 **NetworkPoolManager.cs 코드 보기**](https://github.com/dbwoaud/ElementalWar_portfolio/blob/main/Scripts/Game/Network/Network%20Pool%20Manager.cs)
 
 - **상태 동기화**: 유닛의 상태 전이(State Machine)와 공격 애니메이션을 `PhotonView.RPC`로 상대 클라이언트에 동기화하여, 양측 화면에서 일관된 시각적 표현을 보장합니다.
-https://github.com/dbwoaud/ElementalWar_portfolio/blob/0638aee21f53ed2cc79a7bf0713c79ff427f1a53/Scripts/Game/Units/Components/Unit%20Network%20Sync.cs#L89-L101
+https://github.com/dbwoaud/ElementalWar_portfolio/blob/2ffeb1072c5449a83ce88f6e002821254c725c4a/Scripts/Game/Units/Components/Unit%20Network%20Sync.cs#L89-L101
 
 - **방 속성(Custom Properties)**: 덱 정보, 준비 상태, 맵 인덱스를 Photon `CustomProperties`에 저장하고, `OnRoomPropertiesUpdate` 콜백으로 처리하여 별도 서버 없이도 두 클라이언트 간 게임 시작 조건을 안전하게 동기화했습니다.
-https://github.com/dbwoaud/ElementalWar_portfolio/blob/0638aee21f53ed2cc79a7bf0713c79ff427f1a53/Scripts/Lobby/Network/Lobby%20Network%20Manager.cs#L48-L86
+https://github.com/dbwoaud/ElementalWar_portfolio/blob/2ffeb1072c5449a83ce88f6e002821254c725c4a/Scripts/Lobby/Network/Lobby%20Network%20Manager.cs#L48-L86
 
 - **설계 한계 및 개선 방향 (권한 모델)**: 본 프로젝트는 학습을 목적으로 한 클라이언트 권위 구조로, 각 클라이언트가 계산한 결과를 `PhotonView.RPC`로 전파합니다. 이 방식은 구현이 간결하지만 클라이언트가 보낸 값을 서버가 검증하지 않아 메모리 조작 등 치팅에 취약합니다. 상용 서비스 수준에서는 서버가 모든 판정을 수행하고 클라이언트는 입력만 전송하는 서버 권위 구조로 전환하여 데미지 및 상태 판정을 서버에서 검증해야 함을 인지하고 있습니다.
 
@@ -202,7 +202,7 @@ https://github.com/dbwoaud/ElementalWar_portfolio/blob/0638aee21f53ed2cc79a7bf07
 - [🔗 **PlayFabAuthManager.cs 코드 보기**](https://github.com/dbwoaud/ElementalWar_portfolio/blob/main/Scripts/MainMenu/Network/PlayFab%20Auth%20Manager.cs)
   
 - **에러 처리**: `ErrorTranslator`를 통해 PlayFab 및 Photon 에러 코드를 사용자 친화적 메시지로 변환하고, 공통 팝업 UI(`PopupPanelUIManager`)를 통해 출력하여 에러 처리를 일관되게 관리했습니다.
-https://github.com/dbwoaud/ElementalWar_portfolio/blob/0638aee21f53ed2cc79a7bf0713c79ff427f1a53/Scripts/Common/Constants/Game%20Constants.cs#L180-L238
+https://github.com/dbwoaud/ElementalWar_portfolio/blob/2ffeb1072c5449a83ce88f6e002821254c725c4a/Scripts/Common/Constants/Game%20Constants.cs#L180-L238
 - [🔗 **PopupPanelUIManager.cs 코드 보기**](https://github.com/dbwoaud/ElementalWar_portfolio/blob/main/Scripts/Common/Singletons/Popup%20Panel%20UI%20Manager.cs)
   
 ### **3. [데이터 주도] ScriptableObject 기반 유닛 데이터 설계**
@@ -228,6 +228,12 @@ https://github.com/dbwoaud/ElementalWar_portfolio/blob/0638aee21f53ed2cc79a7bf07
 실시간 1v1 대전에서는 양측 유닛이 동시에 수백 기까지 늘어나므로, **매 프레임 반복되는 탐색 및 할당**과 **유닛 수에 비례해 증가하는 네트워크 트래픽**이 병목이 될 것으로 판단했습니다. 이를 검증하기 위해 **`NetworkPerformanceLogger`** 를 제작해, 프레임 지표와 네트워크 지표를 1초 단위로 함께 수집했습니다.
 
 ### **계측 방법**
+
+```
+Unity 6000.4.7f1 · IL2CPP · Development Build · VSync Off
+1920×1080 / 동일 PC로 2인스턴스 실행(마스터, 게스트 동시 계측)
+시나리오: 고정 간격 자동 소환 후 60초 유지 (1초 단위 샘플링, 59행)
+```
 
 각 최적화는 **런타임 스위치로 해당 항목만 비활성화한 빌드**를 별도로 만들어 before를 측정했으며, 각 수집 항목은 프레임 타임(평균, P95), GC 할당량과 수집 횟수, 물리 질의 횟수, 상태 머신 Tick 수, RPC 발행 수, 송신 바이트, RTT, 재전송 커맨드로 설정했습니다.
 
