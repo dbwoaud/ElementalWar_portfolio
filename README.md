@@ -1,6 +1,8 @@
 # ElementalWar_portfolio
 # **🕹️ [프로젝트] 풍림화산 전쟁(Elemental War)**
 
+https://github.com/user-attachments/assets/cb65efce-49bf-4e47-ad4b-02efa7e1b1dd
+
 > **"냥코 대전쟁과 전쟁 시대, 팔라독에서 영감을 얻어, 속성 상성 시스템과 실시간 멀티플레이를 결합한 2D 사이드뷰 타워 디펜스 게임입니다."**
 
 ---
@@ -107,6 +109,9 @@ https://github.com/dbwoaud/ElementalWar_portfolio/blob/2ffeb1072c5449a83ce88f6e0
 - [🔗 **UnitStateHit.cs 코드 보기**](https://github.com/dbwoaud/ElementalWar_portfolio/blob/main/Scripts/Game/Units/States/Unit%20State%20Hit.cs)  
 - [🔗 **UnitStateDead.cs 코드 보기**](https://github.com/dbwoaud/ElementalWar_portfolio/blob/main/Scripts/Game/Units/States/Unit%20State%20Dead.cs)  
 
+**인스펙터의 `Current State Type`이 Idle → Move → Attack → Hit → Dead로 전이되는 모습**
+
+https://github.com/user-attachments/assets/45c84802-b90f-41e6-9571-53c1abbe700c
 
 **3-3. Observer 패턴: 상태 전이 네트워크 동기화**
 
@@ -270,6 +275,14 @@ Unity 6000.4.7f1 · IL2CPP · Development Build · VSync Off
 | 미적용 | 2.13 ms | 27.08 ms | **12.7배** |
 | 둘 다 적용 | 1.69 ms | 13.10 ms | **7.8배** |
 
+**미적용: 유닛 700명 구간**
+
+https://github.com/user-attachments/assets/5eecc863-dddd-488d-9eba-9f7fe92e5e42
+
+**둘 다 적용: 유닛 750명 구간**
+
+https://github.com/user-attachments/assets/80ab5009-1f6e-45a8-9a64-63bfcb0e2272
+
 **계측으로 확인한 것**: 스캔 스로틀링 단독 효과는 200명 구간에서 −5%에 그쳤습니다. 스로틀은 Idle, Move 상태만 대상이고 **Attack 상태의 사거리 확인은 매 프레임 그대로 실행**되기 때문입니다. 실제 이득의 대부분은 소유 유닛 한정 Tick에서 나온 것을 확인할 수 있습니다.
 
 ---
@@ -294,6 +307,14 @@ Unity 6000.4.7f1 · IL2CPP · Development Build · VSync Off
 | GC 수집 횟수 (게스트) | 86회 | **6회** | −93.0% |
 | 평균 프레임 타임 (게스트) | 0.89 ms | 0.77 ms | −13.5% |
 | P95 프레임 타임 (게스트) | 27.85 ms | 11.13 ms | −60.0% |
+
+**미적용: GC Allocated In Frame 톱니가 지속적으로 누적**
+
+https://github.com/user-attachments/assets/4301e411-8336-4339-a0b7-ea81230633ba
+
+**적용: 할당이 거의 발생하지 않음**
+
+https://github.com/user-attachments/assets/64f9dc95-73a5-427a-b09c-1b2d7844f963
 
 유닛 60명이라는 가벼운 조건에서도 **60초간 GC 수집이 114회에서 6회로 감소**했습니다. 프레임 타임 개선폭이 크지 않은 것은 이 규모에서 CPU 여유가 충분하기 때문이며, 유닛 수가 늘어날수록 GC 스파이크로 나타났을 부하를 사전에 제거한 것으로 해석했습니다.
 
