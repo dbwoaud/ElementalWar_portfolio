@@ -189,7 +189,7 @@ https://github.com/dbwoaud/ElementalWar_portfolio/blob/2ffeb1072c5449a83ce88f6e0
 
 ### **1. [멀티플레이] Photon PUN2 기반 실시간 네트워크 동기화**
 
-- **네트워크 오브젝트 풀(`NetworkPoolManager`)**: `IPunPrefabPool`을 직접 구현하여 Photon의 `Instantiate` / `Destroy` 사이클을 커스텀 오브젝트 풀로 대체했습니다. 다만 실제 계측 결과 유닛 사망률에서는 유의미한 개선이 없었으며, 그 판단 과정은 아래 「최적화 & 성능 계측 4」에 정리했습니다.
+- **네트워크 오브젝트 풀(`NetworkPoolManager`)**: `IPunPrefabPool`을 직접 구현하여 Photon의 `Instantiate` / `Destroy` 사이클을 커스텀 오브젝트 풀로 대체했습니다. 다만 실제 계측 결과 이 프로젝트의 유닛 사망률(초당 약 3회)에서는 유의미한 개선이 없었으며, 그 판단 과정은 아래 「최적화 & 성능 계측 4」에 정리했습니다.
 https://github.com/dbwoaud/ElementalWar_portfolio/blob/2ffeb1072c5449a83ce88f6e002821254c725c4a/Scripts/Game/Network/Network%20Pool%20Manager.cs#L43-L79
 - [🔗 **NetworkPoolManager.cs 코드 보기**](https://github.com/dbwoaud/ElementalWar_portfolio/blob/main/Scripts/Game/Network/Network%20Pool%20Manager.cs)
 
