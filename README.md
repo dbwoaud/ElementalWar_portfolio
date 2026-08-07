@@ -119,7 +119,7 @@ https://github.com/user-attachments/assets/45c84802-b90f-41e6-9571-53c1abbe700c
 
 **패턴 사용 이유**: 상태 머신이 네트워크 동기화를 직접 호출하면 두 시스템이 강하게 결합되기 때문에 상태 변경을 이벤트로 발행만 하도록 했습니다. 이를 통해 상태 머신은 네트워크의 존재를 알 필요 없이 동기화가 가능합니다.
 
-#### **3-4. Registry 패턴: `UnitRegistry`**
+**3-4. Registry 패턴: `UnitRegistry`**
 
 `HashSet<Unit>` 기반의 정적 레지스트리를 통해 씬 내 모든 활성 유닛을 O(1)로 등록/해제가 되도록 최적화를 수행하였으며, `IReadOnlyCollection`으로 외부 읽기 전용 노출하여 데이터 무결성을 보장합니다.
 
@@ -230,7 +230,8 @@ https://github.com/dbwoaud/ElementalWar_portfolio/blob/2ffeb1072c5449a83ce88f6e0
 
 ## **📈 최적화 & 성능 계측**
 
-실시간 1v1 대전에서는 양측 유닛이 동시에 수백 기까지 늘어나므로, **매 프레임 반복되는 탐색 및 할당**과 **유닛 수에 비례해 증가하는 네트워크 트래픽**이 병목이 될 것으로 판단했습니다. 이를 검증하기 위해 **`NetworkPerformanceLogger`** 를 제작해, 프레임 지표와 네트워크 지표를 1초 단위로 함께 수집했습니다.
+실시간 1v1 대전에서는 양측 유닛이 동시에 수백 명까지 늘어나므로, **매 프레임 반복되는 탐색 및 할당**과 **유닛 수에 비례해 증가하는 네트워크 트래픽**이 병목이 될 것으로 판단했습니다. 이를 검증하기 위해 [지하 10층](https://github.com/dbwoaud/Basement10_portfolio)의
+`PerformanceLogger`를 확장한 **`NetworkPerformanceLogger`** 를 제작해, 프레임 지표와 네트워크 지표를 1초 단위로 함께 수집했습니다.
 
 ### **계측 방법**
 
