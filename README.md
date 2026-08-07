@@ -81,7 +81,7 @@ https://github.com/dbwoaud/ElementalWar_portfolio/blob/2ffeb1072c5449a83ce88f6e0
 
 `Unit` 클래스는 직접 로직을 구현하지 않으며, 기능별로 분리된 컴포넌트들에 책임을 위임하고 외부에 프로퍼티로 노출하는 **퍼사드** 역할만 수행합니다. `[RequireComponent]` attribute를 통해 필수 컴포넌트 누락을 컴파일 타임에 방지하고, `[DisallowMultipleComponent]` attribute를 통해 중복 컴포넌트를 허용하지 않게 했습니다.
 
-**패턴 사용 이유**: Unit 하나에 로직을 모두 넣으면 거대한 God Class가 되어 유지보수가 어려워집니다. 기능별 컴포넌트로 책임을 위임하고 Unit은 퍼사드 역할만 맡겨, 각 기능을 독립적으로 수정과 테스트를 할ㅂ 수 있게 했습니다.
+**패턴 사용 이유**: Unit 하나에 로직을 모두 넣으면 거대한 God Class가 되어 유지보수가 어려워집니다. 기능별 컴포넌트로 책임을 위임하고 Unit은 퍼사드 역할만 맡겨, 각 기능을 독립적으로 수정과 테스트를 할 수 있게 했습니다.
 
 https://github.com/dbwoaud/ElementalWar_portfolio/blob/2ffeb1072c5449a83ce88f6e002821254c725c4a/Scripts/Game/Units/Unit.cs#L4-L54
 
@@ -97,7 +97,7 @@ https://github.com/dbwoaud/ElementalWar_portfolio/blob/2ffeb1072c5449a83ce88f6e0
 **3-2. State 패턴: `IUnitState` / `UnitStateMachine`**
 
 유닛의 행동(Idle, Move, Attack, Hit, Dead)을 `IUnitState` 인터페이스로 추상화하고, `UnitStateMachine`이 상태 전이를 관리합니다. 새로운 상태 추가 시 기존 코드를 수정할 필요가 없습니다.
-`UnitStateMachine`은 `Dictionary<UnitStateType, IUnitState>`로 상태를 관리하여 열거형으로 O(1) 조회가 가능하도록 최적화를 수행하였으며, 상태 전이 시 `OnStateChanged` 이벤트를 발행하여 네트워크 동기화와 느슨하게 결합됩니다.
+`UnitStateMachine`은 `Dictionary<UnitStateType, IUnitState>`로 상태를 관리하여 열거형으로 O(1) 조회가 가능하도록 했으며, 상태 전이 시 `OnStateChanged` 이벤트를 발행하여 네트워크 동기화와 느슨하게 결합됩니다.
 
 **패턴 사용 이유**: 유닛 행동을 if/switch로 처리하면 상태가 추가될 때마다 분기문 전체를 수정해야 합니다. 상태를 독립 클래스로 분리하여 새 상태 추가 시 기존 코드 수정 없이 클래스만 추가하면 되도록 했습니다.
 
@@ -213,7 +213,7 @@ https://github.com/dbwoaud/ElementalWar_portfolio/blob/2ffeb1072c5449a83ce88f6e0
 ### **3. [데이터 주도] ScriptableObject 기반 유닛 데이터 설계**
 
 - `UnitStat`을 `ScriptableObject`로 정의하여 게임 로직과 데이터를 완전히 분리했습니다. 새로운 유닛 추가 시 코드 수정 없이 에셋 파일 생성만으로 시스템에 즉시 반영되는 **OCP**를 실천했습니다.
-- `UnitDatabase`는 `ScriptableObject`에 `Dictionary<string, UnitStat>`와 `Dictionary<ElementType, List<UnitStat>>` 캐시를 구축하여, 이름 조회와 속성 필터링을 O(1) / O(1) 로 최적화를 수행했습니다.
+- `UnitDatabase`는 `ScriptableObject`에 `Dictionary<string, UnitStat>`와 `Dictionary<ElementType, List<UnitStat>>` 캐시를 구축하여, 이름 조회와 속성 필터링을 모두 O(1)로 처리했습니다.
 - `UnitStat.CalculateDamage()`로 속성 상성 배율(풍>산, 림>풍, 화>림, 산>화)을 데이터 레벨에서 캡슐화하여, 전투 로직이 상성 테이블을 직접 알 필요가 없도록 설계했습니다.  
 - [🔗 **UnitStat.cs 코드 보기**](https://github.com/dbwoaud/ElementalWar_portfolio/blob/main/Scripts/Common/Data/Unit%20Stat.cs)  
 - [🔗 **UnitDatabase.cs 코드 보기**](https://github.com/dbwoaud/ElementalWar_portfolio/blob/main/Scripts/Common/Data/Unit%20Database.cs)
