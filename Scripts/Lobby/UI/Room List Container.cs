@@ -12,26 +12,31 @@ public class RoomListContainer : MonoBehaviour
     [Header("방 목록 딕셔너리")]
     [SerializeField] private Dictionary<string, RoomListItem> roomItems = new Dictionary<string, RoomListItem>();
 
-    public event Action<RoomInfo> OnRoomItemClicked;
+    public event Action<RoomInfo> OnRoomItemClicked; // 방 버튼 클릭 이벤트
 
 
-    public void UpdateRoomList(List<RoomInfo> roomList) // 방 리스트를 업데이트하는 함수
+    public void UpdateRoomList(List<RoomInfo> roomList) // 방 목록을 업데이트하는 함수
     {
         foreach (var room in roomList)
         {
-            if (room.RemovedFromList)
+            // 방 목록에 없고, 실제로 존재하지 않는 방일 경우, 방 항목 제거
+            if (room.RemovedFromList) 
             {
                 RoomListItem item;
                 if (CheckRoomExist(room, out item))
                     RemoveRoom(room, item);
+
                 continue;
             }
 
             RoomListItem existingItem;
+
+            // 방 목록에 있고, 실제로 존재하는 방일 경우, 방 항목 업데이트
             if (CheckRoomExist(room, out existingItem))
             {
                 ChangeRoom(room, existingItem);
             }
+            // 방 목록에 있고, 실제로 존재하지 않는 방일 경우, 방 항목 생성
             else
             {
                 CreateRoom(room);
@@ -39,7 +44,7 @@ public class RoomListContainer : MonoBehaviour
         }
     }
 
-    private bool CheckRoomExist(RoomInfo room, out RoomListItem item) // 방 리스트에 방이 있는지 확인하는 함수
+    private bool CheckRoomExist(RoomInfo room, out RoomListItem item) // 방 목록에 방이 있는지 확인하는 함수
     {
         return roomItems.TryGetValue(room.Name, out item);
     }
@@ -65,12 +70,12 @@ public class RoomListContainer : MonoBehaviour
         roomItems.Add(room.Name, newItem);
     }
 
-    private void HandleRoomClick(RoomInfo info) // 방 버튼을 클릭할 때 실행되는 함수
+    private void HandleRoomClick(RoomInfo info) // 방 버튼 클릭을 처리하는 함수
     {
         OnRoomItemClicked?.Invoke(info);
     }
 
-    public List<int> GetCurrentRoomNumbers() // 현재 방의 번호를 얻는 함수
+    public List<int> GetCurrentRoomNumbers() // 현재 방의 번호 목록을 반환 함수
     {
         List<int> numbers = new List<int>();
         foreach (var item in roomItems.Values)

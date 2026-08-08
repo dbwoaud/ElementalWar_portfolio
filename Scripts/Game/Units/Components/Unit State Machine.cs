@@ -15,6 +15,9 @@ public class UnitStateMachine : MonoBehaviour
     [SerializeField] private UnitStateHit stateHit = new UnitStateHit();
     [SerializeField] private UnitStateDead stateDead = new UnitStateDead();
 
+    [Header("현재 상태")]
+    [SerializeField] private UnitStateType currentStateType;
+
     public UnitStateIdle StateIdle => stateIdle;
 
     public UnitStateMove StateMove => stateMove;
@@ -56,6 +59,7 @@ public class UnitStateMachine : MonoBehaviour
     public void StartFromIdle() // 유닛 생성 후 상태를 대기 상태로 설정하는 함수
     {
         currentState = null;
+        currentStateType = UnitStateType.Idle;
         ChangeState(stateIdle);
     }
 
@@ -71,6 +75,7 @@ public class UnitStateMachine : MonoBehaviour
 
         currentState?.ExitState(unit);
         currentState = nextState;
+        currentStateType = nextState.Type;
         currentState?.EnterState(unit);
 
         if (!isSync)

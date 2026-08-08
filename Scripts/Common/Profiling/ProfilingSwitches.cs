@@ -12,16 +12,16 @@ public class ProfilingSwitches : MonoBehaviour
 
     public const float DefaultScanInterval = 0.1f;
 
-    [Header("계측 활성화")]
+    [Header("프로파일링 활성화 여부")]
     [SerializeField] private bool enableProfiling = true;
 
-    [Header("최적화 항목 (해제 시 before 측정)")]
+    [Header("최적화 항목")]
     [SerializeField] private bool usePooling = true;
     [SerializeField] private bool useNonAllocQueries = true;
     [SerializeField] private bool useScanThrottle = true;
     [SerializeField] private bool tickOnlyOwnedUnits = true;
 
-    [Header("변형 이름 (CSV 태그)")]
+    [Header("CSV 로그 태그")]
     [SerializeField] private string variantName = "after";
     public static string VariantName { get; private set; } = "after";
 

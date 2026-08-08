@@ -189,14 +189,14 @@ public class Unit : MonoBehaviourPun, IDamagable, IPunInstantiateMagicCallback
     public float PlayAttackAnimation() // 공격 애니메이션을 재생하고 다른 플레이어와 동기화하는 함수
     {
         networkSync.BroadcastAttackAnimation();
-        SoundManager.instance?.Play(SoundKey.UnitAttack);
+        SoundManager.Instance?.Play(SoundKey.UnitAttack);
         return animator?.PlayAttack() ?? 0.5f;
     }
 
     private void HandleDied() // 유닛의 죽음을 처리하는 함수
     {
         if (!networkSync.IsOwnedByLocalPlayer)
-            EnergyManager.instance?.AddEnergy(stats.SpawnCost * KillEnergyRefundRate);
+            EnergyManager.Instance?.AddEnergy(stats.SpawnCost * KillEnergyRefundRate);
 
         stateMachine.ChangeState(stateMachine.StateDead);
     }

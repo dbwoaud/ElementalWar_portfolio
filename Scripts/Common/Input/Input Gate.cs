@@ -15,12 +15,12 @@ public static class InputGate
                 return cachedResult;
 
             cachedFrame = currentFrame;
-            cachedResult = IsTextInputFocused();
+            cachedResult = IsInputFieldFocused();
             return cachedResult;
         }
     }
 
-    private static bool IsTextInputFocused() // 키보드 포커스가 UI 입력 필드에 있는지 확인하는 함수
+    private static bool IsInputFieldFocused() // 현재 키보드 포커스가 InputField에 있는지 확인하는 함수
     {
         if (EventSystem.current == null)
             return false;

@@ -5,10 +5,10 @@ using PlayFab.ClientModels;
 
 public class PlayFabAuthManager : MonoBehaviour
 {
-    public event Action<string> OnLoginSuccessEvent;
-    public event Action<string> OnLoginErrorEvent;
-    public event Action OnRegisterSuccessEvent;
-    public event Action<string> OnRegisterErrorEvent;
+    public event Action<string> OnLoginSuccessEvent; // 로그인 성공 이벤트
+    public event Action<string> OnLoginErrorEvent; // 로그인 오류 이벤트
+    public event Action OnRegisterSuccessEvent; // 회원가입 성공 이벤트
+    public event Action<string> OnRegisterErrorEvent; // 회원가입 오류 이벤트
 
 
     public void PlayFabLogin(string email, string password) // 플레이팹에 로그인하는 함수
@@ -32,10 +32,8 @@ public class PlayFabAuthManager : MonoBehaviour
     {
         string nickname = PlayerConstants.Default.Nickname;
         if (infoResult.AccountInfo != null && infoResult.AccountInfo.Username != null)
-        {
             nickname = infoResult.AccountInfo.Username;
-        }
-
+ 
         OnLoginSuccessEvent?.Invoke(nickname);
     }
 

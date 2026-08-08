@@ -1,26 +1,24 @@
 using System.Collections.Generic;
 using System.IO;
 using UnityEngine;
-#if UNITY_EDITOR
 using UnityEditor;
-#endif
 
 public class BatchPrefabCapturer : MonoBehaviour
 {
-    [Header("카메라 세팅")]
+    [Header("카메라 설정")]
     public Camera captureCamera;
 
-    [Header("캡처할 프리팹 목록")]
+    [Header("촬영할 프리팹 대상 목록")]
     public List<GameObject> targetPrefabs;
 
-    [Header("이미지 세팅")]
+    [Header("이미지 설정")]
     public int imageSize = 512;
     [Range(1f, 2f)]
     public float padding = 1.2f; // 1.2면 상하좌우 약 20%의 여백 생성
     
     
     [ContextMenu("지정된 모든 프리팹 촬영하기!")]
-    public void CaptureAllPrefabs()
+    public void CaptureAllPrefabs() // 모든 프리팹을 촬영하는 함수
     {
         if (captureCamera == null || targetPrefabs.Count == 0)
         {
@@ -30,9 +28,7 @@ public class BatchPrefabCapturer : MonoBehaviour
 
         string saveDirectory = Application.dataPath + "/Project/Resources/Character Icon";
         if (!Directory.Exists(saveDirectory))
-        {
             Directory.CreateDirectory(saveDirectory); 
-        }
 
         foreach (GameObject prefab in targetPrefabs)
         {
@@ -40,7 +36,6 @@ public class BatchPrefabCapturer : MonoBehaviour
                 continue;
 
             GameObject instance = Instantiate(prefab, Vector3.zero, Quaternion.identity);
-
             Renderer[] renderers = instance.GetComponentsInChildren<Renderer>();
             if (renderers.Length == 0)
             {
@@ -50,9 +45,7 @@ public class BatchPrefabCapturer : MonoBehaviour
 
             Bounds bounds = renderers[0].bounds;
             foreach (Renderer r in renderers)
-            {
                 bounds.Encapsulate(r.bounds); 
-            }
 
             captureCamera.transform.position = new Vector3(bounds.center.x, bounds.center.y, -10f);
 

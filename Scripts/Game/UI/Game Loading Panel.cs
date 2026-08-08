@@ -11,7 +11,7 @@ public class GameLoadingPanel : UIPanel
     [SerializeField] private string defaultMessage = "맵을 불러오는 중입니다";
      
 
-    protected override void InitializeListener() { }
+    protected override void RegisterListener() { }
 
     protected override void ResetUI()
     {

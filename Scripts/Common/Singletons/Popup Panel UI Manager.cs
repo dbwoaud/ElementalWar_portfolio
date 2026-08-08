@@ -15,44 +15,40 @@ public class PopupPanelUIManager : Singleton<PopupPanelUIManager>
     [Header("부모 캔버스")]
     [SerializeField] private Transform canvasRoot;
 
-    [Header("패널 저장 딕셔너리")]
     private Dictionary<PopupType, BasePopupPanel> popupCache = new Dictionary<PopupType, BasePopupPanel>();
 
 
     public void ShowError(string message, Action action = null) // 에러 팝업 패널 활성화 함수
     {
-        GetOrSpawn<ErrorPopupPanel>(PopupType.Error).Setup(message, action);
+        GetOrCreatePopup<ErrorPopupPanel>(PopupType.Error).Setup(message, action);
     }
 
     public void ShowConfirm(string message, Action action = null) // 확인 팝업 패널 활성화 함수
     {
-        GetOrSpawn<ConfirmPopupPanel>(PopupType.Confirm).Setup(message, action);
+        GetOrCreatePopup<ConfirmPopupPanel>(PopupType.Confirm).Setup(message, action);
     }
 
     public void ShowSelection(string message, Action onYes, Action onNo) // 선택 팝업 패널 활성화 함수
     {
-        GetOrSpawn<SelectionPopupPanel>(PopupType.Selection).Setup(message, onYes, onNo);
+        GetOrCreatePopup<SelectionPopupPanel>(PopupType.Selection).Setup(message, onYes, onNo);
     }
 
     public void ShowWaiting(string message, Action onCancel = null) // 대기 팝업 패널 활성화 함수
     {
-        GetOrSpawn<WaitingPopupPanel>(PopupType.Waiting).Setup(message, onCancel);
+        GetOrCreatePopup<WaitingPopupPanel>(PopupType.Waiting).Setup(message, onCancel);
     }
 
     public void HideWaiting() // 대기 팝업 패널 비활성화 함수
     {
-        GetOrSpawn<WaitingPopupPanel>(PopupType.Waiting).Close();
+        GetOrCreatePopup<WaitingPopupPanel>(PopupType.Waiting).Close();
     }
 
-    private T GetOrSpawn<T>(PopupType type) where T : BasePopupPanel // 팝업 프리팹을 가져오거나 생성하는 함수
+    private T GetOrCreatePopup<T>(PopupType type) where T : BasePopupPanel // 팝업 종류에 맞는 프리팹을 캐시에서 반환하거나 생성하는 함수
     {
         if (popupCache.TryGetValue(type, out var existingPopup))
-        {
             return existingPopup as T;
-        }
 
-        T prefab = GetPrefabByType<T>(type);
-
+        T prefab = GetPopupPrefab<T>(type);
         if (prefab != null)
         {
             T newPopup = Instantiate(prefab, canvasRoot);
@@ -64,7 +60,7 @@ public class PopupPanelUIManager : Singleton<PopupPanelUIManager>
         return null;
     }
 
-    private T GetPrefabByType<T>(PopupType type) where T : BasePopupPanel // 프리팹을 가져오는 함수
+    private T GetPopupPrefab<T>(PopupType type) where T : BasePopupPanel // 팝업 종류에 맞는 팝업 프리팹을 반환하는 함수
     {
         return type switch
         {

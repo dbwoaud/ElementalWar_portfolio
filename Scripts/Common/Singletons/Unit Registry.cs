@@ -21,12 +21,12 @@ public static class UnitRegistry
         activeUnits.Remove(unit);
     }
 
-    public static void Clear() // 활성 유닛을 초기화하는 함수
+    public static void Clear() // 활성 유닛 목록을 초기화하는 함수
     {
         activeUnits.Clear();
     }
 
-    public static void CopyTo(List<Unit> buffer) // 활성 유닛 목록을 외부로 복사하는 함수
+    public static void CopyTo(List<Unit> buffer) // 활성 유닛 목록을 복사하는 함수
     {
         if (buffer == null)
             return;

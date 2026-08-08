@@ -9,12 +9,18 @@ public abstract class BaseSceneController<T> : Singleton<T> where T : MonoBehavi
         InitializeState(); 
     }
 
+    protected override void OnDestroy()
+    {
+        UnsubscribeAll();
+        base.OnDestroy();
+    }
+
     protected virtual void SetCachedVariable() // 캐싱 변수를 설정하는 함수
     {
         SubscribeEvents();
     }
 
-    protected virtual void SubscribeEvents()
+    protected virtual void SubscribeEvents() // 이벤트를 구독하는 함수
     {
         SetUIManager();
         SetNetworkManager();
@@ -27,12 +33,6 @@ public abstract class BaseSceneController<T> : Singleton<T> where T : MonoBehavi
     protected abstract void PlayBGM(); // 씬의 배경음악을 재생하는 함수
 
     protected abstract void InitializeState(); // 씬의 초기상태를 설정하는 함수
-
-    protected override void OnDestroy()
-    {
-        UnsubscribeAll();
-        base.OnDestroy();
-    }
 
     protected virtual void UnsubscribeAll() // 모든 이벤트를 구독 해제하는 함수
     {

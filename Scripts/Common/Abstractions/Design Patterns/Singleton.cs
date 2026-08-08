@@ -1,23 +1,24 @@
 using UnityEngine;
+
 public abstract class Singleton<T> : MonoBehaviour where T : MonoBehaviour
 {
-    private static T _instance;
-    public static T instance => _instance;
-    public static bool HasInstance => _instance != null;
+    private static T instance;
+    public static T Instance => instance;
+    public static bool HasInstance => instance != null;
 
     protected virtual void Awake()
     {
-        if( _instance != null && _instance != this)
+        if(instance != null && instance != this)
         {
             Destroy(gameObject);
             return;
         }
-        _instance = this as T;
+        instance = this as T;
     }
 
     protected virtual void OnDestroy()
     {
-        if(_instance == this)
-           _instance = null;
+        if(instance == this)
+           instance = null;
     }
 }

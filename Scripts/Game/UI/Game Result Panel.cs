@@ -13,7 +13,7 @@ public class GameResultPanel : UIPanel
     public event Action OnReturnToLobbyRequested;
 
 
-    protected override void InitializeListener()
+    protected override void RegisterListener()
     {
         goToRoomButton?.onClick.AddListener(HandleReturnToRoomRequest);
         goToLobbyButton?.onClick.AddListener(HandleReturnToLobbyRequest);
@@ -44,6 +44,6 @@ public class GameResultPanel : UIPanel
     public void DisplayResult(string playerName, bool isWinner) // 게임의 결과를 출력하는 함수
     {
         if (resultText != null)
-            resultText.text = GameSystem.Gameresult.GetGameResultText(playerName, isWinner);
+            resultText.text = GameSystem.GameResult.GetGameResultText(playerName, isWinner);
     }
 }

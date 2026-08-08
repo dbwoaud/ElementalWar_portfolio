@@ -8,7 +8,7 @@ public class GameStartPanel : UIPanel
     [SerializeField] private Text player2NameText;
 
 
-    protected override void InitializeListener() { }
+    protected override void RegisterListener() { }
 
     protected override void ResetUI() { }
 

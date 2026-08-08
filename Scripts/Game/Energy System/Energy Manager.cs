@@ -24,9 +24,9 @@ public class EnergyManager : BaseSceneController<EnergyManager>
 
     protected override void SetUIManager()
     {
-        if (EnergyUIManager.instance != null)
+        if (EnergyUIManager.Instance != null)
         {
-            energyUIManager = EnergyUIManager.instance;
+            energyUIManager = EnergyUIManager.Instance;
             energyUIManager.OnUpgradeRequested += HandleUpgradeRequest;
         }
     }
@@ -66,7 +66,7 @@ public class EnergyManager : BaseSceneController<EnergyManager>
             currentEnergy -= cost;
             currentLevel++;
 
-            SoundManager.instance?.Play(SoundKey.EnergyConsume);
+            SoundManager.Instance?.Play(SoundKey.EnergyConsume);
 
             RefreshAllUI();
             CheckUpgradeAvailability(true);

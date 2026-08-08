@@ -10,8 +10,8 @@ public class LobbyChatTransport : MonoBehaviour, IChatTransport, IChatClientList
     [SerializeField] private string chatRegion = "kr";
     private ChatClient chatClient;
 
-    public event Action<string, string> OnMessageReceived;
-    public event Action<string> OnSystemMessage;
+    public event Action<string, string> OnPlayerMessageReceived; // 메시지 수신 이벤트
+    public event Action<string> OnSystemMessageReceived; // 시스템 메시지 수신 이벤트
 
 
     private void Update()
@@ -40,7 +40,7 @@ public class LobbyChatTransport : MonoBehaviour, IChatTransport, IChatClientList
         chatClient?.Disconnect();
     }
 
-    public void Send(string message) // 메시지를 글로벌 로비 채널에 송신하는 함수
+    public void Send(string message) // 메시지를 글로벌 로비 채널에 발신하는 함수
     {
         if (chatClient != null && chatClient.CanChat)
             chatClient.PublishMessage(ChattingSystem.Lobby.ChannelName, message);
@@ -59,7 +59,7 @@ public class LobbyChatTransport : MonoBehaviour, IChatTransport, IChatClientList
         {
             string sender = senders[i];
             string message = messages[i].ToString();
-            OnMessageReceived?.Invoke(sender, message);
+            OnPlayerMessageReceived?.Invoke(sender, message);
         }
     }
 

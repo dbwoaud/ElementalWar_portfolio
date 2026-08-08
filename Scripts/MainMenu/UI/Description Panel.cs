@@ -7,24 +7,24 @@ public class DescriptionPanel : UIPanel
     [SerializeField] private Button closeButton;
 
 
-    protected override void InitializeListener()
+    protected override void RegisterListener() // UI 리스너를 등록하는 함수
     {
         closeButton?.onClick.AddListener(OnClickCloseButton);
     }
 
-    protected override void UnregisterListener()
+    protected override void UnregisterListener() // UI 리스너를 해제하는 함수
     {
         closeButton?.onClick.RemoveListener(OnClickCloseButton);
     }
 
-    private void OnClickCloseButton() // 닫기 버튼 클릭 시 실행되는 함수
+    protected override void ResetUI() // UI를 리셋시키는 함수
     {
-        SoundManager.instance?.Play(SoundKey.ButtonClick);
-        Hide();
+
     }
 
-    protected override void ResetUI()
+    private void OnClickCloseButton() // 닫기 버튼 클릭 시 실행되는 함수
     {
-
+        SoundManager.Instance?.Play(SoundKey.ButtonClick);
+        Hide();
     }
 }

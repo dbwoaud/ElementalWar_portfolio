@@ -11,7 +11,7 @@ public class ProfilingScenarioRunner : MonoBehaviour
 
     [Header("시나리오 설정")]
     [SerializeField] private string scenarioName = "spawn60";
-    [SerializeField] private string spawnUnitName = "Larva";
+    [SerializeField] private string spawnUnitName = "불닭 굼벵이";
     [SerializeField] private int totalUnits = 60;
     [SerializeField] private float spawnInterval = 0.25f;
     [SerializeField] private float warmupSeconds = 3f;
@@ -47,7 +47,7 @@ public class ProfilingScenarioRunner : MonoBehaviour
             gameNetworkManager?.BroadcastProfilingStart(0);
     }
 
-    private void HandleStartSignal(int scenarioSeed) // 계측 시작 신호를 처리하는 함수
+    private void HandleStartSignal(int scenarioSeed) // 프로파일링 시작 신호를 처리하는 함수
     {
         if (isRunning)
             return;
@@ -55,7 +55,7 @@ public class ProfilingScenarioRunner : MonoBehaviour
         StartCoroutine(RunScenario());
     }
 
-    private IEnumerator RunScenario() // 계측 시나리오를 실행하는 코루틴
+    private IEnumerator RunScenario() // 프로파일링 시나리오를 실행하는 코루틴
     {
         isRunning = true;
         Debug.Log($"[Scenario] 워밍업 {warmupSeconds}초");
@@ -72,7 +72,7 @@ public class ProfilingScenarioRunner : MonoBehaviour
             yield break;
         }
 
-        Transform spawnPoint = CastleAttackManager.instance?.PlayerCastle?.UnitSpawnPoint;
+        Transform spawnPoint = CastleAttackManager.Instance?.PlayerCastle?.UnitSpawnPoint;
         if (spawnPoint == null)
         {
             Debug.LogError("[Scenario] 소환 지점을 찾을 수 없습니다. 맵 생성 완료 후 실행하세요.");
@@ -89,7 +89,7 @@ public class ProfilingScenarioRunner : MonoBehaviour
             yield return new WaitForSecondsRealtime(spawnInterval);
         }
 
-        Debug.Log($"[Scenario] 소환 완료 ({totalUnits}기). 종료까지 대기");
+        Debug.Log($"[Scenario] 소환 완료 ({totalUnits}명). 종료까지 대기");
 
         while (Time.realtimeSinceStartup < endTime)
             yield return null;

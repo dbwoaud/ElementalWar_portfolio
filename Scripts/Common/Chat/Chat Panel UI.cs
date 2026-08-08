@@ -11,41 +11,42 @@ public class ChatPanelUI : MonoBehaviour, IChatView
     [SerializeField] private Transform contentParent;
     [SerializeField] private GameObject chatTextPrefab;
 
-    public event Action<string> OnSendMessageRequest;
+    public event Action<string> OnSendMessageRequest; // 메시지 발신 요청 이벤트
 
 
     private void Start()
     {
         if (chatInputField != null)
-            chatInputField.onSubmit.AddListener(HandleInputSubmit);
+            chatInputField.onSubmit.AddListener(HandleSendMessage);
     }
 
     private void OnDestroy()
     {
         if (chatInputField != null)
-            chatInputField.onSubmit.RemoveListener(HandleInputSubmit);
+            chatInputField.onSubmit.RemoveListener(HandleSendMessage);
     }
 
-    private void HandleInputSubmit(string inputContent) // 채팅이 입력될 때 실행되는 함수
+    private void HandleSendMessage(string inputContent) // 메시지 전송을 처리하는 함수
     {
         if (string.IsNullOrWhiteSpace(inputContent))
             return;
 
         OnSendMessageRequest?.Invoke(inputContent);
+
         chatInputField.text = string.Empty;
         StartCoroutine(ResetInputField());
     }
 
-    private IEnumerator ResetInputField() // 채팅 입력을 초기화하는 함수
+    private IEnumerator ResetInputField() // 채팅 입력을 초기화하는 코루틴
     {
         yield return null;
-        chatInputField.ActivateInputField(); 
+        chatInputField.ActivateInputField();
         yield return null;
-        chatInputField.text = string.Empty;       
+        chatInputField.text = string.Empty;
         chatInputField.MoveTextEnd(false);
     }
 
-    public void AppendMessage(string formattedMessage) // 메시지를 화면에 한 줄 추가하는 함수
+    public void AppendMessage(string formattedMessage) // 메시지를 추가하는 함수
     {
         if (chatTextPrefab == null || contentParent == null)
             return;
@@ -58,7 +59,7 @@ public class ChatPanelUI : MonoBehaviour, IChatView
         UpdateScrollPosition();
     }
 
-    private void UpdateScrollPosition() // 스크롤을 가장 아래로 이동시키는 함수
+    private void UpdateScrollPosition() // 스크롤 위치를 업데이트하는 함수
     {
         Canvas.ForceUpdateCanvases();
         if (chatView != null)

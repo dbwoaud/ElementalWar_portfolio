@@ -17,7 +17,7 @@ public class UnitStateHit : IUnitState
 
         hitTimer = 0f;
         unit.Animator?.PlayHit();
-        SoundManager.instance?.Play(SoundKey.UnitHit);
+        SoundManager.Instance?.Play(SoundKey.UnitHit);
         unit.ApplyKnockback();
     }
 

@@ -116,23 +116,23 @@ public class Castle : MonoBehaviourPun, IDamagable, IPunInstantiateMagicCallback
         if (!IsOwnedByLocalPlayer) 
             return;
 
-        if (CastleAttackManager.instance != null)
-            CastleAttackManager.instance.SetPlayerCastle(this);
+        if (CastleAttackManager.Instance != null)
+            CastleAttackManager.Instance.SetPlayerCastle(this);
         else
             StartCoroutine(RetryRegistration());
     }
 
     private IEnumerator RetryRegistration() // 성 공격 매니저에 성 등록을 계속 시도하는 함수
     {
-        while (CastleAttackManager.instance == null)
+        while (CastleAttackManager.Instance == null)
             yield return null;
 
-        CastleAttackManager.instance.SetPlayerCastle(this);
+        CastleAttackManager.Instance.SetPlayerCastle(this);
     }
 
     public void FireCannon() // 지형의 중앙에 대포를 발사하는 함수
     {
-        Collider2D groundCollider = MapManager.instance?.GroundCollider;
+        Collider2D groundCollider = MapManager.Instance?.GroundCollider;
         if (groundCollider == null)
             return;
 
@@ -162,7 +162,7 @@ public class Castle : MonoBehaviourPun, IDamagable, IPunInstantiateMagicCallback
     private void RPC_CreateCannonball(Vector2 spawnPosition, float direction, Vector2 force) // 대포를 발사하고 모든 플레이어에게 동기화하는 함수
     { 
         GameObject ball = Instantiate(cannonballPrefab, spawnPosition, Quaternion.identity);
-        SoundManager.instance?.Play(SoundKey.FireCannon);
+        SoundManager.Instance?.Play(SoundKey.FireCannon);
 
         Cannonball ballScript = ball.GetComponent<Cannonball>();
         if(IsOwnedByLocalPlayer)
@@ -176,7 +176,7 @@ public class Castle : MonoBehaviourPun, IDamagable, IPunInstantiateMagicCallback
     [PunRPC]
     public void RPC_ShowExplosionEffect(Vector2 hitPoint) // 폭발 이벤트를 보여주고 네트워크에 동기화하는 함수
     {
-        ExplosionEffectManager.instance?.PlayChainExplosion(hitPoint);
+        ExplosionEffectManager.Instance?.PlayChainExplosion(hitPoint);
     }
 
     [PunRPC]
@@ -187,7 +187,7 @@ public class Castle : MonoBehaviourPun, IDamagable, IPunInstantiateMagicCallback
 
         currentHP = Mathf.Clamp(currentHP - damage, 0f, maxHP);
         SetHPText();
-        SoundManager.instance?.Play(SoundKey.CastleHit);
+        SoundManager.Instance?.Play(SoundKey.CastleHit);
 
         if (currentHP <= 0)
             HandleCastleDestruction();   

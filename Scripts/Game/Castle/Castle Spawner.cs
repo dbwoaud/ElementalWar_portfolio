@@ -16,7 +16,7 @@ public class CastleSpawner : MonoBehaviour
         if (spawnPoint == null || castlePrefab == null)
             return;
 
-        NetworkPoolManager.instance?.RegisterNetworkPrefab(castlePrefab);
+        NetworkPoolManager.Instance?.RegisterNetworkPrefab(castlePrefab);
 
         bool isRightSide = !PhotonNetwork.IsMasterClient;
         object[] initData = new object[] { isRightSide };

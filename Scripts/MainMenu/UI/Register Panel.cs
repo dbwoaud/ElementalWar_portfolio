@@ -11,24 +11,37 @@ public class RegisterPanel : UIPanel
     [SerializeField] private Button registerButton;
     [SerializeField] private Button cancelButton;
 
-    public event Action<string, string, string> OnRegisterSubmit;
+    public event Action<string, string, string> OnRegisterSubmit; // 회원 등록 버튼 클릭 이벤트
 
     
-    protected override void InitializeListener()
+    protected override void RegisterListener() // UI 리스너를 등록하는 함수
     {
         registerButton?.onClick.AddListener(OnClickRegisterButton);
         cancelButton?.onClick.AddListener(OnClickCancelButton);
     }
 
-    protected override void UnregisterListener()
+    protected override void UnregisterListener() // UI 리스너를 해제하는 함수
     {
         registerButton?.onClick.RemoveListener(OnClickRegisterButton);
         cancelButton?.onClick.RemoveListener(OnClickCancelButton);
     }
 
+    protected override void ResetUI() // UI를 리셋시키는 함수
+    {
+        nicknameInputField.text = "";
+        registerEmailInputField.text = "";
+        registerPasswordInputField.text = "";
+    }
+
+    public override void Hide() // 패널을 비활성화시키는 함수
+    {
+        ResetUI();
+        base.Hide();
+    }
+
     private void OnClickRegisterButton() // 회원 등록 버튼 클릭 시 실행되는 함수
     {
-        SoundManager.instance?.Play(SoundKey.ButtonClick);
+        SoundManager.Instance?.Play(SoundKey.ButtonClick);
         OnRegisterSubmit?.Invoke
         (
             nicknameInputField.text,
@@ -39,20 +52,7 @@ public class RegisterPanel : UIPanel
 
     private void OnClickCancelButton() // 취소 버튼 클릭 시 실행되는 함수
     {
-        SoundManager.instance?.Play(SoundKey.ButtonClick);
+        SoundManager.Instance?.Play(SoundKey.ButtonClick);
         Hide();
-    }
-
-    protected override void ResetUI()
-    {
-        nicknameInputField.text = "";
-        registerEmailInputField.text = "";
-        registerPasswordInputField.text = "";
-    }
-
-    public override void Hide()
-    {
-        ResetUI();
-        base.Hide();
     }
 }

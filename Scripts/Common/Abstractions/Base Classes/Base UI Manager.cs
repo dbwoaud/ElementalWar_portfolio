@@ -8,6 +8,12 @@ public abstract class BaseUIManager<T> : Singleton<T> where T : MonoBehaviour
         BindUIEvents();
     }
 
+    protected override void OnDestroy()
+    {
+        UnbindUIEvents();
+        base.OnDestroy();
+    }
+
     protected abstract void InitUIElements(); // UI 요소 초기화 함수
 
     protected virtual void BindUIEvents() // UI 이벤트 할당 함수
@@ -19,12 +25,6 @@ public abstract class BaseUIManager<T> : Singleton<T> where T : MonoBehaviour
     protected abstract void BindButtonEvent(); // 버튼 이벤트 할당 함수
 
     protected abstract void BindPanelEvent();  // 패널 내부 및 데이터 이벤트 할당 함수
-
-    protected override void OnDestroy()
-    {
-        UnbindUIEvents();
-        base.OnDestroy();
-    }
 
     protected virtual void UnbindUIEvents() // UI 이벤트 해제 함수
     {
@@ -38,6 +38,6 @@ public abstract class BaseUIManager<T> : Singleton<T> where T : MonoBehaviour
 
     protected void PlayButtonSound() // 버튼 소리 재생 함수
     {
-        SoundManager.instance?.Play(SoundKey.ButtonClick);
+        SoundManager.Instance?.Play(SoundKey.ButtonClick);
     }
 }

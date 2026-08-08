@@ -16,7 +16,6 @@ public static class TrajectoryCalculator
         if (denominator <= 0)
             return Vector2.zero;
         
-
         float velocity = Mathf.Sqrt((g * D * D) / denominator);
 
         float vx = velocity * Mathf.Cos(theta);

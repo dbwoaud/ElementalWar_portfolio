@@ -7,11 +7,11 @@ using ExitGames.Client.Photon;
 
 public class LobbyNetworkManager : MonoBehaviourPunCallbacks
 {
-     public event Action<List<RoomInfo>> OnRoomListUpdated;
-     public event Action OnJoinSuccess;
-     public event Action<short, string> OnJoinFailed;
-     public event Action OnConnectedToMasterEvent;
-     public event Action OnJoinedLobbyEvent;
+     public event Action<List<RoomInfo>> OnRoomListUpdated; // 방 목록 업데이트 이벤트
+     public event Action OnJoinSuccess; // 방 입장 성공 이벤트
+     public event Action<short, string> OnJoinFailed; // 방 입장 실패 이벤트
+     public event Action OnConnectedToMasterEvent; // 마스터 서버 연결 시 실행되는 이벤트
+     public event Action OnJoinedLobbyEvent; // 로비 입장 완료 시 실행되는 이벤트
 
 
     public override void OnRoomListUpdate(List<RoomInfo> roomList) // 방 목록을 업데이트하는 함수
@@ -40,18 +40,18 @@ public class LobbyNetworkManager : MonoBehaviourPunCallbacks
         PhotonNetwork.JoinLobby();
     }
 
-    public override void OnJoinedLobby() // 로비에 진입 성공 시 실행되는 함수
+    public override void OnJoinedLobby() // 로비 입장 성공 시 실행되는 함수
     {
         OnJoinedLobbyEvent?.Invoke();
     }
 
     public void CreateRoom(string roomName, string password, int roomNumber) // 방을 생성하는 함수
     {
-        string roomPK = Guid.NewGuid().ToString();
+        string roomPrimaryKey = Guid.NewGuid().ToString();
         bool isPublic = string.IsNullOrEmpty(password);
         Hashtable props = SetRoomProperties(roomName, password, roomNumber, isPublic);
         RoomOptions options = SetRoomOptions(props);
-        PhotonNetwork.CreateRoom(roomPK, options);
+        PhotonNetwork.CreateRoom(roomPrimaryKey, options);
     }
 
     private Hashtable SetRoomProperties(string roomName, string password, int roomNumber, bool isPublic) // 방 속성을 설정하는 함수
@@ -85,9 +85,9 @@ public class LobbyNetworkManager : MonoBehaviourPunCallbacks
         };
     }
 
-    public void JoinRoom(string roomPK) // 방에 입장하는 함수
+    public void JoinRoom(string roomPrimaryKey) // 방에 입장하는 함수
     {
-        PhotonNetwork.JoinRoom(roomPK);
+        PhotonNetwork.JoinRoom(roomPrimaryKey);
     }
 
     public void JoinRandomRoom() // 랜덤 방에 입장하는 함수
@@ -96,7 +96,7 @@ public class LobbyNetworkManager : MonoBehaviourPunCallbacks
         PhotonNetwork.JoinRandomRoom(expectedRoomProperties, 0);
     }
 
-    private Hashtable GetPublicRoom() // 공개 방을 얻는 함수
+    private Hashtable GetPublicRoom() // 공개 방을 반환하는 함수
     {
         return new Hashtable()
         {

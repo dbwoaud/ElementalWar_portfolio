@@ -12,28 +12,49 @@ public class RoomCreatePanel : UIPanel
     [SerializeField] private Button confirmButton;
     [SerializeField] private Button cancelButton;
 
-    public event Action<string, string> OnCreateSubmit;
+    public event Action<string, string> OnCreateSubmit; // 방 생성 버튼 클릭 이벤트
 
 
-    protected override void InitializeListener()
+    protected override void RegisterListener() // UI 리스너를 등록하는 함수
     {
-        InitializeButtonListener();
-        InitializeToggleListener();
+        RegisterButtonListener();
+        RegisterToggleListener();
     }
 
-    protected override void UnregisterListener()
+    protected override void UnregisterListener() // UI 리스너를 해제하는 함수
     {
         UnregisterButtonListener();
         UnRegisterToggleListener();
     }
 
-    private void InitializeButtonListener() // 버튼 리스너를 초기화하는 함수
+    protected override void ResetUI() // UI를 리셋시키는 함수
+    {
+        roomNameInputField.text = "";
+        roomPasswordInputField.text = "";
+        publicRoomToggle.isOn = true;
+        privateRoomToggle.isOn = false;
+        roomPasswordInputField.interactable = false;
+    }
+
+    public override void Hide() // 패널을 비활성화하는 함수
+    {
+        ResetUI();
+        base.Hide();
+    }
+
+    public override void HideImmediate() // 패널을 즉시 비활성화하는 함수
+    {
+        ResetUI();
+        base.HideImmediate();
+    }
+
+    private void RegisterButtonListener() // 버튼 리스너를 등록하는 함수
     {
         confirmButton?.onClick.AddListener(OnClickConfirmButton);
         cancelButton?.onClick.AddListener(OnClickCancelButton);
     }
 
-    private void InitializeToggleListener() // 토글 리스너를 초기화하는 함수
+    private void RegisterToggleListener() // 토글 리스너를 등록하는 함수
     {
         publicRoomToggle?.onValueChanged.AddListener(OnPublicToggleChanged);
         privateRoomToggle?.onValueChanged.AddListener(OnPrivateToggleChanged);
@@ -53,13 +74,13 @@ public class RoomCreatePanel : UIPanel
 
     private void OnClickConfirmButton() // 확인 버튼 클릭 시 실행되는 함수
     {
-        SoundManager.instance?.Play(SoundKey.ButtonClick);
+        SoundManager.Instance?.Play(SoundKey.ButtonClick);
         OnCreateSubmit?.Invoke(roomNameInputField.text, roomPasswordInputField.text);
     }
 
     private void OnClickCancelButton() // 취소 버튼 클릭 시 실행되는 함수
     {
-        SoundManager.instance?.Play(SoundKey.ButtonClick);
+        SoundManager.Instance?.Play(SoundKey.ButtonClick);
         Hide();
     }
 
@@ -85,26 +106,5 @@ public class RoomCreatePanel : UIPanel
             roomPasswordInputField.interactable = false;
             roomPasswordInputField.text = "";
         }
-    }
-
-    public override void Hide()
-    {
-        ResetUI();
-        base.Hide();
-    }
-
-    public override void HideImmediate()
-    {
-        ResetUI();
-        base.HideImmediate();
-    }
-
-    protected override void ResetUI()
-    {
-        roomNameInputField.text = "";
-        roomPasswordInputField.text = "";
-        publicRoomToggle.isOn = true;
-        privateRoomToggle.isOn = false;
-        roomPasswordInputField.interactable = false;
     }
 }

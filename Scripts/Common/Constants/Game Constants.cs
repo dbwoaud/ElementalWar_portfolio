@@ -1,7 +1,7 @@
 using Photon.Realtime;
 using PlayFab;
 
-public static class SceneName
+public static class SceneName // 씬 이름
 {
     public static readonly string MainMenu = "MainMenu";
     public static readonly string Lobby = "Lobby";
@@ -10,7 +10,7 @@ public static class SceneName
     public static readonly string Game = "Game";
 }
 
-public static class PlayerConstants
+public static class PlayerConstants // 플레이어 관련 상수
 {
     public static class Default
     {
@@ -25,7 +25,7 @@ public static class PlayerConstants
     }
 }
 
-public static class RoomConstants
+public static class RoomConstants // 방 관련 상수
 {
     public static class Properties
     {
@@ -51,7 +51,7 @@ public static class RoomConstants
     }
 }
 
-public static class PopupMessage
+public static class PopupMessage // 팝업 메시지 관련 상수
 {
     public static class Waiting
     {
@@ -89,7 +89,7 @@ public static class PopupMessage
     }
 }
 
-public static class RegexPattern
+public static class RegexPattern // 정규 표현식 관련 상수
 {
     public static class User
     {
@@ -102,7 +102,7 @@ public static class RegexPattern
     }
 }
 
-public static class GameSystem
+public static class GameSystem // 게임 플레이 관련 상수
 {
     public static class Cost
     {
@@ -134,7 +134,7 @@ public static class GameSystem
         public static readonly string ColliderTag = "Ground";
     }
 
-    public static class Gameresult
+    public static class GameResult
     {
         public static string GetGameResultText(string playerName, bool isWinner)
         {
@@ -143,7 +143,7 @@ public static class GameSystem
     }
 }
 
-public static class ChattingSystem
+public static class ChattingSystem // 채팅 관련 상수
 {
     public static class Color
     {
@@ -177,7 +177,7 @@ public static class ChattingSystem
     }
 }
 
-public static class ErrorTranslator
+public static class ErrorTranslator // 에러 관련 상수
 {
     public static string GetPhotonErrorMessage(short returnCode) // 방 생성 및 입장 관련 오류 메시지를 얻는 함수
     {

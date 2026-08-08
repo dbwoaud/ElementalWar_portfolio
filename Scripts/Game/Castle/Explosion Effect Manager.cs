@@ -66,7 +66,7 @@ public class ExplosionEffectManager: Singleton<ExplosionEffectManager>
         else
             effect = Instantiate(explosionPrefab, pos, Quaternion.identity, transform);
     
-        SoundManager.instance?.Play(SoundKey.Explosion);
+        SoundManager.Instance?.Play(SoundKey.Explosion);
         StartCoroutine(ReturnPrefabToPoolAfterDelay(effect, effectLifeTime));
     }
 
@@ -87,7 +87,7 @@ public class ExplosionEffectManager: Singleton<ExplosionEffectManager>
             return true;
         }
 
-        Collider2D groundCollider = MapManager.instance?.GroundCollider;
+        Collider2D groundCollider = MapManager.Instance?.GroundCollider;
         if (groundCollider != null)
         {
             cachedGroundMinX = groundCollider.bounds.min.x;

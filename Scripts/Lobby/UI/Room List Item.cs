@@ -16,15 +16,10 @@ public class RoomListItem : MonoBehaviour
     [SerializeField] private RoomInfo roomData;
     public RoomInfo RoomData => roomData;
 
-    public event Action<RoomInfo> OnRoomItemClicked;
+    public event Action<RoomInfo> OnRoomItemClicked; // 방 버튼 클릭 이벤트
 
 
     private void Start()
-    {
-        InitializeListener();
-    }
-
-    private void InitializeListener() // UI 리스너를 설정하는 함수
     {
         joinButton?.onClick.AddListener(OnClickEntryButton);
     }
@@ -36,7 +31,7 @@ public class RoomListItem : MonoBehaviour
 
     private void OnClickEntryButton() // 방 버튼 클릭 시 실행되는 함수
     {
-        SoundManager.instance?.Play(SoundKey.ButtonClick);
+        SoundManager.Instance?.Play(SoundKey.ButtonClick);
         OnRoomItemClicked?.Invoke(roomData);
     }
 
@@ -57,7 +52,7 @@ public class RoomListItem : MonoBehaviour
         SetRoomStatusText();
     }
 
-    private void SetRoomNameText() // 방 이름을 설정하는 함수
+    private void SetRoomNameText() // 방 이름 텍스트를 설정하는 함수
     {
         if (roomData.CustomProperties.ContainsKey(RoomConstants.Properties.RoomNumber) && 
             roomData.CustomProperties.ContainsKey(RoomConstants.Properties.RoomName))
@@ -68,7 +63,7 @@ public class RoomListItem : MonoBehaviour
         }
     }
 
-    private void SetPlayerCountText() // 방의 플레이어 수를 설정하는 함수
+    private void SetPlayerCountText() // 방의 플레이어 수 텍스트를 설정하는 함수
     {
         playerCountText.text = $"{roomData.PlayerCount}/{roomData.MaxPlayers}";
     }

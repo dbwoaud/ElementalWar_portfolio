@@ -5,19 +5,19 @@ public class PlayerSlotContainer : MonoBehaviour
     [Header("플레이어 슬롯")]
     [SerializeField] private PlayerSlot[] playerSlots = new PlayerSlot[2];
 
-    public void ClearAllSlots() // 모든 플레이어 슬롯을 초기화하는 함수
+    public void ResetAllSlots() // 모든 플레이어 슬롯을 초기화하는 함수
     {
         for (int i = 0; i < playerSlots.Length; i++)
-            ClearSlot(i);
+            ResetSlot(i);
     }
 
-    public void ClearSlot(int slotIndex) // 플레이어 슬롯을 초기화하는 함수
+    public void ResetSlot(int slotIndex) // 특정 플레이어 슬롯을 초기화하는 함수
     {
         if (CheckValidIndex(slotIndex))
-            playerSlots[slotIndex].ClearSlot();    
+            playerSlots[slotIndex].ResetSlot();    
     }
 
-    private bool CheckValidIndex(int slotIndex) // 유효한 인덱스를 확인하는 함수
+    private bool CheckValidIndex(int slotIndex) // 유효한 플레이어 인덱스를 확인하는 함수
     {
         return slotIndex >= 0 && slotIndex < playerSlots.Length;
     }

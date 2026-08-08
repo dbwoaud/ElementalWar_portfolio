@@ -59,39 +59,6 @@ public class NetworkPerformanceLogger : MonoBehaviour
             gcAllocRecorder.Dispose();
     }
 
-    public void StartLogging(string scenario) // 계측을 시작하는 함수
-    {
-        scenarioName = scenario;
-        rows.Clear();
-        rows.Add(CsvHeader);
-
-        PhotonNetwork.NetworkStatisticsEnabled = true;
-
-        ProfilingCounters.ResetAll();
-        sessionStartTime = Time.realtimeSinceStartup;
-        ResetIntervalAccumulators();
-
-        isLogging = true;
-        Debug.Log($"[Profiler] 계측 시작: scenario={scenario} / variant={ProfilingSwitches.VariantName}");
-    }
-
-    public string StopLoggingAndExport() // 계측을 종료하고 CSV 로 저장하는 함수
-    {
-        if (!isLogging)
-            return null;
-
-        isLogging = false;
-
-        string fileName = $"profile_{scenarioName}_{ProfilingSwitches.VariantName}_" +
-                          $"{(PhotonNetwork.IsMasterClient ? "master" : "guest")}_" +
-                          $"{DateTime.Now:yyyyMMdd_HHmmss}.csv";
-        string path = Path.Combine(Application.persistentDataPath, fileName);
-
-        File.WriteAllLines(path, rows, Encoding.UTF8);
-        Debug.Log($"[Profiler] 계측 종료. {rows.Count - 1}행 저장 → {path}");
-        return path;
-    }
-
     private void Update()
     {
         if (!isLogging)
@@ -120,7 +87,7 @@ public class NetworkPerformanceLogger : MonoBehaviour
             gcAllocSum += gcAllocRecorder.LastValue;
     }
 
-    private void AppendRow() // 한 샘플 구간의 결과를 CSV 행으로 추가하는 함수
+    private void AppendRow() // 한 샘플 구간의 결과를 CSV행으로 추가하는 함수
     {
         float elapsed = Time.realtimeSinceStartup - sessionStartTime;
         int safeFrameCount = Mathf.Max(frameCount, 1);
@@ -134,8 +101,7 @@ public class NetworkPerformanceLogger : MonoBehaviour
         long physicsDelta = ProfilingCounters.PhysicsQueries - physicsQueriesAtStart;
         long tickDelta = ProfilingCounters.UnitTicks - unitTicksAtStart;
 
-        ReadNetworkStats(out long bytesOut, out long bytesIn,
-                         out int rtt, out int rttVariance, out int resent);
+        ReadNetworkStats(out long bytesOut, out long bytesIn, out int rtt, out int rttVariance, out int resent);
 
         lineBuilder.Clear();
         Append(elapsed, 2);
@@ -160,11 +126,9 @@ public class NetworkPerformanceLogger : MonoBehaviour
         rows.Add(lineBuilder.ToString());
     }
 
-    private void ReadNetworkStats(out long bytesOut, out long bytesIn,
-                                  out int rtt, out int rttVariance, out int resent)
+    private void ReadNetworkStats(out long bytesOut, out long bytesIn, out int rtt, out int rttVariance, out int resent) // 네트워크 상태를 읽는 함수
     {
         bytesOut = 0; bytesIn = 0; rtt = 0; rttVariance = 0; resent = 0;
-
         try
         {
             var peer = PhotonNetwork.NetworkingClient?.LoadBalancingPeer;
@@ -177,6 +141,7 @@ public class NetworkPerformanceLogger : MonoBehaviour
 
             if (peer.TrafficStatsOutgoing != null)
                 bytesOut = peer.TrafficStatsOutgoing.TotalPacketBytes;
+
             if (peer.TrafficStatsIncoming != null)
                 bytesIn = peer.TrafficStatsIncoming.TotalPacketBytes;
         }
@@ -213,5 +178,38 @@ public class NetworkPerformanceLogger : MonoBehaviour
         lineBuilder.Append(value);
         if (!last)
             lineBuilder.Append(',');
+    }
+
+    public void StartLogging(string scenario) // 프로파일링을 시작하는 함수
+    {
+        scenarioName = scenario;
+        rows.Clear();
+        rows.Add(CsvHeader);
+
+        PhotonNetwork.NetworkStatisticsEnabled = true;
+
+        ProfilingCounters.ResetAll();
+        sessionStartTime = Time.realtimeSinceStartup;
+        ResetIntervalAccumulators();
+
+        isLogging = true;
+        Debug.Log($"[Profiler] 계측 시작: scenario={scenario} / variant={ProfilingSwitches.VariantName}");
+    }
+
+    public string StopLoggingAndExport() // 프로파일링을 종료하고 CSV로 저장하는 함수
+    {
+        if (!isLogging)
+            return null;
+
+        isLogging = false;
+
+        string fileName = $"profile_{scenarioName}_{ProfilingSwitches.VariantName}_" +
+                          $"{(PhotonNetwork.IsMasterClient ? "master" : "guest")}_" +
+                          $"{DateTime.Now:yyyyMMdd_HHmmss}.csv";
+        string path = Path.Combine(Application.persistentDataPath, fileName);
+
+        File.WriteAllLines(path, rows, Encoding.UTF8);
+        Debug.Log($"[Profiler] 계측 종료. {rows.Count - 1}행 저장 → {path}");
+        return path;
     }
 }

@@ -5,13 +5,9 @@ public class DeckHotkeyHandler : MonoBehaviour
 {
     [Header("입력 활성화 여부")]
     [SerializeField] private bool isEnabled = true;
-    public bool IsEnabled
-    {
-        get => isEnabled;
-        set => isEnabled = value;
-    }
+    public bool IsEnabled { get => isEnabled; set => isEnabled = value; }
 
-    public event Action<int> OnSlotHotkeyPressed;
+    public event Action<int> OnSlotHotkeyPressed; // 슬롯 단축키 누름 이벤트
 
 
     private void Update()
@@ -22,7 +18,7 @@ public class DeckHotkeyHandler : MonoBehaviour
         DetectHotkey();
     }
 
-    private void DetectHotkey() // 단축키 입력을 감지해 이벤트를 발행하는 함수
+    private void DetectHotkey() // 단축키 입력을 감지하는 함수
     {
         if (InputGate.IsBlocked)
             return;

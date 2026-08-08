@@ -94,11 +94,11 @@ public class GameUnitSlotItem : MonoBehaviour, IPointerClickHandler
             yield return null;
         }
 
-        SoundManager.instance?.Play(SoundKey.UnitCoolTimeEnd);
+        SoundManager.Instance?.Play(SoundKey.UnitCoolTimeEnd);
         ChangeState(SlotState.Inactive);
 
-        if (EnergyManager.instance != null)
-            EvaluateEnergyState(EnergyManager.instance.CurrentEnergy);
+        if (EnergyManager.Instance != null)
+            EvaluateEnergyState(EnergyManager.Instance.CurrentEnergy);
     }
 
     public void EvaluateEnergyState(float currentEnergy) // 현재 에너지의 상태를 평가하는 함수

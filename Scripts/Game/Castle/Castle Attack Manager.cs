@@ -19,9 +19,9 @@ public class CastleAttackManager : BaseSceneController<CastleAttackManager>
 
     protected override void SetUIManager()
     {
-        if(CastleUIManager.instance != null)
+        if(CastleUIManager.Instance != null)
         {
-            castleUIManager = CastleUIManager.instance;
+            castleUIManager = CastleUIManager.Instance;
             castleUIManager.OnFireRequested += HandleFireRequest;
         }
     }

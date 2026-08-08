@@ -39,24 +39,24 @@ public class GameManager : BaseSceneController<GameManager>
         Castle.OnAnyCastleDestroyed += HandleCastleDestroyed;
         gameState.OnGameOver += HandleGameOver;
 
-        if (MapManager.instance != null)
+        if (MapManager.Instance != null)
         {
-            mapManager = MapManager.instance;
+            mapManager = MapManager.Instance;
             mapManager.OnMapSetupCompleted += HandleMapSetupCompleted;
             mapManager.OnLoadProgress += HandleMapLoadProgress;
         }
-        if (EnergyManager.instance != null && gameUIManager)
+        if (EnergyManager.Instance != null && gameUIManager)
         {
-            energyManager = EnergyManager.instance;
+            energyManager = EnergyManager.Instance;
             energyManager.OnEnergyChanged += HandleEnergyChanged;
         }
     }
 
     protected override void SetUIManager()
     {
-        if (GameUIManager.instance != null)
+        if (GameUIManager.Instance != null)
         {
-            gameUIManager = GameUIManager.instance;
+            gameUIManager = GameUIManager.Instance;
             gameUIManager.ShowGameLoadingPanel();
             gameUIManager.OnReturnToRoomRequested += HandleReturnToRoomRequest;
             gameUIManager.OnReturnToLobbyRequested += HandleReturnToLobbyRequest;
@@ -98,7 +98,7 @@ public class GameManager : BaseSceneController<GameManager>
 
     protected override void PlayBGM()
     {
-        SoundManager.instance?.StopAll();
+        SoundManager.Instance?.StopAll();
     }
 
     protected override void InitializeState()
@@ -111,7 +111,7 @@ public class GameManager : BaseSceneController<GameManager>
 
     private void HandleReturnToRoomRequest() // 방으로 돌아가기 버튼 클릭 시 실행되는 함수
     {
-        PopupPanelUIManager.instance?.ShowWaiting(PopupMessage.Waiting.RoomEntry, null);
+        PopupPanelUIManager.Instance?.ShowWaiting(PopupMessage.Waiting.RoomEntry, null);
         ResumeTime();
         if (!PhotonNetwork.IsMasterClient)
         {
@@ -184,7 +184,7 @@ public class GameManager : BaseSceneController<GameManager>
 
     private void SetUnitSpawnPoint() // 유닛 소환 지점을 설정하는 함수
     {
-        var playerCastle = CastleAttackManager.instance?.PlayerCastle;
+        var playerCastle = CastleAttackManager.Instance?.PlayerCastle;
         if (playerCastle != null)
             myUnitSpawnPoint = playerCastle.UnitSpawnPoint;
     }
@@ -197,7 +197,7 @@ public class GameManager : BaseSceneController<GameManager>
     private void SpawnUnit(UnitStat spawnUnitStat) // 유닛을 소환하는 함수
     {
         PhotonNetwork.Instantiate(spawnUnitStat.unitPrefab.name, myUnitSpawnPoint.position, Quaternion.identity, 0);
-        SoundManager.instance?.Play(SoundKey.UnitSpawn);
+        SoundManager.Instance?.Play(SoundKey.UnitSpawn);
     }
 
     private void HandleMapSelected(int mapIndex) // 맵 선택을 처리하는 함수
@@ -220,13 +220,13 @@ public class GameManager : BaseSceneController<GameManager>
 
     private void RegisterAllUnitToNetworkPool() // 네트워크 풀에 프리팹을 동록하는 함수
     {
-        if (NetworkPoolManager.instance == null || unitDatabase == null)
+        if (NetworkPoolManager.Instance == null || unitDatabase == null)
             return;
 
-        foreach (var unit in unitDatabase.All)
+        foreach (var unit in unitDatabase.Units)
         {
             if (unit.unitPrefab != null)
-                NetworkPoolManager.instance.RegisterNetworkPrefab(unit.unitPrefab);
+                NetworkPoolManager.Instance.RegisterNetworkPrefab(unit.unitPrefab);
         }
     }
 
@@ -297,9 +297,9 @@ public class GameManager : BaseSceneController<GameManager>
         PauseAllGameSystems();
 
         if (localPlayerWon)
-            SoundManager.instance?.Play(SoundKey.GameWin);
+            SoundManager.Instance?.Play(SoundKey.GameWin);
         else
-            SoundManager.instance?.Play(SoundKey.GameLose);
+            SoundManager.Instance?.Play(SoundKey.GameLose);
 
         gameUIManager?.ShowGameResultPanel(localPlayerWon, PhotonNetwork.NickName);
     }
@@ -307,9 +307,9 @@ public class GameManager : BaseSceneController<GameManager>
     private void PauseAllGameSystems() // 모든 게임 시스템을 중지시키는 함수
     {
         Time.timeScale = 0f;
-        SoundManager.instance?.StopAll();
+        SoundManager.Instance?.StopAll();
         energyManager?.Stop();
-        CastleAttackManager.instance?.Stop();
+        CastleAttackManager.Instance?.Stop();
     }
 
     private void HandleMapSetupCompleted(MapData spawnedMap) // 맵 생성 완료 시 실행되는 함수
@@ -354,7 +354,7 @@ public class GameManager : BaseSceneController<GameManager>
 
     private static void PlayGameStartBGM()
     {
-        SoundManager.instance?.Play(SoundKey.GameStartCue);
+        SoundManager.Instance?.Play(SoundKey.GameStartCue);
     }
 
     private void HideGameStartPanel() // 게임 시작 연출을 끝내는 함수
@@ -365,7 +365,7 @@ public class GameManager : BaseSceneController<GameManager>
     private void PlayMapBGM(AudioClip mapBGM)
     {
         if (mapBGM != null)
-            SoundManager.instance?.PlayDynamicBGM(mapBGM);
+            SoundManager.Instance?.PlayDynamicBGM(mapBGM);
     }
 
     private void HandleMapLoadProgress(float normalized) // 맵 로딩 진행도를 UI 에 전달

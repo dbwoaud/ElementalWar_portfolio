@@ -16,12 +16,11 @@ public class MainMenuUIManager : BaseUIManager<MainMenuUIManager>
     [SerializeField] private RegisterPanel registerPanel;
     [SerializeField] private List<UIPanel> uiPanels = new List<UIPanel>();
 
-    
-    public event Action<string, string> OnLoginRequest;
-    public event Action<string, string, string> OnRegisterRequest;
+    public event Action<string, string> OnLoginRequest; // 로그인 요청 이벤트
+    public event Action<string, string, string> OnRegisterRequest; // 회원 가입 요청 이벤트
 
 
-    protected override void InitUIElements()
+    protected override void InitUIElements() // UI 요소 초기화 함수
     {
         uiPanels.Add(loginPanel);
         uiPanels.Add(registerPanel);
@@ -29,22 +28,14 @@ public class MainMenuUIManager : BaseUIManager<MainMenuUIManager>
         HideAllPanelsImmediate();
     }
 
-    private void HideAllPanelsImmediate() // 모든 하위 패널을 즉시 비활성화시키는 함수
-    {
-        foreach(var panel in uiPanels)
-        {
-            panel?.HideImmediate();
-        }
-    }
-
-    protected override void BindButtonEvent() 
+    protected override void BindButtonEvent() // 버튼 이벤트 할당 함수
     {
         startButton?.onClick.AddListener(OnClickStartButton);
         descriptionButton?.onClick.AddListener(OnClickDescriptionButton);
         exitButton?.onClick.AddListener(OnClickExitButton);
     }
 
-    protected override void BindPanelEvent()
+    protected override void BindPanelEvent() // 패널 내부 및 데이터 이벤트 할당 함수
     {
         if(loginPanel != null)
         {
@@ -58,14 +49,14 @@ public class MainMenuUIManager : BaseUIManager<MainMenuUIManager>
         }
     }
 
-    protected override void UnbindButtonEvent()
+    protected override void UnbindButtonEvent() // 버튼 이벤트 해제 함수
     {
         startButton?.onClick.RemoveListener(OnClickStartButton);
         descriptionButton?.onClick.RemoveListener(OnClickDescriptionButton);
         exitButton?.onClick.RemoveListener(OnClickExitButton);
     }
 
-    protected override void UnbindPanelEvent()
+    protected override void UnbindPanelEvent() // 패널 내부 및 데이터 이벤트 해제 함수
     {
         if(loginPanel != null)
         {
@@ -79,6 +70,11 @@ public class MainMenuUIManager : BaseUIManager<MainMenuUIManager>
         }
     }
 
+    private void HideAllPanelsImmediate() // 모든 하위 패널을 즉시 비활성화시키는 함수
+    {
+        foreach (var panel in uiPanels)
+            panel?.HideImmediate();
+    }
 
     private void HandleSignUpClicked() // 회원가입 버튼 클릭 시 실행되는 함수
     {
@@ -110,7 +106,7 @@ public class MainMenuUIManager : BaseUIManager<MainMenuUIManager>
     private void OnClickExitButton() // 게임 나가기 버튼 클릭 시 실행되는 함수
     {
         PlayButtonSound();
-        PopupPanelUIManager.instance?.ShowSelection
+        PopupPanelUIManager.Instance?.ShowSelection
         (
                 PopupMessage.Selection.GameExit,
                 ExitGame,
@@ -123,13 +119,12 @@ public class MainMenuUIManager : BaseUIManager<MainMenuUIManager>
         Application.Quit();
     }
 
-    public void SetUIRegisterSuccess() // 회원가입 성공 시 UI를 설정하는 함수
+    public void HideRegisterPanel() // 회원가입 패널을 비활성화하는 함수
     {
-        PlayButtonSound();
         registerPanel.Hide();
     }
 
-    public void HideLoginPanel() // 로그인 패널을 숨기는 함수
+    public void HideLoginPanel() // 로그인 패널을 비활성화하는 함수
     {
         loginPanel.Hide();
     }

@@ -12,28 +12,42 @@ public class RoomManager : BaseSceneController<RoomManager>
     [SerializeField] private bool isLocalReady = false;
 
 
-    protected override void SetUIManager()
+    protected override void SetUIManager() // UI 매니저를 설정하는 함수
     {
-        if (RoomUIManager.instance != null)
+        if (RoomUIManager.Instance != null)
         {
-            roomUIManager = RoomUIManager.instance;
+            roomUIManager = RoomUIManager.Instance;
             roomUIManager.OnClickExitRequest += HandleLeaveRoom;
             roomUIManager.OnClickActionRequest += HandleActionButton;
         }
     }
 
-    protected override void SetNetworkManager()
+    protected override void SetNetworkManager() // 네트워크 매니저를 설정하는 함수
     {
         if (roomNetworkManager != null)
         {
             roomNetworkManager.OnRoomStateUpdated += ResetRoomState;
             roomNetworkManager.OnLeftRoomSuccess += HandleLeftRoomSuccess;
             roomNetworkManager.OnGameStart += HandleGameStart;
-            roomNetworkManager.OnBecameMasterClient += HandleBecameMasterClient;
+            roomNetworkManager.OnBecameMasterClient += UpdateRoomStateWhenMasterSwitched;
         }
     }
 
-    protected override void ResetUIManager()
+    protected override void PlayBGM() // 씬의 배경음악을 재생하는 함수
+    {
+        SoundManager.Instance?.StopAll();
+        SoundManager.Instance?.Play(SoundKey.RoomBGM);
+    }
+
+    protected override void InitializeState() // 씬의 초기 상태를 설정하는 함수
+    {
+        PopupPanelUIManager.Instance?.HideWaiting();
+        InitializeRoomInfo();
+        ResetRoomState();
+        roomNetworkManager.InitializeRoomState();
+    }
+
+    protected override void ResetUIManager() // UI 매니저를 리셋하는 함수
     {
         if (roomUIManager != null)
         {
@@ -42,29 +56,15 @@ public class RoomManager : BaseSceneController<RoomManager>
         }
     }
 
-    protected override void ResetNetworkManager()
+    protected override void ResetNetworkManager() // 네트워크 매니저를 리셋하는 함수
     {
         if (roomNetworkManager != null)
         {
             roomNetworkManager.OnRoomStateUpdated -= ResetRoomState;
             roomNetworkManager.OnLeftRoomSuccess -= HandleLeftRoomSuccess;
             roomNetworkManager.OnGameStart -= HandleGameStart;
-            roomNetworkManager.OnBecameMasterClient -= HandleBecameMasterClient;
+            roomNetworkManager.OnBecameMasterClient -= UpdateRoomStateWhenMasterSwitched;
         }
-    }
-
-    protected override void PlayBGM()
-    {
-        SoundManager.instance?.StopAll();
-        SoundManager.instance?.Play(SoundKey.RoomBGM);
-    }
-
-    protected override void InitializeState()
-    {
-        PopupPanelUIManager.instance?.HideWaiting();
-        InitializeRoomInfo();
-        ResetRoomState();
-        roomNetworkManager.InitializeRoomState();
     }
 
     private void InitializeRoomInfo() // 방 정보를 초기화하는 함수
@@ -78,25 +78,27 @@ public class RoomManager : BaseSceneController<RoomManager>
         roomUIManager?.SetRoomNameUI($" {roomNum}: {roomName}");
     }
 
-    private int GetRoomNumber(Room room) // 방의 정보에서 방 숫자를 얻는 함수
+    private int GetRoomNumber(Room room) // 방의 정보에서 방 숫자를 반환하는 함수
     {
         int roomNum = 0;
         if (room.CustomProperties.ContainsKey(RoomConstants.Properties.RoomNumber))
             roomNum = (int)room.CustomProperties[RoomConstants.Properties.RoomNumber];
+
         return roomNum;
     }
 
-    private string GetRoomName(Room room) // 방의 정보에서 방 이름을 얻는 함수
+    private string GetRoomName(Room room) // 방의 정보에서 방 이름을 반환하는 함수
     {
         string roomName = "";
         if (room.CustomProperties.ContainsKey(RoomConstants.Properties.RoomName))
             roomName = (string)room.CustomProperties[RoomConstants.Properties.RoomName];
+
         return roomName;
     }
 
     private void HandleLeaveRoom() // 방 나가기 버튼을 처리하는 함수
     {
-        PopupPanelUIManager.instance?.ShowSelection
+        PopupPanelUIManager.Instance?.ShowSelection
         (
             PopupMessage.Selection.RoomExit,
             ExitRoom,
@@ -106,18 +108,17 @@ public class RoomManager : BaseSceneController<RoomManager>
 
     private void ExitRoom() // 방에서 퇴장하는 함수
     {
-        PopupPanelUIManager.instance?.ShowWaiting(PopupMessage.Waiting.ServerConnection, null);
+        PopupPanelUIManager.Instance?.ShowWaiting(PopupMessage.Waiting.ServerConnection, null);
         roomNetworkManager?.LeaveRoom();
     }
 
-    private void HandleActionButton() // 게임 시작 버튼 클릭 시 실행되는 함수
+    private void HandleActionButton() // 게임 준비/시작 버튼 클릭 시 실행되는 함수
     {
         if(PhotonNetwork.IsMasterClient)
         {
             if(CanStartGame())
                 roomNetworkManager?.StartGame(); 
         }
-
         else
         {
             isLocalReady = !isLocalReady;
@@ -130,7 +131,7 @@ public class RoomManager : BaseSceneController<RoomManager>
     {
         if (PhotonNetwork.CurrentRoom.PlayerCount < 2)
         {
-            PopupPanelUIManager.instance?.ShowError(PopupMessage.Error.NeedMorePlayer, null);
+            PopupPanelUIManager.Instance?.ShowError(PopupMessage.Error.NeedMorePlayer, null);
             return false;
         }
 
@@ -140,7 +141,7 @@ public class RoomManager : BaseSceneController<RoomManager>
             {
                 if (!IsPlayerReady(p))
                 {
-                    PopupPanelUIManager.instance?.ShowError(PopupMessage.Error.NeedAllReady, null);
+                    PopupPanelUIManager.Instance?.ShowError(PopupMessage.Error.NeedAllReady, null);
                     return false;
                 }
             }
@@ -153,7 +154,7 @@ public class RoomManager : BaseSceneController<RoomManager>
         if (PhotonNetwork.CurrentRoom == null)
             return;
 
-        roomUIManager?.ClearAllSlots();
+        roomUIManager?.ResetAllSlots();
 
         Player[] players = PhotonNetwork.PlayerList;
         bool isMaster = PhotonNetwork.IsMasterClient;
@@ -184,7 +185,7 @@ public class RoomManager : BaseSceneController<RoomManager>
             (bool)p.CustomProperties[PlayerConstants.Properties.GameReady];
     }
 
-    private void UpdateActionButtontText(int playerCount, bool isMaster, bool allGuestsReady) // 시작 버튼 텍스트를 업데이트하는 함수
+    private void UpdateActionButtontText(int playerCount, bool isMaster, bool allGuestsReady) // 준비/시작 버튼 텍스트를 업데이트하는 함수
     {
         if (isMaster)
             roomUIManager?.SetActionButtonText(RoomConstants.ButtonText.Start);
@@ -192,9 +193,9 @@ public class RoomManager : BaseSceneController<RoomManager>
             roomUIManager?.SetActionButtonText(isLocalReady ? RoomConstants.ButtonText.CancelReady : RoomConstants.ButtonText.Ready);
     }
 
-    private void HandleLeftRoomSuccess() // 방 퇴장이 성공할 시 실행되는 함수
+    private void HandleLeftRoomSuccess() // 방 퇴장 성공을 처리하는 함수
     {
-        PopupPanelUIManager.instance?.HideWaiting();
+        PopupPanelUIManager.Instance?.HideWaiting();
         PhotonNetwork.LoadLevel(SceneName.Lobby);
     }
 
@@ -204,7 +205,7 @@ public class RoomManager : BaseSceneController<RoomManager>
             PhotonNetwork.LoadLevel(SceneName.UnitSetting);
     }
 
-    private void HandleBecameMasterClient(Player newMaster) // 방장 교체 시 새 방장이 방 상태를 업데이트하는 함수
+    private void UpdateRoomStateWhenMasterSwitched(Player newMaster) // 방장 교체 시 새 방장이 방 상태를 업데이트하는 함수
     {
         if (!newMaster.IsLocal)
             return;

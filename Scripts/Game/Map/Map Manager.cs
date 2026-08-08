@@ -28,7 +28,7 @@ public class MapManager : BaseSceneController<MapManager>
 
     protected override void PlayBGM()
     {
-        SoundManager.instance?.StopAll();
+        SoundManager.Instance?.StopAll();
     }
 
     public void SetupGameEnvironment(int mapIndex) // 맵을 최종적으로 설정하는 함수

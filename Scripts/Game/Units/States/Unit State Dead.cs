@@ -16,7 +16,7 @@ public class UnitStateDead : IUnitState
             return;
 
         unit.Animator?.PlayDead();
-        SoundManager.instance?.Play(SoundKey.UnitDie);
+        SoundManager.Instance?.Play(SoundKey.UnitDie);
         unit.DisableAllPhysics();
         unit.Animator?.StartFadeOut(FadeOutDuration);
         unit.ScheduleDestruction(DestroyDelay);

@@ -9,19 +9,19 @@ public class SoundManager : Singleton<SoundManager>
 
     [Header("오디오 클립")]
     [SerializeField] private SoundEntry[] entries;
-    private readonly Dictionary<SoundKey, SoundEntry> soundTable = new Dictionary<SoundKey, SoundEntry>();
+    private readonly Dictionary<SoundKey, SoundEntry> soundTable = new();
 
 
     protected override void Awake()
     {
         base.Awake();
-        if (instance != this)
+        if (Instance != this)
             return;
 
-        BuildSoundTableData();
+        InitializeSoundTableData();
     }
 
-    private void BuildSoundTableData() // 인스펙터에 등록된 사운드 정보들을 딕셔너리로 변환하는 함수
+    private void InitializeSoundTableData() // 사운드 테이블 데이터를 초기화하는 함수
     {
         soundTable.Clear();
         if (entries == null)
@@ -38,7 +38,7 @@ public class SoundManager : Singleton<SoundManager>
         }
     }
 
-    public void Play(SoundKey key, float volumeScale = 1f) // 키에 매핑된 사운드를 재생하는 함수
+    public void Play(SoundKey key, float volumeScale = 1f) // 지정된 키의 사운드를 재생하는 함수
     {
         if (!soundTable.TryGetValue(key, out SoundEntry entry))
             return;
@@ -54,7 +54,7 @@ public class SoundManager : Singleton<SoundManager>
         }
     }
 
-    public void Stop(SoundChannel channel) // 지정된 채널의 사운드를 멈추는 함수
+    public void Stop(SoundChannel channel) // 지정된 채널의 사운드를 중지하는 함수
     {
         switch (channel)
         {
@@ -69,7 +69,7 @@ public class SoundManager : Singleton<SoundManager>
         }
     }
 
-    public void StopAll() // 모든 사운드를 멈추는 함수
+    public void StopAll() // 모든 채널의 사운드를 중지하는 함수
     {
         Stop(SoundChannel.SFX);
         Stop(SoundChannel.BGM);
@@ -101,8 +101,10 @@ public class SoundManager : Singleton<SoundManager>
     {
         if (clip == null || bgmAudioSource == null)
             return;
+
         if (bgmAudioSource.clip == clip && bgmAudioSource.isPlaying)
             return;
+
         bgmAudioSource.Stop();
         bgmAudioSource.clip = clip;
         bgmAudioSource.volume = volume;
