@@ -9,7 +9,7 @@ public class Cannonball : MonoBehaviour
     [SerializeField] private PhotonView castleView;
     [SerializeField] private float hpDamagePercent = 0.5f;
     [SerializeField] private bool hasDetonated;
-    private static readonly List<Unit> unitBuffer = new List<Unit>(64);
+    private static readonly List<Unit> unitBuffer = new(64);
 
     public void Init(PhotonView ownerCastleView) // 대포를 발사한 로컬 플레이어를 설정하는 함수
     {
@@ -29,13 +29,13 @@ public class Cannonball : MonoBehaviour
         {
             Vector2 hitPoint = collision.ClosestPoint(transform.position);
             castleView.RPC(nameof(Castle.RPC_ShowExplosionEffect), RpcTarget.All, hitPoint);
-            ApplyNetworkDamage();
+            ApplyDamageToUnit();
         }
             
         Destroy(gameObject);
     }
 
-    private void ApplyNetworkDamage() // 적 유닛에게 데미지를 적용하는 함수
+    private void ApplyDamageToUnit() // 적 유닛에게 데미지를 적용하는 함수
     {
         UnitRegistry.CopyTo(unitBuffer);
         for (int i = 0; i < unitBuffer.Count; i++)

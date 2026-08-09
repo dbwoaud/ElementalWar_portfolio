@@ -1,6 +1,5 @@
 using UnityEngine;
 
-
 public class CastleAttackManager : BaseSceneController<CastleAttackManager>
 {
     [Header("캐싱 변수")]
@@ -17,30 +16,39 @@ public class CastleAttackManager : BaseSceneController<CastleAttackManager>
     [Header("게임 진행 상태")]
     [SerializeField] private bool isStop;
 
-    protected override void SetUIManager()
+    protected override void SetUIManager() // UI 매니저를 설정하는 함수
     {
         if(CastleUIManager.Instance != null)
         {
             castleUIManager = CastleUIManager.Instance;
-            castleUIManager.OnFireRequested += HandleFireRequest;
+            castleUIManager.OnAttackRequested += HandleCannonFireRequest;
         }
     }
 
-    protected override void SetNetworkManager() { }
+    protected override void SetNetworkManager() // 네트워크 매니저를 설정하는 함수
+    { 
 
-    protected override void ResetUIManager()
+    }
+
+    protected override void ResetUIManager() // UI 매니저를 리셋하는 함수
     {
         if (castleUIManager != null)
         {
-            castleUIManager.OnFireRequested -= HandleFireRequest;
+            castleUIManager.OnAttackRequested -= HandleCannonFireRequest;
         }
     }
 
-    protected override void ResetNetworkManager() { }
+    protected override void ResetNetworkManager() // 네트워크 매니저를 리셋하는 함수
+    {
 
-    protected override void PlayBGM() { }
+    }
 
-    protected override void InitializeState() 
+    protected override void PlayBGM() // 씬의 배경음악을 재생하는 함수
+    { 
+
+    }
+
+    protected override void InitializeState() // 씬의 초기상태를 설정하는 함수
     {
         isStop = false;
     }
@@ -50,32 +58,32 @@ public class CastleAttackManager : BaseSceneController<CastleAttackManager>
         if (isStop)
             return;
 
-        UpdateCoolTimeTimer();
-        CheckCannonBarInput();
+        UpdateCoolDownTimer();
+        CheckCannonFireInput();
     }
 
-    private void UpdateCoolTimeTimer() // 대포 발사 쿨타임을 계산하고 UI를 갱신하는 함수
+    private void UpdateCoolDownTimer() // 대포 발사 쿨타임을 계산하고 UI를 업데이트하는 함수
     {
         if (!isReady && isRegistered)
         {
             currentTimer += Time.deltaTime;
             float progress = Mathf.Clamp01(currentTimer / coolTime);
-            castleUIManager?.UpdateCoolTimeUI(progress);
+            castleUIManager?.UpdateAttackButtonUI(progress);
             if (progress >= 1f)
                 isReady = true;
         }
     }
 
-    private void CheckCannonBarInput() // 스페이스 바 입력을 확인하는 함수
+    private void CheckCannonFireInput() // 대포 발사 키 입력을 확인하는 함수
     {
         if (InputGate.IsBlocked)
             return;
 
         if (isReady && Input.GetKeyDown(InputBindings.CannonFireKey))
-            HandleFireRequest();     
+            HandleCannonFireRequest();     
     }
 
-    private void HandleFireRequest() // 대포 발사 요청을 처리하는 함수
+    private void HandleCannonFireRequest() // 대포 발사 요청을 처리하는 함수
     {
         if (!isReady || playerCastle == null)
             return;
@@ -84,11 +92,11 @@ public class CastleAttackManager : BaseSceneController<CastleAttackManager>
         playerCastle?.FireCannon();
     }
 
-    private void ResetFireState() // 대포 발사 상태를 초기화하는 함수
+    private void ResetFireState() // 대포 상태를 초기화하는 함수
     {
         isReady = false;
         currentTimer = 0f;
-        castleUIManager?.UpdateCoolTimeUI(0f);
+        castleUIManager?.UpdateAttackButtonUI(0f);
     }
 
     public void SetPlayerCastle(Castle castle) // 플레이어 성을 설정하는 함수
@@ -99,7 +107,7 @@ public class CastleAttackManager : BaseSceneController<CastleAttackManager>
         currentTimer = 0f;
     }
 
-    public void Stop() // 대포 시스템 동작을 중단하는 함수
+    public void StopAttackSystem() // 대포 공격 시스템 동작을 중지하는 함수
     {
         isStop = true;
     }

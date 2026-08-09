@@ -5,35 +5,30 @@ using UnityEngine;
 [DisallowMultipleComponent]
 public class UnitStateMachine : MonoBehaviour
 {
-    [Header("유닛 관련 변수")]
+    [Header("소유 유닛")]
     [SerializeField] private Unit unit;
 
     [Header("상태 변수")]
-    [SerializeField] private UnitStateIdle stateIdle = new UnitStateIdle();
-    [SerializeField] private UnitStateMove stateMove = new UnitStateMove();
-    [SerializeField] private UnitStateAttack stateAttack = new UnitStateAttack();
-    [SerializeField] private UnitStateHit stateHit = new UnitStateHit();
-    [SerializeField] private UnitStateDead stateDead = new UnitStateDead();
+    [SerializeField] private UnitStateIdle stateIdle = new();
+    [SerializeField] private UnitStateMove stateMove = new();
+    [SerializeField] private UnitStateAttack stateAttack = new();
+    [SerializeField] private UnitStateHit stateHit = new();
+    [SerializeField] private UnitStateDead stateDead = new();
 
     [Header("현재 상태")]
     [SerializeField] private UnitStateType currentStateType;
-
-    public UnitStateIdle StateIdle => stateIdle;
-
-    public UnitStateMove StateMove => stateMove;
-
-    public UnitStateAttack StateAttack => stateAttack;
-
-    public UnitStateHit StateHit => stateHit;
-
-    public UnitStateDead StateDead => stateDead;
-
     private IUnitState currentState;
 
+    public UnitStateIdle StateIdle => stateIdle;
+    public UnitStateMove StateMove => stateMove;
+    public UnitStateAttack StateAttack => stateAttack;
+    public UnitStateHit StateHit => stateHit;
+    public UnitStateDead StateDead => stateDead;
     public IUnitState CurrentState => currentState;
 
     private Dictionary<UnitStateType, IUnitState> stateDictionary;
-    public event Action<IUnitState> OnStateChanged;
+
+    public event Action<IUnitState> OnStateChanged; // 유닛 상태 변경 이벤트
 
 
     private void Awake()
@@ -41,10 +36,10 @@ public class UnitStateMachine : MonoBehaviour
         if (unit == null)
             unit = GetComponent<Unit>();
 
-        BuildDictionary();
+        InitializeDictionary();
     }
 
-    private void BuildDictionary() // 상태 열거형과 상태 변수를 연결하는 함수
+    private void InitializeDictionary() // 상태 열거형과 상태 변수를 연결하는 함수
     {
         stateDictionary = new Dictionary<UnitStateType, IUnitState>(5)
         {
@@ -56,19 +51,19 @@ public class UnitStateMachine : MonoBehaviour
         };
     }
 
-    public void StartFromIdle() // 유닛 생성 후 상태를 대기 상태로 설정하는 함수
+    public void InitializeState() // 유닛 상태를 초기화하는 함수
     {
         currentState = null;
         currentStateType = UnitStateType.Idle;
         ChangeState(stateIdle);
     }
 
-    public void Tick() // 매 프레임마다 상태를 업데이트하는 함수
+    public void UpdateState() // 유닛 상태를 업데이트하는 함수
     {
         currentState?.UpdateState(unit);
     }
 
-    public void ChangeState(IUnitState nextState, bool isSync = false) // 상태를 전이시키는 함수
+    public void ChangeState(IUnitState nextState, bool isSync = false) // 유닛 상태를 변경하는 함수
     {
         if (currentState == nextState)
             return;
@@ -82,7 +77,7 @@ public class UnitStateMachine : MonoBehaviour
             OnStateChanged?.Invoke(nextState);
     }
 
-    public bool TryGetStateByType(UnitStateType type, out IUnitState state) // 상태 열거형으로 상태 변수를 조회하는 함수
+    public bool TryGetState(UnitStateType type, out IUnitState state) // 상태 열거형으로 상태 변수를 조회하는 함수
     {
         return stateDictionary.TryGetValue(type, out state);
     }

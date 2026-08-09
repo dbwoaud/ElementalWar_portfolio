@@ -4,78 +4,89 @@ using System;
 
 public class EnergyUIManager : BaseUIManager<EnergyUIManager>
 {
-    [Header("UI 연결")]
+    [Header("UI 요소")]
     [SerializeField] private Text currentEnergyText;
-    [SerializeField] private string lastEnergyText;
+    [SerializeField] private string lastEnergy;
     [SerializeField] private Text currentLevelText;
-    [SerializeField] private string lastLevelText;
+    [SerializeField] private string lastLevel;
     [SerializeField] private Button upgradeButton;
     [SerializeField] private Image upgradeButtonImage;
     [SerializeField] private Text upgradeCostText;
-    [SerializeField] private string lastUpgradeCostText;
+    [SerializeField] private string lastUpgradeCost;
 
-    public event Action OnUpgradeRequested;
+    public event Action OnUpgradeRequested; // 에너지 업그레이드 버튼 클릭 이벤트
 
 
-    protected override void InitUIElements() { }
+    protected override void InitUIElements() // UI 요소 초기화 함수
+    {
 
-    protected override void BindButtonEvent()
+    }
+
+    protected override void BindButtonEvent() // 버튼 이벤트 할당 함수
     {
         upgradeButton?.onClick.AddListener(HandleUpgradeButtonClicked);
     }
 
-    protected override void BindPanelEvent() { }
+    protected override void BindPanelEvent() // 패널 내부 및 데이터 이벤트 할당 함수
+    { 
 
-    protected override void UnbindButtonEvent()
+    }
+
+    protected override void UnbindButtonEvent() // 버튼 이벤트 해제 함수
     {
         upgradeButton?.onClick.RemoveListener(HandleUpgradeButtonClicked);
     }
 
-    private void HandleUpgradeButtonClicked() // 업그레이드 버튼 클릭 시 실행되는 함수
+    protected override void UnbindPanelEvent() // 패널 내부 및 데이터 이벤트 해제 함수
+    {
+
+    }
+
+    private void HandleUpgradeButtonClicked() // 업그레이드 버튼 클릭을 처리하는 함수
     {
         OnUpgradeRequested?.Invoke();
     }
 
-    public void UpdateEnergyText(int currentEnergy, int maxEnergy) // 현재 에너지 텍스트를 업데이트하는 함수
+    public void SetEnergyText(int currentEnergy, int maxEnergy) // 현재 에너지 텍스트를 설정하는 함수
     {
         if (currentEnergyText == null)
             return;
 
-        string newText = GameSystem.Energy.GetEnergyText(currentEnergy, maxEnergy);
-        if (newText == lastEnergyText)
+        string newEnergy = GameSystem.Energy.GetEnergyText(currentEnergy, maxEnergy);
+        if (newEnergy == lastEnergy)
             return;
 
-        lastEnergyText = newText;
-        currentEnergyText.text = newText;
+        lastEnergy = newEnergy;
+        currentEnergyText.text = newEnergy;
     }
 
-    public void UpdateLevelText(int level, bool isMaxLevel) // 현재 에너지 레벨 텍스트를 업데이트하는 함수
+    public void SetLevelText(int level, bool isMaxLevel) // 현재 에너지 레벨 텍스트를 설정하는 함수
     {
         if (currentLevelText == null)
             return;
 
-        string newText = GameSystem.Energy.GetLevelText(level, isMaxLevel);
-        if (newText == lastLevelText)
+        string newLevel = GameSystem.Energy.GetLevelText(level, isMaxLevel);
+        if (newLevel == lastLevel)
             return;
 
-        lastLevelText = newText;
-        currentLevelText.text = newText;
+        lastLevel = newLevel;
+        currentLevelText.text = newLevel;
     }
 
-    public void UpdateUpgradeCostText(int cost, bool isMaxLevel) // 현재 업그레이드 비용 텍스트를 업데이트하는 함수
+    public void SetUpgradeCostText(int cost, bool isMaxLevel) // 현재 업그레이드 비용 텍스트를 설정하는 함수
     {
         if (upgradeCostText == null)
             return;
 
-        string newText = GameSystem.Energy.GetUpgradeCostText(cost, isMaxLevel);
-        if (newText == lastUpgradeCostText)
+        string newUpgradeCost = GameSystem.Energy.GetUpgradeCostText(cost, isMaxLevel);
+        if (newUpgradeCost == lastUpgradeCost)
             return;
 
-        lastUpgradeCostText = newText;
-        upgradeCostText.text = newText;
+        lastUpgradeCost = newUpgradeCost;
+        upgradeCostText.text = newUpgradeCost;
     }
 
-    public void SetUpgradeButtonState(bool canUpgrade, bool isMaxLevel) // 업그레이드 버튼 UI를 설정하는 함수
+    public void SetUpgradeButtonUI(bool canUpgrade, bool isMaxLevel) // 에너지 업그레이드 버튼 UI를 설정하는 함수
     {
         if (isMaxLevel)
         {

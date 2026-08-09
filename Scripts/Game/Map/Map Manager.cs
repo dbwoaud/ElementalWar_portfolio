@@ -9,39 +9,54 @@ public class MapManager : BaseSceneController<MapManager>
     [SerializeField] private MapSpawner mapSpawner;
     [SerializeField] private CastleSpawner castleSpawner;
     [SerializeField] private Collider2D cachedGroundCollider;
-
-    [Header("환경 구성 상태")]
-    private bool isEnvironmentReady;
-    private int setupCallCount;
-
     public Collider2D GroundCollider => cachedGroundCollider;
 
-    public event Action<MapData> OnMapSetupCompleted;
-    public event Action<float> OnLoadProgress;
+    private bool isMapReady;
+
+    public event Action<MapData> OnMapSetupCompleted; // 맵 설정 완료 이벤트
+    public event Action<float> OnLoadProgress; // 로딩 진행도 이벤트
 
 
-    protected override void SetUIManager() { }
-    protected override void SetNetworkManager() { }
-    protected override void ResetUIManager() { }
-    protected override void ResetNetworkManager() { }
-    protected override void InitializeState() { }
+    protected override void SetUIManager() // UI 매니저를 설정하는 함수 
+    {
 
-    protected override void PlayBGM()
+    }
+
+    protected override void SetNetworkManager() // 네트워크 매니저를 설정하는 함수 
+    {
+        
+    }
+
+    protected override void ResetUIManager() // UI 매니저를 리셋하는 함수
+    {
+
+    }
+
+    protected override void ResetNetworkManager() // 네트워크 매니저를 리셋하는 함수
+    {
+
+    }
+
+    protected override void PlayBGM() // 씬의 배경음악을 재생하는 함수
     {
         SoundManager.Instance?.StopAll();
     }
 
-    public void SetupGameEnvironment(int mapIndex) // 맵을 최종적으로 설정하는 함수
+    protected override void InitializeState() // 씬의 초기상태를 설정하는 함수
     {
-        if (isEnvironmentReady)
-            return;
 
-        isEnvironmentReady = true;
-        setupCallCount++;
-        StartCoroutine(SetupGameEnvironmentCoroutine(mapIndex));
     }
 
-    private IEnumerator SetupGameEnvironmentCoroutine(int mapIndex) // 맵을 최종적으로 설정하는 코루틴
+    public void SetupGameMap(int mapIndex) // 맵을 설정하는 함수
+    {
+        if (isMapReady)
+            return;
+
+        isMapReady = true;
+        StartCoroutine(SetupGameMapCoroutine(mapIndex));
+    }
+
+    private IEnumerator SetupGameMapCoroutine(int mapIndex) // 맵을 설정하는 코루틴
     {
         OnLoadProgress?.Invoke(0.1f);
         yield return null;
@@ -57,16 +72,12 @@ public class MapManager : BaseSceneController<MapManager>
         SpawnPlayerCastle(spawnedMap);
         OnLoadProgress?.Invoke(1.0f);
         yield return null;
-
         OnMapSetupCompleted?.Invoke(spawnedMap);
     }
 
     private void SpawnPlayerCastle(MapData mapData) // 플레이어 성을 생성하는 함수
     {
-        Transform spawnPoint = PhotonNetwork.IsMasterClient
-            ? mapData.Player1CastlePoint
-            : mapData.Player2CastlePoint;
-
+        Transform spawnPoint = PhotonNetwork.IsMasterClient ? mapData.Player1CastlePoint : mapData.Player2CastlePoint;
         castleSpawner?.SpawnCastle(spawnPoint);
     }
 }

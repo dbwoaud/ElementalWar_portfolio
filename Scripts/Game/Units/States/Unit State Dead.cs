@@ -10,7 +10,7 @@ public class UnitStateDead : IUnitState
     private const float DestroyDelay = 2.0f;
 
 
-    public void EnterState(Unit unit) // 유닛이 죽음 상태에 들어왔을 때 실행되는 함수
+    public void EnterState(Unit unit) // 유닛이 사망 상태에 진입할 때 실행되는 함수
     {
         if (unit == null)
             return;
@@ -19,9 +19,16 @@ public class UnitStateDead : IUnitState
         SoundManager.Instance?.Play(SoundKey.UnitDie);
         unit.DisableAllPhysics();
         unit.Animator?.StartFadeOut(FadeOutDuration);
-        unit.ScheduleDestruction(DestroyDelay);
+        unit.Despawn(DestroyDelay);
     }
 
-    public void UpdateState(Unit unit) { } // 유닛이 죽음 상태 중일 때 실행되는 함수
-    public void ExitState(Unit unit) { } // 유닛이 죽음 상태가 끝났을 때 실행되는 함수
+    public void UpdateState(Unit unit) // 유닛이 사망 상태를 유지하는 동안 실행되는 함수
+    { 
+
+    } 
+
+    public void ExitState(Unit unit) // 유닛이 사망 상태에서 벗어날 때 실행되는 함수
+    {
+
+    }
 }

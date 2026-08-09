@@ -19,10 +19,10 @@ public class EnergyManager : BaseSceneController<EnergyManager>
     [Header("게임 진행 상태")]
     [SerializeField] private bool isStop;
 
-    public event Action<float> OnEnergyChanged;
+    public event Action<float> OnEnergyChanged; // 현재 에너지 변화 시 실행되는 이벤트
 
 
-    protected override void SetUIManager()
+    protected override void SetUIManager() // UI 매니저를 설정하는 함수
     {
         if (EnergyUIManager.Instance != null)
         {
@@ -31,9 +31,12 @@ public class EnergyManager : BaseSceneController<EnergyManager>
         }
     }
 
-    protected override void SetNetworkManager() { }
+    protected override void SetNetworkManager() // 네트워크 매니저를 설정하는 함수
+    {
 
-    protected override void ResetUIManager()
+    }
+
+    protected override void ResetUIManager() // UI 매니저를 리셋하는 함수
     {
         if (energyUIManager != null)
         {
@@ -41,94 +44,94 @@ public class EnergyManager : BaseSceneController<EnergyManager>
         }
     }
 
-    protected override void ResetNetworkManager() { }
+    protected override void ResetNetworkManager() // 네트워크 매니저를 리셋하는 함수
+    { 
 
-    protected override void PlayBGM() { }
-
-    protected override void InitializeState()
-    {
-        isStop = false;
-
-        RefreshAllUI();
-        CheckUpgradeAvailability(true);
     }
 
-    private void HandleUpgradeRequest() // 업그레이드 버튼 클릭 시 실행되는 함수
+    protected override void PlayBGM() // 씬의 배경음악을 재생하는 함수
+    { 
+
+    }
+
+    protected override void InitializeState() // 씬의 초기상태를 설정하는 함수
+    {
+        isStop = false;
+        SetAllEnergyText();
+        UpdateUpgradeButtonUI(true);
+    }
+
+    private void HandleUpgradeRequest() // 에너지 업그레이드 버튼 클릭을 처리하는 함수
     {
         int index = currentLevel - 1;
-        if (IsCurrentlyMaxLevel()) 
+        if (IsMaxLevel()) 
             return;
 
         int cost = levelStats[index].upgradeCost;
-
         if (currentEnergy >= cost)
         {
             currentEnergy -= cost;
             currentLevel++;
-
             SoundManager.Instance?.Play(SoundKey.EnergyConsume);
-
-            RefreshAllUI();
-            CheckUpgradeAvailability(true);
+            SetAllEnergyText();
+            UpdateUpgradeButtonUI(true);
             OnEnergyChanged?.Invoke(currentEnergy);
         }
     }
 
-    private bool IsCurrentlyMaxLevel() // 현재 에너지 레벨이 만렙인지 확인하는 함수
+    private bool IsMaxLevel() // 현재 에너지 레벨이 최고 레벨인지 확인하는 함수
     {
         return currentLevel >= levelStats.Length;
     }
 
-    private void RefreshAllUI() // 모든 에너지 UI 텍스트를 업데이트하는 함수
+    private void SetAllEnergyText() // 에너지 관련 모든 텍스트를 업데이트하는 함수
     {
-        UpdateEnergyUIOnly();
+        SetEnergyText();
 
         int index = Mathf.Min(currentLevel - 1, levelStats.Length - 1);
-        bool isMax = IsCurrentlyMaxLevel();
+        bool isMax = IsMaxLevel();
 
-        energyUIManager?.UpdateLevelText(currentLevel, isMax); 
-        energyUIManager?.UpdateUpgradeCostText(levelStats[index].upgradeCost, isMax);
+        energyUIManager?.SetLevelText(currentLevel, isMax); 
+        energyUIManager?.SetUpgradeCostText(levelStats[index].upgradeCost, isMax);
     }
 
-    private void UpdateEnergyUIOnly() // 현재 에너지 텍스트를 업데이트하는 함수
+    private void SetEnergyText() // 현재 에너지 텍스트를 업데이트하는 함수
     {
         int index = Mathf.Min(currentLevel - 1, levelStats.Length - 1);
-        energyUIManager?.UpdateEnergyText((int)currentEnergy, (int)levelStats[index].maxEnergy);
+        energyUIManager?.SetEnergyText((int)currentEnergy, (int)levelStats[index].maxEnergy);
     }
 
-    private void CheckUpgradeAvailability(bool forceUpdate = false) // 에너지 업그레이드가 가능한지 검사하는 함수
+    private void UpdateUpgradeButtonUI(bool forceUpdate = false) // 에너지 업그레이드 버튼 UI를 업데이트하는 함수
     {
         int index = currentLevel - 1;
         if (CheckMaxLevelIndex(index))
             HandleMaxLevelState(forceUpdate);
-        
         else
             HandleLevelState(forceUpdate, index);
-        
     }
 
-    private bool CheckMaxLevelIndex(int index) // 유효한 인덱스인지 확인하는 함수 
+    private bool CheckMaxLevelIndex(int index) // 유효한 레벨 인덱스인지 확인하는 함수 
     {
         return index >= levelStats.Length - 1;
     }
 
-    private void HandleMaxLevelState(bool forceUpdate) // 에너지 만렙 상태를 처리하는 함수
+    private void HandleMaxLevelState(bool forceUpdate) // 에너지 최고 레벨 상태를 처리하는 함수
     {
         if (wasUpgradeable || forceUpdate)
         {
-            energyUIManager?.SetUpgradeButtonState(false, true);
+            energyUIManager?.SetUpgradeButtonUI(false, true);
             wasUpgradeable = false;
         }
     }
 
-    private void HandleLevelState(bool forceUpdate, int index) // 만렙이 아닌 에너지 레벨 상태를 처리하는 함수
+    private void HandleLevelState(bool forceUpdate, int index) //  최고 레벨을 제외한 에너지 레벨 상태를 처리하는 함수
     {
         bool canUpgrade = currentEnergy >= levelStats[index].upgradeCost;
 
         if (canUpgrade != wasUpgradeable || forceUpdate)
         {
             wasUpgradeable = canUpgrade;
-            energyUIManager?.SetUpgradeButtonState(canUpgrade, false);
+            energyUIManager?.SetUpgradeButtonUI(canUpgrade, false);
         }
     }
 
@@ -152,19 +155,19 @@ public class EnergyManager : BaseSceneController<EnergyManager>
         if (currentEnergy < stat.maxEnergy)
         {
             CalculateCurrentEnergy(stat);
-            UpdateEnergyUIOnly();
+            SetEnergyText();
             OnEnergyChanged?.Invoke(currentEnergy);
-            CheckUpgradeAvailability();
+            UpdateUpgradeButtonUI();
         }
     }
 
     private void CalculateCurrentEnergy(EnergyLevelStat stat) // 현재 에너지를 계산하는 함수
     {
-        currentEnergy += stat.energyPerSecond * Time.deltaTime;
+        currentEnergy += stat.energyGenerationRate * Time.deltaTime;
         currentEnergy = Mathf.Min(currentEnergy, stat.maxEnergy);
     }
 
-    private void CheckEnergyUpgradeInput() // 시프트 키를 누르면 실행되는 함수
+    private void CheckEnergyUpgradeInput() // 에너지 업그레이드 키 입력을 확인하는 함수
     {
         if (InputGate.IsBlocked)
             return;
@@ -180,30 +183,30 @@ public class EnergyManager : BaseSceneController<EnergyManager>
         }
     } 
 
-    public bool TryConsumeEnergy(float amount) // 에너지를 소비할 때 호출되는 함수
+    public bool TryConsumeEnergy(float amount) // 에너지 소비를 시도하는 함수
     {
         if (currentEnergy >= amount)
         {
             currentEnergy -= amount;
-            UpdateEnergyUIOnly();
-            CheckUpgradeAvailability(true);
+            SetEnergyText();
+            UpdateUpgradeButtonUI(true);
             OnEnergyChanged?.Invoke(currentEnergy);
             return true;
         }
         return false;
     }
 
-    public void AddEnergy(float amount) // 에너지를 추가할 때 호출되는 함수
+    public void AddEnergy(float amount) // 에너지를 획득하는 함수
     {
         int index = Mathf.Min(currentLevel - 1, levelStats.Length - 1);
         float maxEnergy = levelStats[index].maxEnergy;
         currentEnergy = Mathf.Min(currentEnergy + amount, maxEnergy);
-        UpdateEnergyUIOnly();
-        CheckUpgradeAvailability(true);
+        SetEnergyText();
+        UpdateUpgradeButtonUI(true);
         OnEnergyChanged?.Invoke(currentEnergy);
     }
 
-    public void Stop() // 에너지 생성을 멈추는 함수
+    public void StopEnergySystem() // 에너지 시스템 동작을 중지하는 함수
     {
         isStop = true;
     }

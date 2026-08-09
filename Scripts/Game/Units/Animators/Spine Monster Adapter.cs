@@ -3,44 +3,23 @@ using UnityEngine;
 
 public class SpineMonsterAdapter : BaseUnitAnimator
 {
-
     [Header("어댑터 컴포넌트")]
     [SerializeField] private SkeletonAnimation skeletonAnim;
 
-    [Header("애니메이션 클립명")]
-    [SerializeField] private string idleAnim = "Idle";
-    [SerializeField] private string walkAnim = "Walk";
-    [SerializeField] private string attackAnim = "Attack";
-    [SerializeField] private string hitAnim = "Hit";
-    [SerializeField] private string deadAnim = "Dead";
+    [Header("애니메이션 클립 이름")]
+    [SerializeField] private string idleAnimClipName = "Idle";
+    [SerializeField] private string walkAnimClipName = "Walk";
+    [SerializeField] private string attackAnimClipName = "Attack";
+    [SerializeField] private string hitAnimClipName = "Hit";
+    [SerializeField] private string deadAnimClipName = "Dead";
 
 
     protected override void Awake()
     {
         if (skeletonAnim == null) 
             skeletonAnim = GetComponent<SkeletonAnimation>();
+
         base.Awake();
-    }
-
-    protected override void CacheRenderers()
-    {
-        
-    }
-
-    public override void PlayIdle() // 유닛을 대기 상태로 만드는 함수
-    {
-        SetSpineAnim(idleAnim, true);
-    }
-
-    public override void PlayMove() // 유닛을 이동 상태로 만드는 함수
-    {
-        SetSpineAnim(walkAnim, true);
-    }
-
-    public override float PlayAttack() // 유닛을 공격 상태로 만들고 애니메이션 길이를 반환하는 함수
-    {
-        var trackEntry = skeletonAnim.AnimationState.SetAnimation(0, attackAnim, false);
-        return trackEntry != null ? trackEntry.Animation.Duration : 0.5f;
     }
 
     public override void SetDirection(bool lookLeft) // 유닛의 방향을 설정하는 함수
@@ -48,53 +27,75 @@ public class SpineMonsterAdapter : BaseUnitAnimator
         skeletonAnim.skeleton.ScaleX = lookLeft ? -1f : 1f;
     }
 
-    protected override void OnPlayHitInternal() // 피격 시 Hit 애니메이션을 시각적 넉백 연출로 사용하는 함수
+    public override void PlayIdle() // 대기 애니메이션을 재생하는 함수
     {
-        if (HasAnimation(hitAnim))
-            skeletonAnim.AnimationState.SetAnimation(0, hitAnim, false);
+        SetSpineAnim(idleAnimClipName, true);
     }
 
-    protected override void OnPlayDeadInternal() // 죽음 시 Dead 애니메이션을 재생하는 함수
+    public override void PlayMove() // 이동 애니메이션을 재생하는 함수
     {
-        SetSpineAnim(deadAnim, loop: false);
+        SetSpineAnim(walkAnimClipName, true);
     }
 
-    protected override void OnResetForReuseInternal() // 네트워크 풀 재사용 시 Idle 애니메이션으로 복귀하는 함수
+    public override float PlayAttack() // 공격 애니메이션을 재생하는 함수
+    {
+        var trackEntry = skeletonAnim.AnimationState.SetAnimation(0, attackAnimClipName, false);
+        return trackEntry != null ? trackEntry.Animation.Duration : 0.5f;
+    }
+
+    protected override void CacheRenderers() // 원본 색상과 머터리얼을 저장하는 함수
+    {
+
+    }
+
+    protected override void OnPlayKnockback() // 유닛 피격 시 넉백 연출을 재생하는 함수
+    {
+        SetSpineAnim(hitAnimClipName, false);
+    }
+
+    protected override void ApplyFlashColor(Color color) // 원본 색상과 머터리얼에 특정 색을 입히는 함수
+    {
+        skeletonAnim.skeleton.SetColor(color);
+    }
+
+    protected override void OnPlayDeadInternal() // 유닛 사망 연출을 재생하는 함수
+    {
+        SetSpineAnim(deadAnimClipName, false);
+    }
+
+    protected override void ApplyAlpha(float alpha) // 모든 색상과 머터리얼에 알파 값을 적용하는 함수
+    {
+        skeletonAnim.skeleton.A = alpha;
+    }
+
+    protected override void RestoreOriginalColors() // 원본 색상과 머터리얼을 원래대로 복구하는 함수
+    {
+        skeletonAnim.skeleton.SetColor(Color.white);
+    }
+
+    protected override void OnResetForReuseInternal() // 재사용을 위해 유닛 상태를 초기화하는 함수
     {
         if (skeletonAnim != null && skeletonAnim.skeleton != null)
         {
             skeletonAnim.AnimationState.ClearTracks();
             skeletonAnim.skeleton.SetToSetupPose();
         }
-        SetSpineAnim(idleAnim, loop: true);
+        SetSpineAnim(idleAnimClipName, true);
     }
 
-    protected override void ApplyFlashColor(Color color) // FlashRed 효과를 skeleton 단위로 적용하는 함수
+    private void SetSpineAnim(string animName, bool loop) // Spine 애니메이션을 설정하는 함수
     {
-        skeletonAnim.skeleton.SetColor(color);
-    }
+        if (!HasAnimation(animName))
+            return;
 
-    protected override void RestoreOriginalColors() // skeleton 색상을 흰색원본으로 복구하는 함수
-    {
-        skeletonAnim.skeleton.SetColor(Color.white);
-    }
-
-    protected override void ApplyAlpha(float alpha) // 페이드 아웃 알파를 skeleton 에 적용하는 함수
-    {
-        skeletonAnim.skeleton.A = alpha;
-    }
-
-    private void SetSpineAnim(string animName, bool loop) // Spine 애니메이션을 안전하게 설정하는 함수
-    {
         if (skeletonAnim.AnimationName == animName) 
             return;
+
         skeletonAnim.AnimationState.SetAnimation(0, animName, loop);
     }
 
-    private bool HasAnimation(string animName) // 지정된 이름의 애니메이션이 데이터에 존재하는지 확인하는 함수
+    private bool HasAnimation(string animName) // 애니메이션이 존재하는지 확인하는 함수
     {
-        return skeletonAnim != null
-            && skeletonAnim.skeleton != null
-            && skeletonAnim.skeleton.Data.FindAnimation(animName) != null;
+        return skeletonAnim != null && skeletonAnim.skeleton != null && skeletonAnim.skeleton.Data.FindAnimation(animName) != null;
     }
 }

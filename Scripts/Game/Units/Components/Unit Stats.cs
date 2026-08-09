@@ -12,7 +12,7 @@ public class UnitStats : MonoBehaviour
     [SerializeField] private float maxHP;
     [SerializeField] private float currentHP;
     [SerializeField] private float attackDamage;
-    [SerializeField] private float firstAttackDelay;
+    [SerializeField] private float firstAttackInterval;
     [SerializeField] private float attackInterval;
     [SerializeField] private float attackRange;
     [SerializeField] private float moveSpeed;
@@ -25,33 +25,23 @@ public class UnitStats : MonoBehaviour
     [SerializeField] private bool hasTriggeredQuarterHPHit;
 
     public float MaxHP => maxHP;
-
     public float CurrentHP => currentHP;
-
     public bool IsAlive => currentHP > 0;
-
     public float AttackDamage => attackDamage;
-
-    public float FirstAttackDelay => firstAttackDelay;
-
+    public float FirstAttackInterval => firstAttackInterval;
     public float AttackInterval => attackInterval;
-
     public float AttackRange => attackRange;
-
     public float MoveSpeed => moveSpeed;
-
     public float AoeRadius => aoeRadius;
-
     public float SpawnCost => spawnCost;
-
     public ElementType ElementType => elementType;
 
-    public event Action<float> OnDamageTaken;
-    public event Action OnDied;
-    public event Action OnHpThresholdCrossed;
+    public event Action<float> OnDamageTaken; // 유닛 피격 이벤트
+    public event Action OnKnockBackRequested; // 유닛 넉백 요청 이벤트
+    public event Action OnDied; // 유닛 사망 이벤트
+ 
 
-
-    public void InitializeFromBaseStat() // 유닛 데이터에서 전투 능력치를 초기화하는 함수
+    public void InitializeUnitStat() // 유닛 능력치를 초기화하는 함수
     {
         if (baseStat == null)
             return;
@@ -59,24 +49,23 @@ public class UnitStats : MonoBehaviour
         maxHP = baseStat.maxHP;
         currentHP = maxHP;
         attackDamage = baseStat.attackDamage;
-        firstAttackDelay = baseStat.firstAttackDelay;
+        firstAttackInterval = baseStat.firstAttackDelay;
         attackInterval = baseStat.attackInterval;
         attackRange = baseStat.attackRange;
         moveSpeed = baseStat.moveSpeed;
         aoeRadius = baseStat.aoeRadius;
         spawnCost = baseStat.spawnCost;
         elementType = baseStat.elementType;
-
         ResetKnockbackFlags();
     }
 
-    public void ResetKnockbackFlags() // 넉백 플래그를 초기화하는 함수
+    private void ResetKnockbackFlags() // 넉백 플래그를 초기화하는 함수
     {
         hasTriggeredHalfHPHit = false;
         hasTriggeredQuarterHPHit = false;
     }
 
-    public void ApplyDamage(float damage) // 데미지를 적용하고 이벤트를 실행하는 함수
+    public void ApplyDamage(float damage) // 유닛에게 데미지를 적용하는 함수
     {
         if (currentHP <= 0)
             return;
@@ -90,30 +79,29 @@ public class UnitStats : MonoBehaviour
             return;
         }
 
-        TryTriggerKnockback();
+        TriggerKnockback();
     }
 
-    private void TryTriggerKnockback() // 넉백 트리거 발동 시 이벤트를 실행하는 함수
+    private void TriggerKnockback() // 넉백 트리거를 발동시키는 함수
     {
         float ratio = currentHP / maxHP;
-
         if (ratio <= 0.25f && !hasTriggeredQuarterHPHit)
         {
             hasTriggeredQuarterHPHit = true;
-            OnHpThresholdCrossed?.Invoke();
+            OnKnockBackRequested?.Invoke();
         }
         else if (ratio <= 0.5f && !hasTriggeredHalfHPHit)
         {
             hasTriggeredHalfHPHit = true;
-            OnHpThresholdCrossed?.Invoke();
+            OnKnockBackRequested?.Invoke();
         }
     }
 
-    public float CalculateDamageAgainst(ElementType defenderElement) // 속성 상성을 적용한 데미지를 계산하는 함수
+    public float CalculateDamage(ElementType targetUnitElementType) // 속성 상성을 적용한 데미지를 계산하는 함수
     {
         if (baseStat == null)
             return attackDamage;
 
-        return baseStat.CalculateDamage(elementType, defenderElement, attackDamage);
+        return baseStat.CalculateDamage(elementType, targetUnitElementType, attackDamage);
     }
 }

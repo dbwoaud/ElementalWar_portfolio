@@ -26,7 +26,7 @@ public class CameraBoundManager : MonoBehaviour
         IsInitialized = true;
     }
 
-    public float ClampX(float currentX) // 현재 x값을 경계 내로 제한하는 함수
+    public float ClampX(float currentX) // 현재 x값을 카메라 경계 내로 제한하는 함수
     {
         if (!IsInitialized)
             return currentX;

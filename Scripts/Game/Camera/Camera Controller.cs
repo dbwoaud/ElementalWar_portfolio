@@ -27,6 +27,14 @@ public class CameraController : MonoBehaviour
         }
     }
 
+    private void OnDestroy()
+    {
+        if (cameraInputManager != null)
+        {
+            cameraInputManager.OnScrollInput -= HandleEdgeScroll;
+        }
+    }
+
     private void HandleEdgeScroll(float direction) // 카메라 이동을 처리하는 함수
     {
         if (!cameraBoundManager.IsInitialized)
@@ -39,15 +47,6 @@ public class CameraController : MonoBehaviour
         pos.x += direction * scrollSpeed * Time.deltaTime;
         pos.x = cameraBoundManager.ClampX(pos.x);
         transform.position = pos;
-    }
-
-
-    private void OnDestroy()
-    {
-        if (cameraInputManager != null)
-        {
-            cameraInputManager.OnScrollInput -= HandleEdgeScroll;
-        }
     }
 
     public void SetBounds(PolygonCollider2D bounds) // 카메라의 경계를 설정하는 함수

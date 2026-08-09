@@ -2,7 +2,7 @@ using UnityEngine;
 
 public class MapData : MonoBehaviour
 {
-    [Header("맵 메타데이터")]
+    [Header("맵 정보")]
     [SerializeField] private ElementType mapType;
     [SerializeField] private AudioClip mapBGM;
 
@@ -10,11 +10,10 @@ public class MapData : MonoBehaviour
     [SerializeField] private Transform player1CastlePoint;
     [SerializeField] private Transform player2CastlePoint;
 
-    [Header("카메라 및 지형 설정")]
+    [Header("카메라 및 맵 지형 설정")]
     [SerializeField] private PolygonCollider2D cameraBounds;
     [SerializeField] private BoxCollider2D groundCollider;
 
-    [Header("편의 프로퍼티")]
     public ElementType MapType => mapType;
     public AudioClip MapBGM => mapBGM;
     public Transform Player1CastlePoint => player1CastlePoint;

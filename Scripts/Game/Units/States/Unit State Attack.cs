@@ -3,17 +3,17 @@ using UnityEngine;
 [System.Serializable]
 public class UnitStateAttack : IUnitState
 {
+    private enum AttackPhase { WaitingFirst, Attacking, Interval }
     public UnitStateType Type => UnitStateType.Attack;
 
-    private enum AttackPhase { WaitingFirst, Attacking, Interval }
-
-    [Header("내부 상태 추적")]
+    [Header("공격 내부 상태 추적")]
     [SerializeField] private AttackPhase phase;
-    [SerializeField] private float phaseTimer;
     [SerializeField] private float currentAnimDuration;
     [SerializeField] private Collider2D currentTarget;
+    private float phaseTimer;
 
-    public void EnterState(Unit unit) // 유닛이 공격 상태에 들어왔을 때 실행되는 함수
+
+    public void EnterState(Unit unit) // 유닛이 공격 상태에 진입할 때 실행되는 함수
     {
         if (unit == null)
             return;
@@ -24,48 +24,48 @@ public class UnitStateAttack : IUnitState
         currentAnimDuration = 0f;
 
         unit.Animator?.PlayIdle();
-        unit.StopUnit();
+        unit.StopMovement();
     }
 
-    public void UpdateState(Unit unit) // 유닛이 공격 상태 중일 때 실행되는 함수
+    public void UpdateState(Unit unit) // 유닛이 공격 상태를 유지하는 동안 실행되는 함수
     {
         if (unit == null) 
             return;
 
-        unit.StopUnit();
+        unit.StopMovement();
         switch (phase)
         {
             case AttackPhase.WaitingFirst: 
-                TickWaitingFirst(unit); 
+                HandleFirstAttackInterval(unit); 
                 break;
             case AttackPhase.Attacking: 
-                TickAttacking(unit);
+                HandleAttacking(unit);
                 break;
             case AttackPhase.Interval: 
-                TickInterval(unit); 
+                HandleAttackInterval(unit); 
                 break;
         }
     }
 
-    private void TickWaitingFirst(Unit unit) // 적 인식 후 첫 공격까지의 딜레이를 처리하는 함수
+    private void HandleFirstAttackInterval(Unit unit) // 첫 공격 대기 시간을 처리하는 함수
     {
-        if (!unit.HasValidTarget())
+        if (!unit.CheckValidEnemy())
         {
             unit.ChangeState(unit.StateMove);
             return;
         }
 
         phaseTimer += Time.deltaTime;
-        if (phaseTimer >= unit.FirstAttackDelay)
-            BeginAttackCycle(unit);
+        if (phaseTimer >= unit.FirstAttackInterval)
+            StartAttack(unit);
     }
 
-    private void BeginAttackCycle(Unit unit) // 새로운 공격 사이클을 시작하고 타겟을 저장하는 함수
+    private void StartAttack(Unit unit) // 공격을 시작하는 함수
     {
         if (!unit.IsAlive) 
             return;
 
-        currentTarget = unit.AcquirePrimaryTarget();
+        currentTarget = unit.FindValidEnemy();
         if (currentTarget == null)
         {
             unit.ChangeState(unit.StateMove);
@@ -77,16 +77,15 @@ public class UnitStateAttack : IUnitState
         currentAnimDuration = unit.PlayAttackAnimation();
     }
 
-    private void TickAttacking(Unit unit) // 공격 애니메이션 진행을 처리하는 함수
+    private void HandleAttacking(Unit unit) // 공격 애니메이션 진행 및 공격을 처리하는 함수
     {
-
         phaseTimer += Time.deltaTime;
         if (phaseTimer < currentAnimDuration) 
             return;
 
-        TryApplyDamage(unit);
+        ApplyDamage(unit);
 
-        if (!unit.HasValidTarget())
+        if (!unit.CheckValidEnemy())
         {
             unit.ChangeState(unit.StateMove);
             return;
@@ -96,20 +95,20 @@ public class UnitStateAttack : IUnitState
         phaseTimer = 0f;
     }
 
-    private void TryApplyDamage(Unit unit) // 공격 애니메이션 종료 시 데미지 적용 가능 여부를 검증하고 적용하는 함수
+    private void ApplyDamage(Unit unit) // 목표 검증 후 실제 대미지를 적용하는 함수
     {
         if (currentTarget == null) 
             return;
 
-        if (!unit.IsColliderTargetable(currentTarget)) 
+        if (!unit.IsAttackableEnemy(currentTarget)) 
             return;
 
-        unit.ApplyDamageFromAttack(currentTarget);
+        unit.ApplyDamage(currentTarget);
     }
 
-    private void TickInterval(Unit unit) // 공격 애니메이션 종료 후 다음 공격까지의 딜레이를 처리하는 함수
+    private void HandleAttackInterval(Unit unit) // 다음 공격 대기 시간을 처리하는 함수
     {
-        if (!unit.HasValidTarget())
+        if (!unit.CheckValidEnemy())
         {
             unit.ChangeState(unit.StateMove);
             return;
@@ -119,10 +118,10 @@ public class UnitStateAttack : IUnitState
         if (phaseTimer < unit.AttackInterval) 
             return;
 
-        BeginAttackCycle(unit);
+        StartAttack(unit);
     }
 
-    public void ExitState(Unit unit) // 유닛이 공격 상태가 끝났을 때 실행되는 함수
+    public void ExitState(Unit unit) // 유닛이 공격 상태에서 벗어날 때 실행되는 함수
     {
         currentTarget = null;
     }

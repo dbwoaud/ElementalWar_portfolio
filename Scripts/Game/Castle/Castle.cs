@@ -6,18 +6,15 @@ using UnityEngine.UI;
 
 public class Castle : MonoBehaviourPun, IDamagable, IPunInstantiateMagicCallback
 {
-    [Header("IDamagable")]
+    [Header("IDamagable 인터페이스 변수")]
     public float MaxHP => maxHP;
     public float CurrentHP => currentHP;
     public bool IsAlive => !isDestroyed;
 
-    [Header("편의 프로퍼티")]
-    private bool IsOwnedByLocalPlayer => photonView.IsMine;
-
-    [Header("성의 기본 정보")]
+    [Header("체력 정보")]
     [SerializeField] private float maxHP = 150000f;
-    [SerializeField] private string lastHPText;
     [SerializeField] private float currentHP;
+    [SerializeField] private string lastHP;
     [SerializeField] private bool isDestroyed = false;
 
     [Header("UI 요소")]
@@ -25,9 +22,13 @@ public class Castle : MonoBehaviourPun, IDamagable, IPunInstantiateMagicCallback
     [SerializeField] private RectTransform canvas;
     [SerializeField] Text CastleHPText;
 
-    [Header("성 체력 텍스트 위치 설정")]
+    [Header("위치 및 방향 설정")]
+    [SerializeField] private BoxCollider2D castleCollider;
+    [SerializeField] private Vector2 defaultColliderOffset;
     [SerializeField] private float horizontalOffset = 4f;
     [SerializeField] private float verticalOffset = 3f;
+    [SerializeField] private Transform unitSpawnPoint;
+    public Transform UnitSpawnPoint => unitSpawnPoint;
 
     [Header("대포 발사 설정")]
     [SerializeField] private GameObject cannonballPrefab;
@@ -35,33 +36,21 @@ public class Castle : MonoBehaviourPun, IDamagable, IPunInstantiateMagicCallback
     [SerializeField] private float directionMultiplier = 1f;
     [SerializeField] private float fireAngle = 30f;
 
-    [Header("방향 설정")]
-    [SerializeField] private BoxCollider2D castleCollider;
-    [SerializeField] private Transform unitSpawnPoint;
-    public Transform UnitSpawnPoint => unitSpawnPoint;
-    [SerializeField] private Vector2 defaultColliderOffset;
-    [SerializeField] private Vector3 defaultFirePointPos;
-    [SerializeField] private Vector3 defaultSpawnPointPos;
+    private bool IsOwnedByLocalPlayer => photonView.IsMine;
 
-    public static event Action<bool, Vector3> OnAnyCastleDestroyed;
-    public event Action<bool, Vector3> OnThisCastleDestroyed;
+    public static event Action<bool, Vector3> OnAnyCastleDestroyed; // 성 파괴 시 실행되는 이벤트 
+    public event Action<bool, Vector3> OnMyCastleDestroyed; // 내 성 파괴 시 실행되는 이벤트 
 
 
     private void Awake()
     {
-        SetPositionOffset();
+        SetColliderPositionOffset();
     }
 
-    private void SetPositionOffset() // 성의 하위 오브젝트에 대한 상대 위치를 설정하는 함수 
+    private void SetColliderPositionOffset() // 성 콜라이더의 상대 위치를 설정하는 함수 
     {
         if (castleCollider != null)
             defaultColliderOffset = castleCollider.offset;
-
-        if (firePoint != null)
-            defaultFirePointPos = firePoint.localPosition;
-
-        if (unitSpawnPoint != null)
-            defaultSpawnPointPos = unitSpawnPoint.localPosition;
     }
 
     public void OnPhotonInstantiate(PhotonMessageInfo info)
@@ -79,28 +68,25 @@ public class Castle : MonoBehaviourPun, IDamagable, IPunInstantiateMagicCallback
         RegisterCastleAttackManager();
     }
 
-    private void SetHPText() // 성 HP UI를 업데이트하는 함수
+    private void SetHPText() // 성 HP 텍스트를 설정하는 함수
     {
         if (CastleHPText == null)
             return;
 
-        string newText = GameSystem.CastleConstants.GetHPText(currentHP, maxHP);
-        if (newText == lastHPText)
+        string newHP = GameSystem.CastleConstants.GetHPText(currentHP, maxHP);
+        if (newHP == lastHP)
             return;
 
-        lastHPText = newText;
-        CastleHPText.text = newText;
+        lastHP = newHP;
+        CastleHPText.text = newHP;
     }
 
     public void SetDirection(bool isRightCastle) // 성의 방향을 설정하는 함수
     {
         directionMultiplier = isRightCastle ? -1f : 1f;
         sprite.localRotation = isRightCastle ? Quaternion.Euler(0, 180, 0) : Quaternion.identity;
-        castleCollider.offset = isRightCastle
-            ? new Vector2(-defaultColliderOffset.x, defaultColliderOffset.y)
-            : defaultColliderOffset;
-        canvas.anchoredPosition = new Vector2(
-            (isRightCastle ? -1 : 1) * horizontalOffset, verticalOffset);
+        castleCollider.offset = isRightCastle ? new Vector2(-defaultColliderOffset.x, defaultColliderOffset.y) : defaultColliderOffset;
+        canvas.anchoredPosition = new Vector2((isRightCastle ? -1 : 1) * horizontalOffset, verticalOffset);
     }
 
     private void SetLayer() // 성의 레이어를 설정하는 함수
@@ -122,7 +108,7 @@ public class Castle : MonoBehaviourPun, IDamagable, IPunInstantiateMagicCallback
             StartCoroutine(RetryRegistration());
     }
 
-    private IEnumerator RetryRegistration() // 성 공격 매니저에 성 등록을 계속 시도하는 함수
+    private IEnumerator RetryRegistration() // 성 공격 매니저에 성 등록을 계속 시도하는 코루틴
     {
         while (CastleAttackManager.Instance == null)
             yield return null;
@@ -138,11 +124,7 @@ public class Castle : MonoBehaviourPun, IDamagable, IPunInstantiateMagicCallback
 
         float targetDistance = groundCollider.bounds.size.x / 2f;
         float groundSurfaceY = groundCollider.bounds.max.y;
-        Vector2 targetPos = new Vector2
-        (
-            firePoint.position.x + targetDistance * directionMultiplier,
-            groundSurfaceY
-        );
+        Vector2 targetPos = new Vector2(firePoint.position.x + targetDistance * directionMultiplier, groundSurfaceY);
         LaunchCannonBall(targetPos);
     }
 
@@ -151,11 +133,9 @@ public class Castle : MonoBehaviourPun, IDamagable, IPunInstantiateMagicCallback
         if (cannonballPrefab == null || firePoint == null) 
             return;
 
-        Vector2 calculatedForce = TrajectoryCalculator.CalculateLaunchForce(
-            firePoint.position, targetPosition, fireAngle);
+        Vector2 calculatedForce = TrajectoryCalculator.CalculateLaunchForce(firePoint.position, targetPosition, fireAngle);
 
-        photonView.RPC(nameof(RPC_CreateCannonball), RpcTarget.All,
-            (Vector2)firePoint.position, directionMultiplier, calculatedForce);
+        photonView.RPC(nameof(RPC_CreateCannonball), RpcTarget.All, (Vector2)firePoint.position, directionMultiplier, calculatedForce);
     }
 
     [PunRPC]
@@ -168,19 +148,18 @@ public class Castle : MonoBehaviourPun, IDamagable, IPunInstantiateMagicCallback
         if(IsOwnedByLocalPlayer)
             ballScript?.Init(photonView);
 
-        Rigidbody2D rb = ball.GetComponent<Rigidbody2D>();
-        if (rb != null)
+        if (ball.TryGetComponent<Rigidbody2D>(out var rb))
             rb.linearVelocity = new Vector2(force.x * direction, force.y);
     }
 
     [PunRPC]
-    public void RPC_ShowExplosionEffect(Vector2 hitPoint) // 폭발 이벤트를 보여주고 네트워크에 동기화하는 함수
+    public void RPC_ShowExplosionEffect(Vector2 hitPoint) // 연쇄 폭발 효과를 보여주고 네트워크에 동기화하는 함수
     {
         ExplosionEffectManager.Instance?.PlayChainExplosion(hitPoint);
     }
 
     [PunRPC]
-    public void RPC_TakeDamage(float damage) // 성 피격 시 실행되는 함수
+    public void RPC_TakeDamage(float damage) // 성 피격을 처리하고 네트워크에 동기화하는 함수
     {
         if (isDestroyed || currentHP <= 0) 
             return;
@@ -201,11 +180,11 @@ public class Castle : MonoBehaviourPun, IDamagable, IPunInstantiateMagicCallback
     }
 
     [PunRPC]
-    private void RPC_MyCastleDestroyed() // 패배를 모든 플레이어에게 동기화하는 함수
+    private void RPC_MyCastleDestroyed() // 자신의 성 파괴를 네트워크에 동기화하는 함수
     {
         bool localPlayerLost = photonView.IsMine;
         Vector3 castlePosition = transform.position;
         OnAnyCastleDestroyed?.Invoke(localPlayerLost, castlePosition);
-        OnThisCastleDestroyed?.Invoke(localPlayerLost, castlePosition);
+        OnMyCastleDestroyed?.Invoke(localPlayerLost, castlePosition);
     }
 }

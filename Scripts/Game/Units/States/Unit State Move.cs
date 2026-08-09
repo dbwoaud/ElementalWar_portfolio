@@ -6,17 +6,17 @@ public class UnitStateMove : IUnitState
 {
     public UnitStateType Type => UnitStateType.Move;
 
-    [Header("스캔 변수")]
     private static float ScanInterval => ProfilingSwitches.ScanInterval;
-    [SerializeField] private float lastScanTime;
+    private float lastScanTime;
 
-    public void EnterState(Unit unit) // 유닛이 이동 상태에 들어왔을 때 실행되는 함수
+
+    public void EnterState(Unit unit) // 유닛이 이동 상태에 진입할 때 실행되는 함수
     {
         unit.Animator?.PlayMove();
         lastScanTime = -ScanInterval;
     }
 
-    public void UpdateState(Unit unit) // 유닛이 이동 상태 중일 때 실행되는 함수
+    public void UpdateState(Unit unit) // 유닛이 이동 상태를 유지하는 동안 실행되는 함수
     {
         if (unit == null) 
             return;
@@ -24,18 +24,18 @@ public class UnitStateMove : IUnitState
         if (Time.time - lastScanTime >= ScanInterval)
         {
             lastScanTime = Time.time;
-            if (unit.HasValidTarget())
+            if (unit.CheckValidEnemy())
             {
                 unit.ChangeState(unit.StateAttack);
                 return;
             }
         }
 
-        unit?.MoveUnit();
+        unit?.ApplyMovement();
     }
 
-    public void ExitState(Unit unit) // 유닛이 이동 상태가 끝났을 때 실행되는 함수
+    public void ExitState(Unit unit) // 유닛이 이동 상태에서 벗어날 때 실행되는 함수
     {
-        unit?.StopUnit();
+        unit?.StopMovement();
     }
 }

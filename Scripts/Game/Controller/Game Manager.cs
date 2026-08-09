@@ -202,7 +202,7 @@ public class GameManager : BaseSceneController<GameManager>
 
     private void HandleMapSelected(int mapIndex) // 맵 선택을 처리하는 함수
     {
-        mapManager?.SetupGameEnvironment(mapIndex);
+        mapManager?.SetupGameMap(mapIndex);
     }
 
     private void HandleOpponentLeft(Player leftPlayer) // 상대방의 탈주를 처리하는 함수
@@ -308,8 +308,8 @@ public class GameManager : BaseSceneController<GameManager>
     {
         Time.timeScale = 0f;
         SoundManager.Instance?.StopAll();
-        energyManager?.Stop();
-        CastleAttackManager.Instance?.Stop();
+        energyManager?.StopEnergySystem();
+        CastleAttackManager.Instance?.StopAttackSystem();
     }
 
     private void HandleMapSetupCompleted(MapData spawnedMap) // 맵 생성 완료 시 실행되는 함수

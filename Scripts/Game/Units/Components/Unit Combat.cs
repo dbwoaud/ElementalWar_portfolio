@@ -3,19 +3,21 @@ using Photon.Pun;
 using UnityEngine;
 
 [DisallowMultipleComponent]
+[RequireComponent(typeof(UnitStats))]
+[RequireComponent(typeof(UnitMovement))]
+[RequireComponent(typeof(UnitNetworkSync))]
 public class UnitCombat : MonoBehaviour
 {
-    [Header("유닛 관련 변수")]
+    [Header("유닛 컴포넌트")]
     [SerializeField] private UnitStats stats;
     [SerializeField] private UnitMovement movement;
     [SerializeField] private UnitNetworkSync networkSync;
 
-    [Header("적 유닛 저장 변수")]
     private const int ScanBufferSize = 16;
     private const int AoeBufferSize = 32;
     private readonly Collider2D[] scanBuffer = new Collider2D[ScanBufferSize];
     private readonly Collider2D[] aoeBuffer = new Collider2D[AoeBufferSize];
-    private readonly List<Collider2D> reusableTargets = new List<Collider2D>(8);
+    private readonly List<Collider2D> currentTargetBuffer = new(8);
 
     public int TargetLayerMask { get; set; }
 
@@ -24,18 +26,20 @@ public class UnitCombat : MonoBehaviour
     {
         if (stats == null) 
             stats = GetComponent<UnitStats>();
+
         if (movement == null) 
             movement = GetComponent<UnitMovement>();
+
         if (networkSync == null) 
             networkSync = GetComponent<UnitNetworkSync>();
     }
 
-    public bool HasValidTarget() // 사거리 안에 공격 가능한 적이 있는지 확인하는 함수
+    public bool CheckValidEnemy() // 공격 사거리 내 적 유닛이 있는지 확인하는 함수
     {
-        return AcquirePrimaryTarget() != null;
+        return FindValidEnemy() != null;
     }
 
-    public Collider2D AcquirePrimaryTarget() // 사거리 안의 우선 적을 반환하는 함수
+    public Collider2D FindValidEnemy() // 공격 사거리 내 적을 찾는 함수
     {
         var col = movement.UnitCollider;
         if (col == null)
@@ -45,66 +49,158 @@ public class UnitCombat : MonoBehaviour
         return FindOverlappingEnemy(b) ?? FindFrontEnemy(b);
     }
 
-    public bool IsTargetInRange(Collider2D target) // 지정된 타겟이 현재 사거리 내에 있는지 확인하는 함수
+    private Collider2D FindOverlappingEnemy(Bounds b) // 겹쳐 있는 적을 찾는 함수
     {
-        if (target == null || !target.gameObject.activeInHierarchy)
-            return false;
-
-        var col = movement.UnitCollider;
-        if (col == null)
-            return false;
-
-        Bounds attacker = col.bounds;
-        Bounds defender = target.bounds;
-
-        if (attacker.Intersects(defender))
-            return true;
-
-        return ComputeAttackBox(attacker).Intersects(defender);
+        return FindEnemyInBox(b.center, b.size);
     }
 
-    public bool IsColliderTargetable(Collider2D col) // 현재 타겟의 콜라이더가 데미지를 받을 수 있는 상태인지 확인하는 함수
+    private Collider2D FindFrontEnemy(Bounds b) // 전방 공격 사거리 내 적을 찾는 함수
     {
-        if (col == null)
-            return false;
-        return IsAttackableEnemy(col.GetComponent<IDamagable>());
+        Bounds attackBox = CalculateAttackBox(b);
+        return FindEnemyInBox(attackBox.center, attackBox.size);
     }
 
-    public void ApplyDamageFromAttack(Collider2D epicenter) // 공격으로부터 실제 데미지를 적용하는 함수
+    private Collider2D FindEnemyInBox(Vector2 center, Vector2 size) // 박스 내 적을 찾는 함수
     {
-        if (epicenter == null)
-            return;
+        ProfilingCounters.CountPhysicsQuery();
 
-        reusableTargets.Clear();
-        if (stats.AoeRadius > 0)
-            FindAllEnemiesInAoeRadius(epicenter, reusableTargets);
-        else
-            reusableTargets.Add(epicenter);
-
-        ApplyDamageToTargets(reusableTargets);
-    }
-
-    private void ApplyDamageToTargets(List<Collider2D> targets) // 공격 데미지를 모든 플레이어에게 동기화하는 함수
-    {
-        foreach (var target in targets)
+        /* 프로파일링용 before 경로: 호출마다 새 배열을 반환 */
+        if (!ProfilingSwitches.UseNonAllocQueries)
         {
-            if (!TryGetValidEnemy(target, out PhotonView enemyView, out IDamagable enemy))
+            Collider2D[] enemyCollider = Physics2D.OverlapBoxAll(center, size, 0f, TargetLayerMask);
+            for (int i = 0; i < enemyCollider.Length; i++)
+            {
+                if (enemyCollider[i] == null || enemyCollider[i] == movement.UnitCollider)
+                    continue;
+
+                if (IsAttackableEnemy(enemyCollider[i].GetComponent<IDamagable>()))
+                    return enemyCollider[i];
+            }
+            return null;
+        }
+
+        /* 프로파일링용 after 경로: 호출마다 기존 배열을 재사용 */
+        ContactFilter2D filter = new()
+        {
+            useLayerMask = true,
+            layerMask = TargetLayerMask
+        };
+        int count = Physics2D.OverlapBox(center, size, 0f, filter, scanBuffer);
+        count = Mathf.Min(count, scanBuffer.Length);
+        for (int i = 0; i < count; i++)
+        {
+            var enemyCollider = scanBuffer[i];
+            if (enemyCollider == null || enemyCollider == movement.UnitCollider)
                 continue;
 
-            float finalDamage = CalculateDamage(enemy);
-            ProfilingCounters.CountRpcSent();
-            enemyView.RPC(nameof(Unit.RPC_TakeDamage), RpcTarget.All, finalDamage);
+            if (IsAttackableEnemy(enemyCollider.GetComponent<IDamagable>()))
+                return enemyCollider;
+        }
+        return null;
+    }
+
+    private bool IsAttackableEnemy(IDamagable enemy) // 공격 가능한 적 상태인지 확인하는 함수
+    {
+        if (enemy == null)
+            return false;
+
+        if (enemy is Unit unit)
+            return unit.IsTargetable;
+
+        return enemy.IsAlive;
+    }
+
+    private Bounds CalculateAttackBox(Bounds attackerBounds) // 공격 사거리를 계산하는 함수
+    {
+        float dir = movement.DirectionMultiplier;
+        float forwardX = dir > 0 ? attackerBounds.max.x : attackerBounds.min.x;
+        float scanWidth = Mathf.Max(stats.AttackRange, 0.05f);
+
+        Vector3 center = new(forwardX + dir * scanWidth * 0.5f, attackerBounds.center.y, attackerBounds.center.z);
+        Vector3 size = new(scanWidth, attackerBounds.size.y, attackerBounds.size.z);
+        return new Bounds(center, size);
+    }
+
+    public bool IsAttackableEnemy(Collider2D enemyCollider) // 공격 가능한 적 콜라이더인지 확인하는 함수
+    {
+        if (enemyCollider == null)
+            return false;
+
+        return IsAttackableEnemy(enemyCollider.GetComponent<IDamagable>());
+    }
+
+    public void ApplyDamage(Collider2D mainTargetCollider) // 데미지를 적용하는 함수
+    {
+        if (mainTargetCollider == null)
+            return;
+
+        currentTargetBuffer.Clear();
+
+        if (stats.AoeRadius > 0)
+            FindAllEnemiesInAoeRange(mainTargetCollider, currentTargetBuffer);
+        else
+            currentTargetBuffer.Add(mainTargetCollider);
+
+        ApplyDamageToTargets(currentTargetBuffer);
+    }
+
+    private void FindAllEnemiesInAoeRange(Collider2D epicenter, List<Collider2D> results) // AOE 사거리 내의 모든 적을 찾는 함수
+    {
+        ProfilingCounters.CountPhysicsQuery();
+
+        /* 프로파일링용 before 경로: 호출마다 새 배열을 반환 */
+        if (!ProfilingSwitches.UseNonAllocQueries)
+        {
+            Collider2D[] enemyCollider = Physics2D.OverlapCircleAll(epicenter.bounds.center, stats.AoeRadius, TargetLayerMask);
+            foreach (var hit in enemyCollider)
+            {
+                if (hit != null && IsAttackableEnemy(hit.GetComponent<IDamagable>()))
+                    results.Add(hit);
+            }
+            return;
+        }
+
+        /* 프로파일링용 after 경로: 호출마다 기존 배열을 재사용 */
+        ContactFilter2D filter = new ContactFilter2D
+        {
+            useLayerMask = true,
+            layerMask = TargetLayerMask
+        };
+        int count = Physics2D.OverlapCircle(epicenter.bounds.center, stats.AoeRadius, filter, aoeBuffer);
+        count = Mathf.Min(count, aoeBuffer.Length);
+        for (int i = 0; i < count; i++)
+        {
+            var enemyCollider = aoeBuffer[i];
+            if (enemyCollider == null || enemyCollider == movement.UnitCollider)
+                continue;
+
+            if (IsAttackableEnemy(enemyCollider.GetComponent<IDamagable>()))
+                results.Add(enemyCollider);
         }
     }
 
-    private bool TryGetValidEnemy(Collider2D col, out PhotonView enemyView, out IDamagable enemy) // 적 유닛의 콜라이더에서 유효한 적 정보를 얻는 함수
+    private void ApplyDamageToTargets(List<Collider2D> targets) // 현재 대상 버퍼에 있는 모든 적들에게 데미지를 적용하는 함수
     {
-        enemyView = col.GetComponent<PhotonView>();
-        enemy = col.GetComponent<IDamagable>();
+        foreach (var targetCollider in targets)
+        {
+            if (!TryGetValidEnemy(targetCollider, out PhotonView targetView, out IDamagable target))
+                continue;
 
-        if (enemyView == null || enemyView.Owner == null || enemy == null)
+            float finalDamage = CalculateDamage(target);
+            ProfilingCounters.CountRpcSent();
+            targetView.RPC(nameof(Unit.RPC_TakeDamage), RpcTarget.All, finalDamage);
+        }
+    }
+
+    private bool TryGetValidEnemy(Collider2D col, out PhotonView targetView, out IDamagable target) // 유효한 적 반환을 시도하는 함수
+    {
+        targetView = col.GetComponent<PhotonView>();
+        target = col.GetComponent<IDamagable>();
+
+        if (targetView == null || targetView.Owner == null || target == null)
             return false;
-        if (enemyView.IsMine == networkSync.PhotonView.IsMine)
+
+        if (targetView.IsMine == networkSync.PhotonView.IsMine)
             return false;
 
         return true;
@@ -116,112 +212,8 @@ public class UnitCombat : MonoBehaviour
         {
             var enemyStats = enemyUnit.Stats;
             if (enemyStats != null)
-                return stats.CalculateDamageAgainst(enemyStats.ElementType);
+                return stats.CalculateDamage(enemyStats.ElementType);
         }
         return stats.AttackDamage;
-    }
-
-    private Collider2D FindOverlappingEnemy(Bounds b) // 자신과 겹쳐 있는 적을 찾는 함수
-    {
-        return FindEnemyInBox(b.center, b.size);
-    }
-
-    private Collider2D FindFrontEnemy(Bounds b) // 공격 사거리 내의 적을 찾는 함수
-    {
-        Bounds attackBox = ComputeAttackBox(b);
-        return FindEnemyInBox(attackBox.center, attackBox.size);
-    }
-
-    private Bounds ComputeAttackBox(Bounds attackerBounds) // 공격 사거리를 계산하는 함수
-    {
-        float dir = movement.DirectionMultiplier;
-        float forwardX = dir > 0 ? attackerBounds.max.x : attackerBounds.min.x;
-        float scanWidth = Mathf.Max(stats.AttackRange, 0.05f);
-
-        Vector3 center = new Vector3(
-            forwardX + dir * scanWidth * 0.5f,
-            attackerBounds.center.y,
-            attackerBounds.center.z);
-        Vector3 size = new Vector3(scanWidth, attackerBounds.size.y, attackerBounds.size.z);
-        return new Bounds(center, size);
-    }
-
-    private Collider2D FindEnemyInBox(Vector2 center, Vector2 size) // 공격 사거리 내에서 첫 번째 공격 가능한 적을 반환하는 함수
-    {
-        ProfilingCounters.CountPhysicsQuery();
-
-        /* 계측용 before 경로: 호출마다 새 배열을 반환하는 오버로드 */
-        if (!ProfilingSwitches.UseNonAllocQueries)
-        {
-            Collider2D[] allocated = Physics2D.OverlapBoxAll(center, size, 0f, TargetLayerMask);
-            for (int i = 0; i < allocated.Length; i++)
-            {
-                if (allocated[i] == null || allocated[i] == movement.UnitCollider)
-                    continue;
-                if (IsAttackableEnemy(allocated[i].GetComponent<IDamagable>()))
-                    return allocated[i];
-            }
-            return null;
-        }
-
-        ContactFilter2D filter = new ContactFilter2D();
-        filter.useLayerMask = true;
-        filter.layerMask = TargetLayerMask;
-        int count = Physics2D.OverlapBox(center, size, 0f, filter, scanBuffer);
-        count = Mathf.Min(count, scanBuffer.Length);
-
-        for (int i = 0; i < count; i++)
-        {
-            var candidate = scanBuffer[i];
-            if (candidate == null || candidate == movement.UnitCollider)
-                continue;
-
-            if (IsAttackableEnemy(candidate.GetComponent<IDamagable>()))
-                return candidate;
-        }
-        return null;
-    }
-
-    private bool IsAttackableEnemy(IDamagable enemy) // 적이 데미지를 받을 수 있는 상태인지 확인하는 함수
-    {
-        if (enemy == null)
-            return false;
-
-        if (enemy is Unit unit)
-            return unit.IsTargetable;
-
-        return enemy.IsAlive;
-    }
-
-    private void FindAllEnemiesInAoeRadius(Collider2D epicenter, List<Collider2D> results) // AOE 범위 내의 모든 적을 찾는 함수
-    {
-        ProfilingCounters.CountPhysicsQuery();
-
-        if (!ProfilingSwitches.UseNonAllocQueries)
-        {
-            Collider2D[] allocated = Physics2D.OverlapCircleAll(
-                epicenter.bounds.center, stats.AoeRadius, TargetLayerMask);
-            foreach (var hit in allocated)
-            {
-                if (hit != null && IsAttackableEnemy(hit.GetComponent<IDamagable>()))
-                    results.Add(hit);
-            }
-            return;
-        }
-
-        ContactFilter2D filter = new ContactFilter2D();
-        filter.useLayerMask = true;
-        filter.layerMask = TargetLayerMask;
-        int count = Physics2D.OverlapCircle(epicenter.bounds.center, stats.AoeRadius, filter, aoeBuffer);
-
-        for (int i = 0; i < count; i++)
-        {
-            var hit = aoeBuffer[i];
-            if (hit == null)
-                continue;
-
-            if (IsAttackableEnemy(hit.GetComponent<IDamagable>()))
-                results.Add(hit);
-        }
     }
 }

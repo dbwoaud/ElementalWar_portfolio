@@ -16,7 +16,7 @@ public class ExplosionEffectManager: Singleton<ExplosionEffectManager>
     [SerializeField] private float effectLifeTime;
 
     [Header("오브젝트 풀")]
-    [SerializeField] private Queue<GameObject> explosionPool = new Queue<GameObject>();
+    [SerializeField] private Queue<GameObject> explosionPool = new();
     [SerializeField] private int initialiPoolsize = 40;
     [SerializeField] private int maxPoolSize = 80;
 
@@ -26,9 +26,8 @@ public class ExplosionEffectManager: Singleton<ExplosionEffectManager>
         base.Awake();
         ParticleSystem ps = explosionPrefab.GetComponent<ParticleSystem>();
         if (ps != null)
-        {
             effectLifeTime = ps.main.duration + ps.main.startLifetime.constantMax;
-        }
+
         PreloadExplosions(initialiPoolsize);
     }
 
@@ -53,9 +52,7 @@ public class ExplosionEffectManager: Singleton<ExplosionEffectManager>
         yield return new WaitForSeconds(delay);
 
         if (TryGetGroundBounds(out float minX, out float maxX))
-        {
             yield return StartCoroutine(ExpandExplosionsRoutine(startPos.x, startPos.y, startPos.z, minX, maxX));
-        }
     }
 
     private void SpawnExplosion(Vector3 pos) // 폭발 프리팹을 생성하는 함수
@@ -78,7 +75,7 @@ public class ExplosionEffectManager: Singleton<ExplosionEffectManager>
         return effect;
     }
 
-    private bool TryGetGroundBounds(out float minX, out float maxX) // 지형의 x축 경계 값을 계산하는 함수
+    private bool TryGetGroundBounds(out float minX, out float maxX) // 맵 지형의 x축 경계의 반환을 시도하는 함수
     {
         if (hasCachedBounds)
         {
@@ -103,7 +100,7 @@ public class ExplosionEffectManager: Singleton<ExplosionEffectManager>
         return false;
     }
 
-    private IEnumerator ExpandExplosionsRoutine(float startX, float startY, float startZ, float minX, float maxX) // 지형의 경계 끝까지 연쇄 폭발 연출을 재생하는 코루틴                                                                                                         
+    private IEnumerator ExpandExplosionsRoutine(float startX, float startY, float startZ, float minX, float maxX) // 맵 지형의 경계 끝까지 연쇄 폭발 연출을 재생하는 코루틴                                                                                                         
     {
         int step = 1;
         bool canExpandLeft = true;
@@ -130,7 +127,7 @@ public class ExplosionEffectManager: Singleton<ExplosionEffectManager>
         }
     }
 
-    private IEnumerator ReturnPrefabToPoolAfterDelay(GameObject effect, float time) // 폭발 프리팹을 일정시간 이후에 오브젝트 풀로 반환하는 코루틴
+    private IEnumerator ReturnPrefabToPoolAfterDelay(GameObject effect, float time) // 폭발 프리팹을 일정 시간 이후에 오브젝트 풀로 반환하는 코루틴
     {
         yield return new WaitForSeconds(time);
 
