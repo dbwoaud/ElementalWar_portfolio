@@ -22,22 +22,31 @@ public class GameManager : BaseSceneController<GameManager>
     [SerializeField] private GameStateModel gameState;
     [SerializeField] private Vector3? destroyedCastlePosition;
 
-    [Header("스폰 설정")]
+    [Header("소환 설정")]
     [SerializeField] private Transform myCastleSpawnPoint;
     [SerializeField] private Transform myUnitSpawnPoint;
 
-    protected override void SetCachedVariable()
+
+    protected override void SetCachedVariable() // 캐싱 변수를 설정하는 함수
     {
         deckModel = new DeckModel();
         gameState = new GameStateModel();
         base.SetCachedVariable();
     }
 
-    protected override void SubscribeEvents()
+    protected override void SubscribeEvents() // 이벤트를 구독하는 함수
     {
         base.SubscribeEvents();
-        Castle.OnAnyCastleDestroyed += HandleCastleDestroyed;
-        gameState.OnGameOver += HandleGameOver;
+        Castle.OnAnyCastleDestroyed += HandleGameResult;
+        if (gameState != null)
+        {
+            gameState.OnGameOver += HandleGameOverState;
+        }
+
+        if (deckHotkeyHandler != null)
+        {
+            deckHotkeyHandler.OnSlotHotkeyPressed += HandleHotkeyUnitSpawn;
+        }
 
         if (MapManager.Instance != null)
         {
@@ -45,14 +54,15 @@ public class GameManager : BaseSceneController<GameManager>
             mapManager.OnMapSetupCompleted += HandleMapSetupCompleted;
             mapManager.OnLoadProgress += HandleMapLoadProgress;
         }
-        if (EnergyManager.Instance != null && gameUIManager)
+
+        if (EnergyManager.Instance != null)
         {
             energyManager = EnergyManager.Instance;
             energyManager.OnEnergyChanged += HandleEnergyChanged;
         }
     }
 
-    protected override void SetUIManager()
+    protected override void SetUIManager() // UI 매니저를 설정하는 함수
     {
         if (GameUIManager.Instance != null)
         {
@@ -64,18 +74,58 @@ public class GameManager : BaseSceneController<GameManager>
         } 
     }
 
-    protected override void SetNetworkManager()
+    protected override void SetNetworkManager() // 네트워크 매니저를 설정하는 함수
     {
         if (gameNetworkManager != null)
         {
-            gameNetworkManager.OnMapIndexReceived += HandleMapSelected;
+            gameNetworkManager.OnMapIndexSet += HandleMapSelected;
             gameNetworkManager.OnOpponentLeftRoom += HandleOpponentLeft;
             gameNetworkManager.OnLeftRoomSuccess += HandleLeftRoomForLobby;
-            gameNetworkManager.OnReturnToRoomRequestedByGuest += HandleGuestReturnRequest;
+            gameNetworkManager.OnReturnToRoomRequested += HandleExecuteReturnToRoom;
         }
     }
 
-    protected override void ResetUIManager()
+    protected override void PlayBGM() // 씬의 배경음악을 재생하는 함수
+    {
+        SoundManager.Instance?.StopAll();
+    }
+
+    protected override void InitializeState() // 씬의 초기상태를 설정하는 함수
+    {
+        UnitRegistry.Clear();
+        RegisterAllUnitToNetworkPool();
+        LoadDeckFromNetwork();
+    }
+
+    protected override void UnsubscribeAll() // 모든 이벤트를 구독 해제 하는 함수
+    {
+        base.UnsubscribeAll();
+        Castle.OnAnyCastleDestroyed -= HandleGameResult;
+        if (gameState != null)
+        {
+            gameState.OnGameOver -= HandleGameOverState;
+        }
+
+        if (deckHotkeyHandler != null)
+        {
+            deckHotkeyHandler.OnSlotHotkeyPressed -= HandleHotkeyUnitSpawn;
+        }
+
+        if (mapManager != null)
+        {
+            mapManager.OnMapSetupCompleted -= HandleMapSetupCompleted;
+            mapManager.OnLoadProgress -= HandleMapLoadProgress;
+        }
+
+        if (energyManager != null)
+        {
+            energyManager.OnEnergyChanged -= HandleEnergyChanged;
+        }
+
+        UnitRegistry.Clear();
+    }
+
+    protected override void ResetUIManager() // UI 매니저를 리셋하는 함수
     {
         if (gameUIManager != null)
         {
@@ -85,81 +135,44 @@ public class GameManager : BaseSceneController<GameManager>
         }
     }
 
-    protected override void ResetNetworkManager()
+    protected override void ResetNetworkManager() // 네트워크 매니저를 리셋하는 함수
     {
         if (gameNetworkManager != null)
         {
-            gameNetworkManager.OnMapIndexReceived -= HandleMapSelected;
+            gameNetworkManager.OnMapIndexSet -= HandleMapSelected;
             gameNetworkManager.OnOpponentLeftRoom -= HandleOpponentLeft;
             gameNetworkManager.OnLeftRoomSuccess -= HandleLeftRoomForLobby;
-            gameNetworkManager.OnReturnToRoomRequestedByGuest -= HandleGuestReturnRequest;
+            gameNetworkManager.OnReturnToRoomRequested -= HandleExecuteReturnToRoom;
         }
     }
 
-    protected override void PlayBGM()
+    private void HandleGameResult(bool localPlayerLost, Vector3 castlePos) // 게임 결과를 처리하는 함수
     {
-        SoundManager.Instance?.StopAll();
+        destroyedCastlePosition = castlePos;
+        gameState.DeclareGameOver(!localPlayerLost);
     }
 
-    protected override void InitializeState()
+    private void HandleGameOverState(bool localPlayerWon) // 게임 종료 상태를 처리하는 함수
     {
-        UnitRegistry.Clear();
-        RegisterAllUnitToNetworkPool();
-        LoadMyDeckFromNetwork();
-        SubscribeHotkey();
+        if (deckHotkeyHandler != null)
+            deckHotkeyHandler.IsEnabled = false;
+
+        StartCoroutine(GameOverSequence(localPlayerWon));
     }
 
-    private void HandleReturnToRoomRequest() // 방으로 돌아가기 버튼 클릭 시 실행되는 함수
+    private void HandleHotkeyUnitSpawn(int slotIndex) // 단축키로 유닛 소환을 처리하는 함수
     {
-        PopupPanelUIManager.Instance?.ShowWaiting(PopupMessage.Waiting.RoomEntry, null);
-        ResumeTime();
-        if (!PhotonNetwork.IsMasterClient)
-        {
-            gameNetworkManager?.RequestReturnToRoom();
-            return;
-        }
-        ReopenRoom();
-        PhotonNetwork.LoadLevel(SceneName.Room);
-    }
-
-    private void ResumeTime() // 시간을 흐르게하는 함수
-    {
-        Time.timeScale = 1f;
-    }
-
-    private void ReopenRoom() // 게임이 끝나고 방을 다시 오픈하는 함수
-    {
-        if (!PhotonNetwork.IsMasterClient || PhotonNetwork.CurrentRoom == null)
+        if (gameState.IsGameOver)
             return;
 
-        PhotonNetwork.CurrentRoom.IsOpen = true;
-        ExitGames.Client.Photon.Hashtable props = new ExitGames.Client.Photon.Hashtable()
-        {
-            { RoomConstants.Properties.GameStart, false },
-            { RoomConstants.Properties.MapIndex, null }
-        };
-        PhotonNetwork.CurrentRoom.SetCustomProperties(props);
-    }
-
-    private void HandleReturnToLobbyRequest() // 로비로 돌아가기 버튼 클릭 시 실행되는 함수
-    {
-        ResumeTime();
-        CleanUpNetworkObjects();
-        ReopenRoom();
-        if (PhotonNetwork.CurrentRoom != null)
-            PhotonNetwork.LeaveRoom();
-    }
-
-    private void CleanUpNetworkObjects() // 룸의 네트워크 오브젝트와 캐시를 정리하는 함수
-    {
-        if (!PhotonNetwork.IsMasterClient)
+        UnitStat unit = deckModel.GetUnit(slotIndex);
+        if (unit == null)
             return;
 
-        if (PhotonNetwork.CurrentRoom != null)
-            PhotonNetwork.DestroyAll();
+        HandleUnitSpawnRequest(slotIndex, unit);
     }
 
-    private void HandleUnitSpawnRequest(int slotIndex, UnitStat spawnUnitStat) // 유닛 생성 요청을 처리하는 함수
+    private void HandleUnitSpawnRequest(int slotIndex, UnitStat spawnUnitStat) // 유닛 소환 요청을 처리하는 함수
     {
         if (gameState.IsGameOver)
             return;
@@ -175,115 +188,16 @@ public class GameManager : BaseSceneController<GameManager>
         if (myUnitSpawnPoint == null)
             return;
 
-        if (!TryEnoughEnergy(spawnUnitStat))
+        if (!CheckEnergyToSpawn(spawnUnitStat))
             return;
 
         SpawnUnit(spawnUnitStat);
         gameUIManager?.StartSlotCoolTime(slotIndex);
     }
 
-    private void SetUnitSpawnPoint() // 유닛 소환 지점을 설정하는 함수
-    {
-        var playerCastle = CastleAttackManager.Instance?.PlayerCastle;
-        if (playerCastle != null)
-            myUnitSpawnPoint = playerCastle.UnitSpawnPoint;
-    }
-
-    private bool TryEnoughEnergy(UnitStat unitToSpawn) // 유닛의 소환 비용만큼 에너지 소비를 시도하는 함수
-    {
-        return energyManager!= null && energyManager.TryConsumeEnergy(unitToSpawn.spawnCost);
-    }
-
-    private void SpawnUnit(UnitStat spawnUnitStat) // 유닛을 소환하는 함수
-    {
-        PhotonNetwork.Instantiate(spawnUnitStat.unitPrefab.name, myUnitSpawnPoint.position, Quaternion.identity, 0);
-        SoundManager.Instance?.Play(SoundKey.UnitSpawn);
-    }
-
-    private void HandleMapSelected(int mapIndex) // 맵 선택을 처리하는 함수
-    {
-        mapManager?.SetupGameMap(mapIndex);
-    }
-
-    private void HandleOpponentLeft(Player leftPlayer) // 상대방의 탈주를 처리하는 함수
-    {
-        if (gameState.IsGameOver)
-            return;
-
-        gameState.DeclareGameOver(true);
-    }
-
-    private void HandleLeftRoomForLobby() // 방 퇴장 완료 후 로비로 이동하는 함수
-    {
-        PhotonNetwork.LoadLevel(SceneName.Lobby);
-    }
-
-    private void RegisterAllUnitToNetworkPool() // 네트워크 풀에 프리팹을 동록하는 함수
-    {
-        if (NetworkPoolManager.Instance == null || unitDatabase == null)
-            return;
-
-        foreach (var unit in unitDatabase.Units)
-        {
-            if (unit.unitPrefab != null)
-                NetworkPoolManager.Instance.RegisterNetworkPrefab(unit.unitPrefab);
-        }
-    }
-
-    private void LoadMyDeckFromNetwork() // 네트워크에서 덱 정보를 가져오는 함수
-    {
-        string[] myDeckNames = gameNetworkManager?.GetMyDeckNames();
-
-        if (myDeckNames == null || unitDatabase == null)
-            return;
-
-        for (int i = 0; i < myDeckNames.Length; i++)
-        {
-            UnitStat unitStat = unitDatabase.FindByName(myDeckNames[i]);
-            if (unitStat == null)
-                continue;
-                
-            deckModel.SetUnit(i, unitStat);
-            gameUIManager?.UpdateDeckSlotsUI(i, unitStat);
-        }
-    }
-
-    private void SubscribeHotkey() // 키보드 숫자키 입력 이벤트를 구독하는 함수
-    {
-        if (deckHotkeyHandler != null)
-            deckHotkeyHandler.OnSlotHotkeyPressed += HandleHotkeyUnitSpawn;
-    }
-
-    private void HandleHotkeyUnitSpawn(int slotIndex) // 단축키로 유닛을 소환하는 함수
-    {
-        if (gameState.IsGameOver)
-            return;
-
-        UnitStat unit = deckModel.GetUnit(slotIndex);
-        if (unit == null)
-            return;
-
-        HandleUnitSpawnRequest(slotIndex, unit);
-    }
-
-    private void HandleCastleDestroyed(bool localPlayerLost, Vector3 castlePos) // 자신의 성이 파괴되어 게임 패배를 처리하는 함수
-    {
-        destroyedCastlePosition = castlePos;
-        gameState.DeclareGameOver(!localPlayerLost);
-    }
-
-    private void HandleGameOver(bool localPlayerWon) // 게임 종료 연출을 처리하는 함수
-    {
-        if (deckHotkeyHandler != null)
-            deckHotkeyHandler.IsEnabled = false;
-
-        StartCoroutine(GameEndSequence(localPlayerWon));
-    }
-
-    private IEnumerator GameEndSequence(bool localPlayerWon) // 게임 종료 연출을 수행하는 코루틴 
+    private IEnumerator GameOverSequence(bool localPlayerWon) // 게임 종료 연출을 수행하는 코루틴 
     {
         cameraController?.DisablePlayerControl();
-
         if (cameraController != null && destroyedCastlePosition.HasValue)
         {
             cameraController.MoveToTarget(destroyedCastlePosition.Value, 2f);
@@ -312,7 +226,7 @@ public class GameManager : BaseSceneController<GameManager>
         CastleAttackManager.Instance?.StopAttackSystem();
     }
 
-    private void HandleMapSetupCompleted(MapData spawnedMap) // 맵 생성 완료 시 실행되는 함수
+    private void HandleMapSetupCompleted(MapData spawnedMap) // 맵 설정 완료 시 실행되는 함수
     {
         SetCameraOnMap(spawnedMap);
         gameUIManager?.HideGameLoadingPanel();
@@ -324,9 +238,7 @@ public class GameManager : BaseSceneController<GameManager>
         if (spawnedMap != null && cameraController != null)
         {
             cameraController.SetBounds(spawnedMap.CameraBounds);
-            myCastleSpawnPoint = PhotonNetwork.IsMasterClient
-                ? spawnedMap.Player1CastlePoint
-                : spawnedMap.Player2CastlePoint;
+            myCastleSpawnPoint = PhotonNetwork.IsMasterClient ? spawnedMap.Player1CastlePoint : spawnedMap.Player2CastlePoint;
         }
     }
 
@@ -334,80 +246,66 @@ public class GameManager : BaseSceneController<GameManager>
     {
         ShowGameStartPanel();
         PlayGameStartBGM();
-        yield return new WaitForSeconds(3f);
+        yield return new WaitForSeconds(2f);
         HideGameStartPanel();
         PlayMapBGM(mapBGM);
         if (deckHotkeyHandler != null)
             deckHotkeyHandler.IsEnabled = true;
     }
 
-    private void ShowGameStartPanel() // 게임 시작 연출을 시작하는 함수
+    private void ShowGameStartPanel() // 게임 시작 패널을 활성화하는 함수
     {
         string p1 = PhotonNetwork.PlayerList[0].NickName;
-        string p2 = PhotonNetwork.PlayerList.Length > 1
-            ? PhotonNetwork.PlayerList[1].NickName
-            : PlayerConstants.Default.Nickname;
-
+        string p2 = PhotonNetwork.PlayerList.Length > 1 ? PhotonNetwork.PlayerList[1].NickName : PlayerConstants.Default.Nickname;
         gameUIManager?.ShowGameStartPanel(p1, p2);
-
     }
 
-    private static void PlayGameStartBGM()
+    private static void PlayGameStartBGM() // 게임 시작 배경음악을 재생하는 함수
     {
         SoundManager.Instance?.Play(SoundKey.GameStartCue);
     }
 
-    private void HideGameStartPanel() // 게임 시작 연출을 끝내는 함수
+    private void HideGameStartPanel() // 게임 시작 패널을 비활성화하는 함수
     {
         gameUIManager?.HideGameStartPanel();
     }
 
-    private void PlayMapBGM(AudioClip mapBGM)
+    private void PlayMapBGM(AudioClip mapBGM) // 게임 맵 배경음악을 재생하는 함수
     {
         if (mapBGM != null)
             SoundManager.Instance?.PlayDynamicBGM(mapBGM);
     }
 
-    private void HandleMapLoadProgress(float normalized) // 맵 로딩 진행도를 UI 에 전달
+    private void HandleMapLoadProgress(float normalized) // 맵 로딩 진행도를 처리하는 함수
     {
         gameUIManager?.UpdateLoadingProgress(normalized);
     }
 
-    private void HandleEnergyChanged(float currentEnergy) // 에너지 변동을 UI 에 전파하는 함수
+    private void HandleEnergyChanged(float currentEnergy) // 에너지 변화를 처리하는 함수
     {
-        gameUIManager?.RefreshSlotsEnergyState(currentEnergy);
+        gameUIManager?.UpdateSlotStateByEnergy(currentEnergy);
     }
 
-    protected override void UnsubscribeAll()
+    private void HandleReturnToRoomRequest() // UI 관련 방으로 돌아가기 요청을 처리하는 함수
     {
-        base.UnsubscribeAll();
-        Castle.OnAnyCastleDestroyed -= HandleCastleDestroyed;
-        if (gameState != null)
+        PopupPanelUIManager.Instance?.ShowWaiting(PopupMessage.Waiting.RoomEntry, null);
+        ResumeTime();
+        if (PhotonNetwork.IsMasterClient)
         {
-            gameState.OnGameOver -= HandleGameOver;
+            HandleExecuteReturnToRoom();
         }
-        if (energyManager != null)
+        else
         {
-            energyManager.OnEnergyChanged -= HandleEnergyChanged;
+            gameNetworkManager?.HandleReturnToRoomRequest();
         }
-        if (mapManager != null)
-        {
-            mapManager.OnMapSetupCompleted -= HandleMapSetupCompleted;
-            mapManager.OnLoadProgress -= HandleMapLoadProgress;
-        }
-        if (deckHotkeyHandler != null)
-        {
-            deckHotkeyHandler.OnSlotHotkeyPressed -= HandleHotkeyUnitSpawn;
-        }
-        UnitRegistry.Clear();
     }
 
-    private bool CanSpawnFromSlot(int slotIndex) // 슬롯에서 유닛을 소환할 수 있는지 확인하는 함수
+    private void ResumeTime() // 시간을 재개하는 함수
     {
-        return gameUIManager != null && gameUIManager.IsSlotSpawnable(slotIndex);
+        Time.timeScale = 1f;
     }
 
-    private void HandleGuestReturnRequest() // 손님의 방 복귀 요청을 처리하는 함수
+    private void HandleExecuteReturnToRoom() // 방장의 방 복귀 실행을 처리하는 함수
     {
         if (!PhotonNetwork.IsMasterClient)
             return;
@@ -415,5 +313,107 @@ public class GameManager : BaseSceneController<GameManager>
         ResumeTime();
         ReopenRoom();
         PhotonNetwork.LoadLevel(SceneName.Room);
+    }
+
+    private void ReopenRoom() // 게임 종료 후 방을 다시 여는 함수
+    {
+        if (!PhotonNetwork.IsMasterClient || PhotonNetwork.CurrentRoom == null)
+            return;
+
+        PhotonNetwork.CurrentRoom.IsOpen = true;
+        ExitGames.Client.Photon.Hashtable props = new ExitGames.Client.Photon.Hashtable()
+        {
+            { RoomConstants.Properties.GameStart, false },
+            { RoomConstants.Properties.MapIndex, null }
+        };
+        PhotonNetwork.CurrentRoom.SetCustomProperties(props);
+    }
+
+    private void HandleReturnToLobbyRequest() // 로비로 돌아가기 요청을 처리하는 함수
+    {
+        ResumeTime();
+        DestroyAllNetworkObjects();
+        ReopenRoom();
+        if (PhotonNetwork.CurrentRoom != null)
+            PhotonNetwork.LeaveRoom();
+    }
+
+    private void DestroyAllNetworkObjects() // 방 내부의 모든 네트워크 오브젝트를 파괴하는 함수
+    {
+        if (!PhotonNetwork.IsMasterClient)
+            return;
+
+        if (PhotonNetwork.CurrentRoom != null)
+            PhotonNetwork.DestroyAll();
+    }
+
+    private bool CanSpawnFromSlot(int slotIndex) // 특정 슬롯의 유닛을 소환할 수 있는지 확인하는 함수
+    {
+        return gameUIManager != null && gameUIManager.CheckUnitSpawnable(slotIndex);
+    }
+
+    private void SetUnitSpawnPoint() // 유닛 소환 지점을 설정하는 함수
+    {
+        var playerCastle = CastleAttackManager.Instance?.PlayerCastle;
+        if (playerCastle != null)
+            myUnitSpawnPoint = playerCastle.UnitSpawnPoint;
+    }
+
+    private bool CheckEnergyToSpawn(UnitStat unitToSpawn) // 유닛의 소환 에너지가 있는지 확인하는 함수
+    {
+        return energyManager!= null && energyManager.TryConsumeEnergy(unitToSpawn.spawnCost);
+    }
+
+    private void SpawnUnit(UnitStat spawnUnitStat) // 유닛을 소환하는 함수
+    {
+        PhotonNetwork.Instantiate(spawnUnitStat.unitPrefab.name, myUnitSpawnPoint.position, Quaternion.identity, 0);
+        SoundManager.Instance?.Play(SoundKey.UnitSpawn);
+    }
+
+    private void HandleMapSelected(int mapIndex) // 맵 선택을 처리하는 함수
+    {
+        mapManager?.SetupGameMap(mapIndex);
+    }
+
+    private void HandleOpponentLeft(Player leftPlayer) // 상대 플레이어의 탈주를 처리하는 함수
+    {
+        if (gameState.IsGameOver)
+            return;
+
+        gameState.DeclareGameOver(true);
+    }
+
+    private void HandleLeftRoomForLobby() // 방 나가기 후 로비 이동을 처리하는 함수
+    {
+        PhotonNetwork.LoadLevel(SceneName.Lobby);
+    }
+
+    private void RegisterAllUnitToNetworkPool() // 네트워크 풀에 모든 유닛 프리팹을 등록하는 함수
+    {
+        if (NetworkPoolManager.Instance == null || unitDatabase == null)
+            return;
+
+        foreach (var unit in unitDatabase.Units)
+        {
+            if (unit.unitPrefab != null)
+                NetworkPoolManager.Instance.RegisterNetworkPrefab(unit.unitPrefab);
+        }
+    }
+
+    private void LoadDeckFromNetwork() // 서버에서 덱 정보를 가져오고 설정하는 함수
+    {
+        string[] myDeckNames = gameNetworkManager?.GetMyDeckNames();
+        if (myDeckNames == null || unitDatabase == null)
+            return;
+
+        for (int i = 0; i < myDeckNames.Length; i++)
+        {
+            UnitStat unitStat = unitDatabase.FindByName(myDeckNames[i]);
+            if (unitStat == null)
+                continue;
+                
+            deckModel.SetUnit(i, unitStat);
+            gameUIManager?.SetGameUnitSlotsUI(i, unitStat);
+        }
     }
 }

@@ -8,9 +8,15 @@ public class GameStartPanel : UIPanel
     [SerializeField] private Text player2NameText;
 
 
-    protected override void RegisterListener() { }
+    protected override void RegisterListener() // UI 리스너를 등록하는 함수
+    { 
 
-    protected override void ResetUI() { }
+    }
+
+    protected override void ResetUI() // UI를 리셋하는 함수
+    {
+
+    }
 
     public void SetPlayerNames(string p1Name, string p2Name) // 플레이어 이름을 설정하는 함수
     {

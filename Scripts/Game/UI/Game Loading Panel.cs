@@ -1,6 +1,7 @@
 using UnityEngine;
 using UnityEngine.UI;
 
+[RequireComponent(typeof(CanvasGroup))]
 public class GameLoadingPanel : UIPanel
 {
     [Header("UI 요소")]
@@ -11,15 +12,18 @@ public class GameLoadingPanel : UIPanel
     [SerializeField] private string defaultMessage = "맵을 불러오는 중입니다";
      
 
-    protected override void RegisterListener() { }
+    protected override void RegisterListener() // UI 리스너를 등록하는 함수
+    { 
 
-    protected override void ResetUI()
+    }
+
+    protected override void ResetUI() // UI를 리셋하는 함수
     {
         if (progressFill != null)
             progressFill.fillAmount = 0f;
     }
 
-    public void ShowImmediate(string message = null) // 페이드 연출 없이 즉시 패널을 보여주는 함수
+    public void ShowImmediate(string message = null) // 즉시 패널을 활성화하는 함수
     {
         if (canvasGroup == null)
             canvasGroup = GetComponent<CanvasGroup>();

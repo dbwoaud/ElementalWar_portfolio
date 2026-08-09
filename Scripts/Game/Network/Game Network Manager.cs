@@ -5,17 +5,34 @@ using System.Collections;
 
 public class GameNetworkManager : MonoBehaviourPunCallbacks
 {
-    public event Action<Player> OnOpponentLeftRoom;
-    public event Action<int> OnMapIndexReceived;
-    public event Action OnLeftRoomSuccess;
-    public event Action OnReturnToRoomRequestedByGuest;
+    private bool isMapIndexSet;
 
-    private bool hasReceivedMapIndex;
+    public event Action<Player> OnOpponentLeftRoom; // 상대 플레이어 탈주 시 실행되는 이벤트 
+    public event Action<int> OnMapIndexSet; // 맵 인덱스 설정 시 실행되는 이벤트
+    public event Action OnLeftRoomSuccess; // 방 나가기 성공 시 실행되는 이벤트
+    public event Action OnReturnToRoomRequested; // 방으로 돌아가기 요청 이벤트
+    public event Action<int> OnProfilingStart; // 프로파일링 시작 이벤트
 
 
     private void Start()
     {
         StartCoroutine(TryGetMapIndexCoroutine());
+    }
+
+    public override void OnPlayerLeftRoom(Player otherPlayer) // 상대 플레이어 탈주 시 실행되는 함수
+    {
+        OnOpponentLeftRoom?.Invoke(otherPlayer);
+    }
+
+    public override void OnLeftRoom() // 방 나가기 성공 시 실행되는 함수
+    {
+        OnLeftRoomSuccess?.Invoke();
+    }
+
+    public override void OnRoomPropertiesUpdate(ExitGames.Client.Photon.Hashtable propertiesThatChanged) // 방 정보를 업데이트하는 함수
+    {
+        if (TryReadMapIndex(propertiesThatChanged, out int mapIndex))
+            SetMapIndex(mapIndex);
     }
 
     private IEnumerator TryGetMapIndexCoroutine() // 맵 인덱스 반환을 시도하는 코루틴
@@ -32,35 +49,10 @@ public class GameNetworkManager : MonoBehaviourPunCallbacks
         if (!TryReadMapIndex(PhotonNetwork.CurrentRoom?.CustomProperties, out int mapIndex))
             return;
 
-        RaiseMapIndexReceived(mapIndex);
+        SetMapIndex(mapIndex);
     }
 
-    public override void OnPlayerLeftRoom(Player otherPlayer) // 상대방의 탈주 시 실행되는 함수
-    {
-        OnOpponentLeftRoom?.Invoke(otherPlayer);
-    }
-
-    public override void OnLeftRoom() // 방 퇴장이 완료되었을 때 실행되는 함수
-    {
-        OnLeftRoomSuccess?.Invoke();
-    }
-
-    public override void OnRoomPropertiesUpdate(ExitGames.Client.Photon.Hashtable propertiesThatChanged) // 방의 정보가 갱신될 때 실행되는 함수
-    {
-        if (TryReadMapIndex(propertiesThatChanged, out int mapIndex))
-            RaiseMapIndexReceived(mapIndex);
-    }
-
-    private void RaiseMapIndexReceived(int mapIndex) // 맵 인덱스를 최초 1회만 발행하는 함수
-    {
-        if (hasReceivedMapIndex)
-            return;
-
-        hasReceivedMapIndex = true;
-        OnMapIndexReceived?.Invoke(mapIndex);
-    }
-
-    private bool TryReadMapIndex(ExitGames.Client.Photon.Hashtable props, out int mapIndex) // 방 프로퍼티에서 맵 인덱스를 얻는 함수
+    private bool TryReadMapIndex(ExitGames.Client.Photon.Hashtable props, out int mapIndex) // 방 프로퍼티에서 맵 인덱스를 읽어오는 함수
     {
         if (props != null && props.TryGetValue(RoomConstants.Properties.MapIndex, out object value))
         {
@@ -75,9 +67,18 @@ public class GameNetworkManager : MonoBehaviourPunCallbacks
         return false;
     }
 
-    public string[] GetMyDeckNames() // 포톤 서버에 저장된 유닛 이름들을 가져오는 함수
+    private void SetMapIndex(int mapIndex) // 맵 인덱스를 설정하는 함수
     {
-        if (HasDeckProperty(out object deckData))
+        if (isMapIndexSet)
+            return;
+
+        isMapIndexSet = true;
+        OnMapIndexSet?.Invoke(mapIndex);
+    }
+
+    public string[] GetMyDeckNames() // 자신의 덱에 저장된 유닛 이름들을 반환하는 함수
+    {
+        if (CheckDeckProperty(out object deckData))
         {
             if (deckData is string[] deckNames)
                 return deckNames;
@@ -85,35 +86,30 @@ public class GameNetworkManager : MonoBehaviourPunCallbacks
         return null;
     }
 
-    private bool HasDeckProperty(out object deckData) // 포톤 서버에 저장된 유닛 이름들이 있는지 확인하는 함수
+    private bool CheckDeckProperty(out object deckData) // 플레이어 속성에서 자신의 덱에 저장된 유닛 이름들이 있는지 확인하는 함수
     {
         return PhotonNetwork.LocalPlayer.CustomProperties.TryGetValue(PlayerConstants.Properties.DeckList, out deckData);
     }
 
-    public void RequestReturnToRoom() // 마스터에게 방 복귀를 요청하는 함수
+    public void HandleReturnToRoomRequest() // 방으로 돌아가기 요청을 처리하는 함수
     {
-        photonView.RPC(nameof(RPC_RequestReturnToRoom), RpcTarget.MasterClient);
+        photonView.RPC(nameof(RPC_HandleReturnToRoomRequest), RpcTarget.MasterClient);
     }
 
     [PunRPC]
-    private void RPC_RequestReturnToRoom() // 손님의 방 복귀 요청을 받는 함수
+    private void RPC_HandleReturnToRoomRequest() // 클라이언트의 방으로 돌아가기 요청을 처리하는 함수
     {
-        OnReturnToRoomRequestedByGuest?.Invoke();
+        OnReturnToRoomRequested?.Invoke();
     }
 
-
-
-    /* 계측 */
-    public event Action<int> OnProfilingStartSignal;
-
-    public void BroadcastProfilingStart(int scenarioSeed) // 계측 시작을 양쪽에 전파하는 함수
+    public void BroadcastProfilingStart(int scenarioSeed) // 프로파일링 시작을 다른 플레이어와 동기화하는 함수
     {
-        photonView.RPC(nameof(RPC_StartProfiling), RpcTarget.All, scenarioSeed);
+        photonView.RPC(nameof(RPC_HandleProfilingStart), RpcTarget.All, scenarioSeed);
     }
 
     [PunRPC]
-    private void RPC_StartProfiling(int scenarioSeed) // 계측 시작 신호를 받는 함수
+    private void RPC_HandleProfilingStart(int scenarioSeed) // 프로파일링 시작을 처리하는 함수
     {
-        OnProfilingStartSignal?.Invoke(scenarioSeed);
+        OnProfilingStart?.Invoke(scenarioSeed);
     }
 }

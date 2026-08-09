@@ -4,8 +4,12 @@ using UnityEngine.EventSystems;
 using System;
 using System.Collections;
 
-
-public enum SlotState { Active, Inactive, CoolTime }
+public enum SlotState 
+{ 
+    Active, // 활성화
+    Inactive, // 비활성화
+    CoolTime // 쿨타임
+}
 
 public class GameUnitSlotItem : MonoBehaviour, IPointerClickHandler
 {
@@ -19,31 +23,31 @@ public class GameUnitSlotItem : MonoBehaviour, IPointerClickHandler
     [SerializeField] private int slotIndex;
     [SerializeField] private UnitStat assignedUnit;
     [SerializeField] private SlotState currentState = SlotState.Inactive;
-    public bool IsActive => currentState == SlotState.Active;
-    public bool IsInCoolTime => currentState == SlotState.CoolTime;
-    public bool IsSpawnable => assignedUnit != null && IsActive;
 
     [Header("쿨타임 코루틴")]
     [SerializeField] private Coroutine coolTimeCoroutine;
 
-    public event Action<int, UnitStat> OnUnitSlotClicked;
+    public bool IsActive => currentState == SlotState.Active;
+    public bool IsInCoolTime => currentState == SlotState.CoolTime;
+    public bool IsSpawnable => assignedUnit != null && IsActive;
+
+    public event Action<int, UnitStat> OnUnitSlotClicked; // 게임 유닛 슬롯 클릭 이벤트
 
 
-    public void SetupSlot(int index) // 슬롯의 인덱스와 클릭 콜백을 등록하는 함수
+    public void SetupSlot(int index) // 게임 유닛 슬롯을 설정하는 함수
     {
         slotIndex = index;
         if(assignedUnit == null)
-            UpdateUI(null);
+            SetSlotUI(null);
     }
 
-    public void UpdateUI(UnitStat stat) // 유닛 정보를 슬롯에 표시하는 함수
+    public void SetSlotUI(UnitStat stat) // 게임 유닛 슬롯 UI를 설정하는 함수
     {
         assignedUnit = stat;
-        bool hasUnit = stat != null;
 
+        bool hasUnit = stat != null;
         unitInfoObj.SetActive(hasUnit);
         darkOverlayImage.gameObject.SetActive(hasUnit);
- 
         if(hasUnit)
         {
             unitIconImage.sprite = stat.unitIcon;
@@ -53,7 +57,7 @@ public class GameUnitSlotItem : MonoBehaviour, IPointerClickHandler
         ChangeState(SlotState.Inactive);  
     }
 
-    private void ChangeState(SlotState newState) // 슬롯의 상태를 변화시키는 함수
+    private void ChangeState(SlotState newState) // 게임 유닛 슬롯의 상태를 변화시키는 함수
     {
         currentState = newState;
         darkOverlayImage.gameObject.SetActive(!IsActive);
@@ -61,7 +65,7 @@ public class GameUnitSlotItem : MonoBehaviour, IPointerClickHandler
             darkOverlayImage.fillAmount = 1f;
     }
 
-    public void OnPointerClick(PointerEventData eventData) // 마우스 클릭 시 실행되는 함수
+    public void OnPointerClick(PointerEventData eventData) // 게임 유닛 슬롯에 마우스 클릭 시 실행되는 함수
     {
         if (!IsSpawnable) 
             return;
@@ -72,15 +76,15 @@ public class GameUnitSlotItem : MonoBehaviour, IPointerClickHandler
         OnUnitSlotClicked?.Invoke(slotIndex, assignedUnit);
     }
 
-    public void StartCoolTime() // 유닛 쿨타임 연출을 시작하는 함수
+    public void StartCoolTime() // 게임 유닛 슬롯의 쿨타임 연출을 시작하는 함수
     {
         if (assignedUnit == null || IsInCoolTime)
             return;
 
-        coolTimeCoroutine = StartCoroutine(CoolTimeCoroutine());
+        coolTimeCoroutine = StartCoroutine(StartCoolTimeCoroutine());
     }
 
-    private IEnumerator CoolTimeCoroutine() // 유닛 쿨타임 연출을 시작하는 코루틴
+    private IEnumerator StartCoolTimeCoroutine() // 게임 유닛 슬롯의 쿨타임 연출을 시작하는 코루틴
     {
         ChangeState(SlotState.CoolTime);
 
@@ -90,7 +94,6 @@ public class GameUnitSlotItem : MonoBehaviour, IPointerClickHandler
         {
             timer += Time.deltaTime;
             darkOverlayImage.fillAmount = 1f - (timer / coolTime);
-
             yield return null;
         }
 
@@ -98,15 +101,15 @@ public class GameUnitSlotItem : MonoBehaviour, IPointerClickHandler
         ChangeState(SlotState.Inactive);
 
         if (EnergyManager.Instance != null)
-            EvaluateEnergyState(EnergyManager.Instance.CurrentEnergy);
+            UpdateSlotStateByEnergy(EnergyManager.Instance.CurrentEnergy);
     }
 
-    public void EvaluateEnergyState(float currentEnergy) // 현재 에너지의 상태를 평가하는 함수
+    public void UpdateSlotStateByEnergy(float currentEnergy) // 현재 에너지에 따른 슬롯 상태를 업데이트하는 함수
     {
         if (assignedUnit == null || IsInCoolTime) 
             return;
 
-        bool hasEnoughEnergy = currentEnergy >= assignedUnit.spawnCost;
-        ChangeState(hasEnoughEnergy ? SlotState.Active : SlotState.Inactive);
+        bool hasEnergy = currentEnergy >= assignedUnit.spawnCost;
+        ChangeState(hasEnergy ? SlotState.Active : SlotState.Inactive);
     }
 }

@@ -32,13 +32,13 @@ public class ProfilingScenarioRunner : MonoBehaviour
     private void OnEnable()
     {
         if (gameNetworkManager != null)
-            gameNetworkManager.OnProfilingStartSignal += HandleStartSignal;
+            gameNetworkManager.OnProfilingStart += HandleStartSignal;
     }
 
     private void OnDisable()
     {
         if (gameNetworkManager != null)
-            gameNetworkManager.OnProfilingStartSignal -= HandleStartSignal;
+            gameNetworkManager.OnProfilingStart -= HandleStartSignal;
     }
 
     private void Update()
