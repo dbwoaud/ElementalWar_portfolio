@@ -15,11 +15,24 @@ public class UnitCombat : MonoBehaviour
 
     private const int ScanBufferSize = 16;
     private const int AoeBufferSize = 32;
+    private const float MinScanWidth = 0.05f;
     private readonly Collider2D[] scanBuffer = new Collider2D[ScanBufferSize];
     private readonly Collider2D[] aoeBuffer = new Collider2D[AoeBufferSize];
     private readonly List<Collider2D> currentTargetBuffer = new(8);
+    private ContactFilter2D targetFilter;
 
-    public int TargetLayerMask { get; set; }
+    private int targetLayerMask;
+    public int TargetLayerMask
+    {
+        get => targetLayerMask;
+        set
+        {
+            targetLayerMask = value;
+            targetFilter.useLayerMask = true;
+            targetFilter.layerMask = value;
+            targetFilter.useTriggers = false;
+        }
+    }
 
 
     private void Awake()
@@ -68,25 +81,20 @@ public class UnitCombat : MonoBehaviour
         /* 프로파일링용 before 경로: 호출마다 새 배열을 반환 */
         if (!ProfilingSwitches.UseNonAllocQueries)
         {
-            Collider2D[] enemyCollider = Physics2D.OverlapBoxAll(center, size, 0f, TargetLayerMask);
-            for (int i = 0; i < enemyCollider.Length; i++)
+            Collider2D[] allocated = Physics2D.OverlapBoxAll(center, size, 0f, targetLayerMask);
+            for (int i = 0; i < allocated.Length; i++)
             {
-                if (enemyCollider[i] == null || enemyCollider[i] == movement.UnitCollider)
+                if (allocated[i] == null || allocated[i] == movement.UnitCollider)
                     continue;
 
-                if (IsAttackableEnemy(enemyCollider[i].GetComponent<IDamagable>()))
-                    return enemyCollider[i];
+                if (IsAttackableEnemy(allocated[i].GetComponent<IDamagable>()))
+                    return allocated[i];
             }
             return null;
         }
 #endif
-        /* 프로파일링용 after 경로: 호출마다 기존 배열을 재사용 */
-        ContactFilter2D filter = new()
-        {
-            useLayerMask = true,
-            layerMask = TargetLayerMask
-        };
-        int count = Physics2D.OverlapBox(center, size, 0f, filter, scanBuffer);
+        /* 프로파일링용 after 경로: 버퍼와 필터를 재사용 */
+        int count = Physics2D.OverlapBox(center, size, 0f, targetFilter, scanBuffer);
         count = Mathf.Min(count, scanBuffer.Length);
         for (int i = 0; i < count; i++)
         {
@@ -115,7 +123,7 @@ public class UnitCombat : MonoBehaviour
     {
         float dir = movement.DirectionMultiplier;
         float forwardX = dir > 0 ? attackerBounds.max.x : attackerBounds.min.x;
-        float scanWidth = Mathf.Max(stats.AttackRange, 0.05f);
+        float scanWidth = Mathf.Max(stats.AttackRange, MinScanWidth);
 
         Vector3 center = new(forwardX + dir * scanWidth * 0.5f, attackerBounds.center.y, attackerBounds.center.z);
         Vector3 size = new(scanWidth, attackerBounds.size.y, attackerBounds.size.z);
@@ -149,26 +157,27 @@ public class UnitCombat : MonoBehaviour
     {
         ProfilingCounters.CountPhysicsQuery();
 
+        Vector2 center = epicenter.bounds.center;
+
 #if ENABLE_PROFILING
         /* 프로파일링용 before 경로: 호출마다 새 배열을 반환 */
         if (!ProfilingSwitches.UseNonAllocQueries)
         {
-            Collider2D[] enemyCollider = Physics2D.OverlapCircleAll(epicenter.bounds.center, stats.AoeRadius, TargetLayerMask);
-            foreach (var hit in enemyCollider)
+            Collider2D[] allocated = Physics2D.OverlapCircleAll(center, stats.AoeRadius, targetLayerMask);
+            for (int i = 0; i < allocated.Length; i++)
             {
-                if (hit != null && IsAttackableEnemy(hit.GetComponent<IDamagable>()))
+                var hit = allocated[i];
+                if (hit == null || hit == movement.UnitCollider)
+                    continue;
+
+                if (IsAttackableEnemy(hit.GetComponent<IDamagable>()))
                     results.Add(hit);
             }
             return;
         }
 #endif
-        /* 프로파일링용 after 경로: 호출마다 기존 배열을 재사용 */
-        ContactFilter2D filter = new ContactFilter2D
-        {
-            useLayerMask = true,
-            layerMask = TargetLayerMask
-        };
-        int count = Physics2D.OverlapCircle(epicenter.bounds.center, stats.AoeRadius, filter, aoeBuffer);
+        /* 프로파일링용 after 경로: 버퍼와 필터를 재사용 */
+        int count = Physics2D.OverlapCircle(center, stats.AoeRadius, targetFilter, aoeBuffer);
         count = Mathf.Min(count, aoeBuffer.Length);
         for (int i = 0; i < count; i++)
         {

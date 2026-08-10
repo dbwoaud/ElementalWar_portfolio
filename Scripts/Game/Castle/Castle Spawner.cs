@@ -1,6 +1,5 @@
 using Photon.Pun;
 using UnityEngine;
-using System;
 
 public class CastleSpawner : MonoBehaviour
 {
@@ -15,12 +14,6 @@ public class CastleSpawner : MonoBehaviour
             return;
 
         NetworkPoolManager.Instance?.RegisterNetworkPrefab(castlePrefab);
-        GameObject castleInstance = PhotonNetwork.Instantiate
-        (
-            castlePrefab.name,
-            spawnPoint.position,
-            Quaternion.identity,
-            0
-        );
+        PhotonNetwork.Instantiate(castlePrefab.name, spawnPoint.position, Quaternion.identity, 0);
     }
 }

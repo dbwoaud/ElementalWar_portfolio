@@ -19,10 +19,6 @@ public class UnitNetworkSync : MonoBehaviour
     [SerializeField] private UnitCombat combat;
     private IUnitAnimator unitAnimator;
 
-    private IUnitState pendingState;
-    private float pendingStartTime;
-    private const float PendingInterval = 0.05f;
-
     public PhotonView PhotonView { get; private set; }
     public bool IsOwnedByLocalPlayer => PhotonView.IsMine;
     public int OwnLayerMask { get; private set; }
@@ -58,35 +54,13 @@ public class UnitNetworkSync : MonoBehaviour
     {
         if (stateMachine != null)
             stateMachine.OnStateChanged -= HandleStateChange;
-
-        pendingState = null;
-    }
-
-    private void Update()
-    {
-        if (pendingState == null)
-            return;
-
-        if (Time.time - pendingStartTime < PendingInterval)
-            return;
-
-        BroadcastStateRpc(pendingState.Type);
-        pendingState = null;
     }
 
     private void HandleStateChange(IUnitState nextState) // 유닛의 상태 변경을 처리하는 함수
     {
         if (!IsOwnedByLocalPlayer || nextState == null)
             return;
-
-        if (nextState.Type == UnitStateType.Idle)
-        {
-            pendingState = nextState;
-            pendingStartTime = Time.time;
-            return;
-        }
-
-        pendingState = null;
+        
         BroadcastStateRpc(nextState.Type);
     }
 
