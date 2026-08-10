@@ -15,7 +15,7 @@ public class UnitStat : ScriptableObject
     [SerializeField] private float spawnCoolTime;
 
     [Header("전투 능력치")]
-    [SerializeField] float maxHP;
+    [SerializeField] private float maxHP;
     [SerializeField] private float attackDamage;
     [SerializeField] private float firstAttackDelay;
     [SerializeField] private float attackInterval;

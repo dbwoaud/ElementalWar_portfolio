@@ -12,9 +12,9 @@ public class DeckSlotItem : MonoBehaviour, IDropHandler, IBeginDragHandler, IDra
     [SerializeField] private Text unitCostText;
 
     [Header("슬롯 관리")]
-    [SerializeField] public int slotIndex;
     [SerializeField] private UnitStat assignedUnit;
     public UnitStat AssignedUnit => assignedUnit;
+    public int slotIndex;
 
     public event Action<int, UnitStat> OnSlotDropped; // 마우스 드롭 이벤트 
     public event Action<DeckSlotItem> OnBeginDragEvent; // 마우스 드래그 시작 이벤트
