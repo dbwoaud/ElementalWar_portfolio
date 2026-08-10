@@ -7,11 +7,11 @@ public abstract class UIPanel : MonoBehaviour
     [Header("애니메이션 설정")]
     [SerializeField] private float animationDuration = 0.2f;
     [SerializeField] private Vector3 hiddenScale = new Vector3(0.8f, 0.8f, 0.8f);
-    [SerializeField] private Coroutine animationCoroutine;
+    private Coroutine animationCoroutine;
 
     [Header("애니메이션 대상")]
     [SerializeField] protected Transform contentTransform;
-    private Transform CotentTransform => contentTransform != null ? contentTransform : transform;
+    private Transform ContentTransform => contentTransform != null ? contentTransform : transform;
 
     [Header("캔버스")]
     [SerializeField] protected CanvasGroup canvasGroup;
@@ -48,7 +48,7 @@ public abstract class UIPanel : MonoBehaviour
             if (canvasGroup != null)
                 canvasGroup.alpha = 0f;
 
-            CotentTransform.localScale = hiddenScale;
+            ContentTransform.localScale = hiddenScale;
         }
 
         gameObject.SetActive(true);
@@ -71,7 +71,7 @@ public abstract class UIPanel : MonoBehaviour
     {
         float elapsed = 0f;
         float startAlpha = canvasGroup.alpha;
-        Vector3 startScale = CotentTransform.localScale;
+        Vector3 startScale = ContentTransform.localScale;
 
         while (elapsed < animationDuration)
         {
@@ -79,13 +79,13 @@ public abstract class UIPanel : MonoBehaviour
             float t = EaseOut(Mathf.Clamp01(elapsed / animationDuration));
 
             canvasGroup.alpha = Mathf.Lerp(startAlpha, targetAlpha, t);
-            CotentTransform.localScale = Vector3.Lerp(startScale, targetScale, t);
+            ContentTransform.localScale = Vector3.Lerp(startScale, targetScale, t);
 
             yield return null;
         }
 
         canvasGroup.alpha = targetAlpha;
-        CotentTransform.localScale = targetScale;
+        ContentTransform.localScale = targetScale;
     }
 
     public virtual void Hide() // 패널을 비활성화하는 함수
@@ -111,7 +111,7 @@ public abstract class UIPanel : MonoBehaviour
         StopAnimationCoroutine();
 
         canvasGroup.alpha = 0f;
-        CotentTransform.localScale = hiddenScale;
+        ContentTransform.localScale = hiddenScale;
         canvasGroup.blocksRaycasts = false;
         gameObject.SetActive(false);
     }

@@ -156,27 +156,17 @@ public class RoomManager : BaseSceneController<RoomManager>
 
         roomUIManager?.ResetAllSlots();
 
-        Player[] players = PhotonNetwork.PlayerList;
-        bool isMaster = PhotonNetwork.IsMasterClient;
-        bool allGuestsReady = UpdatePlayerSlotAndCheckReady(players);
-        UpdateActionButtontText(players.Length, isMaster, allGuestsReady);
+        UpdatePlayerSlots(PhotonNetwork.PlayerList);
+        UpdateActionButtonText(PhotonNetwork.IsMasterClient);
     }
 
-    private bool UpdatePlayerSlotAndCheckReady(Player[] players) // 슬롯을 업데이트하고 플레이어의 준비 상태를 확인하는 함수
+    private void UpdatePlayerSlots(Player[] players) // 플레이어 슬롯을 업데이트하는 함수
     {
-        bool allGuestsReady = true;
         foreach (Player p in players)
         {
-            bool pIsMaster = p.IsMasterClient;
-            bool pIsReady = IsPlayerReady(p);
-
             int slotIndex = p.IsLocal ? 0 : 1;
-            roomUIManager?.UpdatePlayerSlot(slotIndex, p.NickName, pIsMaster, pIsReady);
-
-            if (!pIsMaster && !pIsReady)
-                allGuestsReady = false;
+            roomUIManager?.UpdatePlayerSlot(slotIndex, p.NickName, p.IsMasterClient, IsPlayerReady(p));
         }
-        return allGuestsReady;
     }
 
     private bool IsPlayerReady(Player p) // 플레이어 준비 상태를 확인하는 함수
@@ -185,7 +175,7 @@ public class RoomManager : BaseSceneController<RoomManager>
             (bool)p.CustomProperties[PlayerConstants.Properties.GameReady];
     }
 
-    private void UpdateActionButtontText(int playerCount, bool isMaster, bool allGuestsReady) // 준비/시작 버튼 텍스트를 업데이트하는 함수
+    private void UpdateActionButtonText(bool isMaster) // 준비/시작 버튼 텍스트를 업데이트하는 함수
     {
         if (isMaster)
             roomUIManager?.SetActionButtonText(RoomConstants.ButtonText.Start);

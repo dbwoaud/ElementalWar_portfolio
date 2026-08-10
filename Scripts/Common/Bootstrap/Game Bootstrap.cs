@@ -1,3 +1,4 @@
+using Photon.Pun;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
@@ -11,6 +12,11 @@ public class GameBootstrap : MonoBehaviour
 
     private static bool isBootstrapped;
 
+    [RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.SubsystemRegistration)]
+    private static void ResetStatics() // 도메인 리로드 비활성화 시 정적 상태를 초기화하는 함수
+    {
+        isBootstrapped = false;
+    }
 
     private void Awake()
     {
@@ -21,8 +27,15 @@ public class GameBootstrap : MonoBehaviour
         }
         isBootstrapped = true;
 
+        SetRunInBackground();
         SpawnPersistentManagers();
         LoadFirstScene();
+    }
+
+    private static void SetRunInBackground() // 백그라운드 실행을 설정하는 함수
+    {
+        Application.runInBackground = true;
+        PhotonNetwork.KeepAliveInBackground = 60000f;
     }
 
     private void SpawnPersistentManagers() // 전역 매니저를 생성하는 함수

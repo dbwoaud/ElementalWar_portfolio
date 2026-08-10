@@ -1,3 +1,6 @@
+using UnityEngine;
+
+#if ENABLE_PROFILING
 using System;
 using System.Collections.Generic;
 using System.Globalization;
@@ -5,10 +8,12 @@ using System.IO;
 using System.Text;
 using Photon.Pun;
 using Unity.Profiling;
-using UnityEngine;
+#endif
 
 public class NetworkPerformanceLogger : MonoBehaviour
 {
+#if ENABLE_PROFILING
+
     [Header("샘플링 설정")]
     [SerializeField] private float sampleInterval = 1f;
     [SerializeField] private string scenarioName = "unnamed";
@@ -30,9 +35,10 @@ public class NetworkPerformanceLogger : MonoBehaviour
     private float frameTimeMax;
     private long gcAllocSum;
 
-    // 구간 시작 시점 스냅샷 (델타 계산용)
+    // 구간 시작 시점 스냅샷
     private int gcCollectAtStart;
     private long rpcSentAtStart;
+    private long rpcReceivedDamageAtStart;
     private long physicsQueriesAtStart;
     private long unitTicksAtStart;
     private long bytesOutAtStart;
@@ -44,7 +50,7 @@ public class NetworkPerformanceLogger : MonoBehaviour
         "elapsed_s,scenario,variant,is_master," +
         "frame_time_avg_ms,frame_time_max_ms,fps_avg," +
         "gc_alloc_per_frame_kb,gc_collect_count," +
-        "active_units,rpc_sent,physics_queries,unit_ticks," +
+        "active_units,rpc_sent,rpc_received_damage,physics_queries,unit_ticks," +
         "bytes_out,bytes_in,rtt_ms,rtt_variance_ms,resent_reliable";
 
 
@@ -98,6 +104,7 @@ public class NetworkPerformanceLogger : MonoBehaviour
 
         int gcCollectDelta = GC.CollectionCount(0) - gcCollectAtStart;
         long rpcDelta = ProfilingCounters.RpcSent - rpcSentAtStart;
+        long rpcRecvDelta = ProfilingCounters.RpcReceivedDamage - rpcReceivedDamageAtStart;   // 추가
         long physicsDelta = ProfilingCounters.PhysicsQueries - physicsQueriesAtStart;
         long tickDelta = ProfilingCounters.UnitTicks - unitTicksAtStart;
 
@@ -115,6 +122,7 @@ public class NetworkPerformanceLogger : MonoBehaviour
         Append(gcCollectDelta);
         Append(UnitRegistry.ActiveUnits.Count);
         Append(rpcDelta);
+        Append(rpcRecvDelta); 
         Append(physicsDelta);
         Append(tickDelta);
         Append(bytesOut - bytesOutAtStart);
@@ -161,6 +169,7 @@ public class NetworkPerformanceLogger : MonoBehaviour
 
         gcCollectAtStart = GC.CollectionCount(0);
         rpcSentAtStart = ProfilingCounters.RpcSent;
+        rpcReceivedDamageAtStart = ProfilingCounters.RpcReceivedDamage; 
         physicsQueriesAtStart = ProfilingCounters.PhysicsQueries;
         unitTicksAtStart = ProfilingCounters.UnitTicks;
 
@@ -212,4 +221,17 @@ public class NetworkPerformanceLogger : MonoBehaviour
         Debug.Log($"[Profiler] 계측 종료. {rows.Count - 1}행 저장 → {path}");
         return path;
     }
+
+#else
+    public string ScenarioName { get => string.Empty; set { } }
+    public bool IsLogging => false;
+
+    public void StartLogging(string scenario) 
+    { 
+
+    }
+
+    public string StopLoggingAndExport() => null;
+
+#endif
 }

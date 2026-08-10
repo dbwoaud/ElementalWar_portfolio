@@ -11,8 +11,11 @@ public class UnitStateIdle : IUnitState
 
     public void EnterState(Unit unit) // 유닛이 대기 상태에 진입할 때 실행되는 함수
     {
-        unit?.Animator.PlayIdle();
-        unit?.StopMovement();
+        if (unit == null)
+            return;
+
+        unit.Animator?.PlayIdle();
+        unit.StopMovement();
         lastScanTime = -ScanInterval;
     }
 

@@ -14,6 +14,9 @@ public class NetworkPoolManager : Singleton<NetworkPoolManager>, IPunPrefabPool
     protected override void Awake()
     {
         base.Awake();
+        if (Instance != this)
+            return;
+
         PhotonNetwork.PrefabPool = this;
         RegisterPrefabs();
     }
@@ -24,6 +27,10 @@ public class NetworkPoolManager : Singleton<NetworkPoolManager>, IPunPrefabPool
             pool.Clear();
 
         pooledObjects.Clear();
+
+        if (ReferenceEquals(PhotonNetwork.PrefabPool, this))
+            PhotonNetwork.PrefabPool = new DefaultPool();
+
         base.OnDestroy();
     }
 
@@ -48,12 +55,17 @@ public class NetworkPoolManager : Singleton<NetworkPoolManager>, IPunPrefabPool
     public GameObject Instantiate(string prefabId, Vector3 position, Quaternion rotation) // 프리팹을 생성하는 함수
     {
         if (!prefabDict.TryGetValue(prefabId, out GameObject sourcePrefab))
-            return new GameObject(prefabId);
+        {
+            var temp = new GameObject(prefabId);
+            temp.SetActive(false);
+            return temp;
+        }
 
+#if ENABLE_PROFILING
         /* 프로파일링용 before 경로: 오브젝트 풀 미사용 */
         if (!ProfilingSwitches.UsePooling)
             return CreatePrefab(sourcePrefab, position, rotation);
-
+#endif
         /* 프로파일링용 after 경로: 오브젝트 풀 사용 */
         if (!objectPool.TryGetValue(prefabId, out Queue<GameObject> pool))
         {
@@ -69,13 +81,14 @@ public class NetworkPoolManager : Singleton<NetworkPoolManager>, IPunPrefabPool
         if (obj == null)
             return;
 
+#if ENABLE_PROFILING
         /* 프로파일링용 before 경로: 오브젝트 풀 미사용 */
         if (!ProfilingSwitches.UsePooling)
         {
             Object.Destroy(obj);
             return;
         }
-
+#endif
         /* 프로파일링용 after 경로: 오브젝트 풀 사용 */
         obj.SetActive(false);
         ReturnToPool(obj);

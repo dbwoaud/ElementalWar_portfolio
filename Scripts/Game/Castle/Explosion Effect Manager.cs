@@ -17,18 +17,24 @@ public class ExplosionEffectManager: Singleton<ExplosionEffectManager>
 
     [Header("오브젝트 풀")]
     [SerializeField] private Queue<GameObject> explosionPool = new();
-    [SerializeField] private int initialiPoolsize = 40;
+    [SerializeField] private int initialPoolsize = 40;
     [SerializeField] private int maxPoolSize = 80;
 
 
     protected override void Awake()
     {
         base.Awake();
+        if (Instance != this)
+            return;
+
+        if (explosionPrefab == null)
+            return;
+
         ParticleSystem ps = explosionPrefab.GetComponent<ParticleSystem>();
         if (ps != null)
             effectLifeTime = ps.main.duration + ps.main.startLifetime.constantMax;
 
-        PreloadExplosions(initialiPoolsize);
+        PreloadExplosions(initialPoolsize);
     }
 
     private void PreloadExplosions(int count) // 폭발 프리팹을 풀에 미리 넣는 함수

@@ -11,7 +11,9 @@ public class GameNetworkManager : MonoBehaviourPunCallbacks
     public event Action<int> OnMapIndexSet; // 맵 인덱스 설정 시 실행되는 이벤트
     public event Action OnLeftRoomSuccess; // 방 나가기 성공 시 실행되는 이벤트
     public event Action OnReturnToRoomRequested; // 방으로 돌아가기 요청 이벤트
+#if ENABLE_PROFILING
     public event Action<int> OnProfilingStart; // 프로파일링 시작 이벤트
+#endif
 
 
     private void Start()
@@ -102,6 +104,7 @@ public class GameNetworkManager : MonoBehaviourPunCallbacks
         OnReturnToRoomRequested?.Invoke();
     }
 
+#if ENABLE_PROFILING
     public void BroadcastProfilingStart(int scenarioSeed) // 프로파일링 시작을 다른 플레이어와 동기화하는 함수
     {
         photonView.RPC(nameof(RPC_HandleProfilingStart), RpcTarget.All, scenarioSeed);
@@ -112,4 +115,5 @@ public class GameNetworkManager : MonoBehaviourPunCallbacks
     {
         OnProfilingStart?.Invoke(scenarioSeed);
     }
+#endif
 }

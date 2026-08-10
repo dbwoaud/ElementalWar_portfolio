@@ -1,10 +1,14 @@
+#if ENABLE_PROFILING
 using UnityEngine;
 
 public class FPSOverlay : MonoBehaviour
 {
     [SerializeField] private int fontSize = 28;
     [SerializeField] private string variantLabel = "";
+
     private float smoothedMs = 16f;
+    private GUIStyle cachedStyle;
+    private readonly Rect labelRect = new Rect(20, 20, 600, 160);
 
 
     private void Update()
@@ -14,7 +18,7 @@ public class FPSOverlay : MonoBehaviour
 
     private void OnGUI()
     {
-        var style = new GUIStyle
+        cachedStyle ??= new GUIStyle
         {
             fontSize = fontSize,
             normal = { textColor = Color.yellow }
@@ -23,6 +27,8 @@ public class FPSOverlay : MonoBehaviour
         string label = $"{variantLabel}\n" +
                        $"{smoothedMs:F1} ms  ({1000f / smoothedMs:F0} FPS)\n" +
                        $"Units: {UnitRegistry.ActiveUnits.Count}";
-        GUI.Label(new Rect(20, 20, 600, 160), label, style);
+
+        GUI.Label(labelRect, label, cachedStyle);
     }
 }
+#endif

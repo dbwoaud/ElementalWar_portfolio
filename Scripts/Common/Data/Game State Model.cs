@@ -3,7 +3,6 @@ using System;
 public class GameStateModel
 {
     public bool IsGameOver { get; private set; } = false;
-    public bool LocalPlayerWon { get; private set; } = false;
 
     public event Action<bool> OnGameOver; // 게임 종료 시 실행되는 이벤트
 
@@ -14,8 +13,6 @@ public class GameStateModel
             return;
 
         IsGameOver = true;
-        LocalPlayerWon = localPlayerWon;
-
         OnGameOver?.Invoke(localPlayerWon);
     }
 }

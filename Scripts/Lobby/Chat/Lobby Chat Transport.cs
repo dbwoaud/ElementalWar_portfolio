@@ -26,7 +26,12 @@ public class LobbyChatTransport : MonoBehaviour, IChatTransport, IChatClientList
 
     public void Connect() // 포톤 채팅 서버에 연결하는 함수
     {
+#if UNITY_WEBGL && !UNITY_EDITOR
+        chatClient = new ChatClient(this, ConnectionProtocol.WebSocketSecure) { ChatRegion = chatRegion };
+        chatClient.UseBackgroundWorkerForSending = false;
+#else
         chatClient = new ChatClient(this) { ChatRegion = chatRegion };
+#endif
         chatClient.Connect
         (
             PhotonNetwork.PhotonServerSettings.AppSettings.AppIdChat,

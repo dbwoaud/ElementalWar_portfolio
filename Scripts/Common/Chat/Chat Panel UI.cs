@@ -10,6 +10,7 @@ public class ChatPanelUI : MonoBehaviour, IChatView
     [SerializeField] private ScrollRect chatView;
     [SerializeField] private Transform contentParent;
     [SerializeField] private GameObject chatTextPrefab;
+    [SerializeField] private int maxMessageCount = 100;
 
     public event Action<string> OnSendMessageRequest; // 메시지 발신 요청 이벤트
 
@@ -51,12 +52,19 @@ public class ChatPanelUI : MonoBehaviour, IChatView
         if (chatTextPrefab == null || contentParent == null)
             return;
 
+        RemoveOldMessages();
+
         GameObject newChatObj = Instantiate(chatTextPrefab, contentParent);
-        Text chatText = newChatObj.GetComponent<Text>();
-        if (chatText != null)
+        if (newChatObj.TryGetComponent(out Text chatText))
             chatText.text = formattedMessage;
 
         UpdateScrollPosition();
+    }
+
+    private void RemoveOldMessages() // 오래된 메시지를 제거하는 함수
+    {
+        while (contentParent.childCount >= maxMessageCount)
+            Destroy(contentParent.GetChild(0).gameObject);
     }
 
     private void UpdateScrollPosition() // 스크롤 위치를 업데이트하는 함수

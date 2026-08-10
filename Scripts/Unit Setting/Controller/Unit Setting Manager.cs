@@ -111,8 +111,7 @@ public class UnitSettingManager : BaseSceneController<UnitSettingManager>
         if (unitDatabase == null)
             return;
         
-        List<UnitStat> filteredUnits = new List<UnitStat>(unitDatabase.FindByElement(type));
-        filteredUnits.Sort((a, b) => a.spawnCost.CompareTo(b.spawnCost));
+        List<UnitStat> filteredUnits = new(unitDatabase.FindByElement(type));
         unitSettingUIManager?.UpdateUnitSlotList(filteredUnits);
         UpdateDeckSlot();
     }

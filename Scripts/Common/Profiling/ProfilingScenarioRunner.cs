@@ -1,3 +1,4 @@
+#if ENABLE_PROFILING
 using System.Collections;
 using Photon.Pun;
 using UnityEngine;
@@ -85,7 +86,7 @@ public class ProfilingScenarioRunner : MonoBehaviour
 
         for (int i = 0; i < totalUnits; i++)
         {
-            PhotonNetwork.Instantiate(stat.unitPrefab.name, spawnPoint.position, Quaternion.identity, 0);
+            PhotonNetwork.Instantiate(stat.UnitPrefab.name, spawnPoint.position, Quaternion.identity, 0);
             yield return new WaitForSecondsRealtime(spawnInterval);
         }
 
@@ -98,3 +99,4 @@ public class ProfilingScenarioRunner : MonoBehaviour
         isRunning = false;
     }
 }
+#endif

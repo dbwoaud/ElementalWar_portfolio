@@ -83,16 +83,16 @@ public class UnitSlotItem : MonoBehaviour, IPointerClickHandler, IBeginDragHandl
         assignedUnit = stat;
 
         if(unitIconImage != null)
-            unitIconImage.sprite = stat.unitIcon;
+            unitIconImage.sprite = stat.UnitIcon;
 
         if(unitCostText != null)
-            unitCostText.text = GameSystem.Cost.GetUnitCostText(stat.spawnCost);
+            unitCostText.text = GameSystem.Cost.GetUnitCostText(stat.SpawnCost);
 
         if(unitNameText != null)
-            unitNameText.text = stat.unitName;
+            unitNameText.text = stat.UnitName;
 
         if(descriptionText != null)
-            descriptionText.text = stat.unitDescription;
+            descriptionText.text = stat.UnitDescription;
 
         unitDescriptionObj?.SetActive(false);
     }

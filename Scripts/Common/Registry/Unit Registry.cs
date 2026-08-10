@@ -1,9 +1,17 @@
 using System.Collections.Generic;
+using UnityEngine;
 
 public static class UnitRegistry
 {
     private static readonly HashSet<Unit> activeUnits = new HashSet<Unit>();
     public static IReadOnlyCollection<Unit> ActiveUnits => activeUnits;
+
+
+    [RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.SubsystemRegistration)]
+    private static void ResetStatics() // 도메인 리로드 비활성화 시 정적 상태를 초기화하는 함수
+    {
+        activeUnits.Clear();
+    }
 
     public static void Register(Unit unit) // 유닛을 활성 목록에 등록하는 함수
     {

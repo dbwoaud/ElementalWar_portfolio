@@ -5,7 +5,7 @@ using UnityEngine.EventSystems;
 public class DeckSlotContainer : MonoBehaviour
 {
     [Header("덱 슬롯 관리")]
-    [SerializeField] public DeckSlotItem[] slotItems;
+    [SerializeField] private DeckSlotItem[] slotItems;
 
     public event Action<int, UnitStat> OnSlotDropped; // 마우스 드롭 이벤트
     public event Action<DeckSlotItem> OnBeginDragEvent; // 마우스 드래그 시작 이벤트

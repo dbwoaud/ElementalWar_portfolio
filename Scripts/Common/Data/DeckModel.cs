@@ -67,6 +67,6 @@ public class DeckModel
 
     public string[] GetUnitNames() // 덱에 있는 모든 유닛의 이름을 배열로 반환하는 함수
     {
-        return deck.Select(s => s != null ? s.unitName : string.Empty).ToArray();
+        return deck.Select(s => s != null ? s.UnitName : string.Empty).ToArray();
     }
 }

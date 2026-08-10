@@ -5,7 +5,6 @@ public class UnitStateDead : IUnitState
 {
     public UnitStateType Type => UnitStateType.Dead;
 
-    [Header("죽음 연출 설정")]
     private const float FadeOutDuration = 1.5f;
     private const float DestroyDelay = 2.0f;
 

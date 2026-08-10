@@ -63,10 +63,10 @@ public class EnergyManager : BaseSceneController<EnergyManager>
 
     private void HandleUpgradeRequest() // 에너지 업그레이드 버튼 클릭을 처리하는 함수
     {
-        int index = currentLevel - 1;
         if (IsMaxLevel()) 
             return;
 
+        int index = currentLevel - 1;
         int cost = levelStats[index].upgradeCost;
         if (currentEnergy >= cost)
         {
@@ -198,6 +198,9 @@ public class EnergyManager : BaseSceneController<EnergyManager>
 
     public void AddEnergy(float amount) // 에너지를 획득하는 함수
     {
+        if (isStop)
+            return;
+
         int index = Mathf.Min(currentLevel - 1, levelStats.Length - 1);
         float maxEnergy = levelStats[index].maxEnergy;
         currentEnergy = Mathf.Min(currentEnergy + amount, maxEnergy);

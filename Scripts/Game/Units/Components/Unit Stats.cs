@@ -6,7 +6,6 @@ public class UnitStats : MonoBehaviour
 {
     [Header("기본 데이터")]
     [SerializeField] private UnitStat baseStat;
-    public UnitStat BaseStat => baseStat;
 
     [Header("유닛 능력치")]
     [SerializeField] private float maxHP;
@@ -20,9 +19,8 @@ public class UnitStats : MonoBehaviour
     [SerializeField] private float spawnCost;
     [SerializeField] private ElementType elementType;
 
-    [Header("넉백 플래그")]
-    [SerializeField] private bool hasTriggeredHalfHPHit;
-    [SerializeField] private bool hasTriggeredQuarterHPHit;
+    private bool hasTriggeredHalfHPHit;
+    private bool hasTriggeredQuarterHPHit;
 
     public float MaxHP => maxHP;
     public float CurrentHP => currentHP;
@@ -36,7 +34,6 @@ public class UnitStats : MonoBehaviour
     public float SpawnCost => spawnCost;
     public ElementType ElementType => elementType;
 
-    public event Action<float> OnDamageTaken; // 유닛 피격 이벤트
     public event Action OnKnockBackRequested; // 유닛 넉백 요청 이벤트
     public event Action OnDied; // 유닛 사망 이벤트
  
@@ -46,16 +43,16 @@ public class UnitStats : MonoBehaviour
         if (baseStat == null)
             return;
 
-        maxHP = baseStat.maxHP;
+        maxHP = baseStat.MaxHP;
         currentHP = maxHP;
-        attackDamage = baseStat.attackDamage;
-        firstAttackInterval = baseStat.firstAttackDelay;
-        attackInterval = baseStat.attackInterval;
-        attackRange = baseStat.attackRange;
-        moveSpeed = baseStat.moveSpeed;
-        aoeRadius = baseStat.aoeRadius;
-        spawnCost = baseStat.spawnCost;
-        elementType = baseStat.elementType;
+        attackDamage = baseStat.AttackDamage;
+        firstAttackInterval = baseStat.FirstAttackDelay;
+        attackInterval = baseStat.AttackInterval;
+        attackRange = baseStat.AttackRange;
+        moveSpeed = baseStat.MoveSpeed;
+        aoeRadius = baseStat.AoeRadius;
+        spawnCost = baseStat.SpawnCost;
+        elementType = baseStat.ElementType;
         ResetKnockbackFlags();
     }
 
@@ -71,8 +68,6 @@ public class UnitStats : MonoBehaviour
             return;
 
         currentHP = Mathf.Clamp(currentHP - damage, 0f, maxHP);
-        OnDamageTaken?.Invoke(damage);
-
         if (currentHP <= 0)
         {
             OnDied?.Invoke();
@@ -99,9 +94,6 @@ public class UnitStats : MonoBehaviour
 
     public float CalculateDamage(ElementType targetUnitElementType) // 속성 상성을 적용한 데미지를 계산하는 함수
     {
-        if (baseStat == null)
-            return attackDamage;
-
-        return baseStat.CalculateDamage(elementType, targetUnitElementType, attackDamage);
+        return UnitStat.CalculateDamage(elementType, targetUnitElementType, attackDamage);
     }
 }

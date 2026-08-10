@@ -15,7 +15,7 @@ public class Unit : MonoBehaviourPun, IDamagable, IPunInstantiateMagicCallback
     [SerializeField] private UnitCombat combat;
     [SerializeField] private UnitStateMachine stateMachine;
     [SerializeField] private UnitNetworkSync networkSync;
-    [SerializeField] private IUnitAnimator animator;
+    private IUnitAnimator animator;
 
     private const int ZOffsetSlotCount = 200;
     private const float ZOffsetRange = 1f;
@@ -63,8 +63,7 @@ public class Unit : MonoBehaviourPun, IDamagable, IPunInstantiateMagicCallback
         if (networkSync == null) 
             networkSync = GetComponent<UnitNetworkSync>();
 
-        if (animator == null) 
-            animator = GetComponent<IUnitAnimator>();
+        animator ??= GetComponent<IUnitAnimator>();
     }
 
     private void OnEnable()

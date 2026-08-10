@@ -191,10 +191,10 @@ public class UnitSettingUIManager : BaseUIManager<UnitSettingUIManager>
     private void SetDragGhostUI(UnitSlotItem unitSlotItem) // 유닛 슬롯의 드래그 고스트 UI를 설정하는 함수
     {
         if (ghostImage != null)
-            ghostImage.sprite = unitSlotItem.AssignedUnit.unitIcon;
+            ghostImage.sprite = unitSlotItem.AssignedUnit.UnitIcon;
 
         if (ghostCostText != null)
-            ghostCostText.text = GameSystem.Cost.GetUnitCostText(unitSlotItem.AssignedUnit.spawnCost);
+            ghostCostText.text = GameSystem.Cost.GetUnitCostText(unitSlotItem.AssignedUnit.SpawnCost);
     }
 
     private void HandleMoveDragGhost(PointerEventData data)  // 드래그 고스트 이동을 처리하는 함수 
@@ -225,10 +225,10 @@ public class UnitSettingUIManager : BaseUIManager<UnitSettingUIManager>
     private void SetDragGhostUI(DeckSlotItem slotItem) // 덱 슬롯의 드래그 고스트 UI를 설정하는 함수
     {
         if (ghostCostText != null)
-            ghostImage.sprite = slotItem.AssignedUnit.unitIcon;
+            ghostImage.sprite = slotItem.AssignedUnit.UnitIcon;
 
         if (ghostCostText != null)
-            ghostCostText.text = GameSystem.Cost.GetUnitCostText(slotItem.AssignedUnit.spawnCost);
+            ghostCostText.text = GameSystem.Cost.GetUnitCostText(slotItem.AssignedUnit.SpawnCost);
     }
 
     public void MoveDragGhost(PointerEventData eventData, Canvas mainCanvas) // 드래그 고스트 이동을 연출하는 함수

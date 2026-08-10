@@ -51,10 +51,10 @@ public class DeckSlotItem : MonoBehaviour, IDropHandler, IBeginDragHandler, IDra
     private void PutUnitInfoInDeckSlot(UnitStat stat) // 덱 슬롯에 유닛 정보를 넣는 함수
     {
         if (unitIconImage != null)
-            unitIconImage.sprite = stat.unitIcon;
+            unitIconImage.sprite = stat.UnitIcon;
 
         if (unitCostText != null)
-            unitCostText.text = GameSystem.Cost.GetUnitCostText(stat.spawnCost);
+            unitCostText.text = GameSystem.Cost.GetUnitCostText(stat.SpawnCost);
     }
 
     public void OnBeginDrag(PointerEventData eventData) // 마우스 드래그 시작 시 실행되는 함수

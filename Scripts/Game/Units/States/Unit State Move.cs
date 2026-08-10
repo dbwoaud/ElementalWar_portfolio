@@ -31,11 +31,11 @@ public class UnitStateMove : IUnitState
             }
         }
 
-        unit?.ApplyMovement();
+        unit.ApplyMovement();
     }
 
     public void ExitState(Unit unit) // 유닛이 이동 상태에서 벗어날 때 실행되는 함수
     {
-        unit?.StopMovement();
+        unit.StopMovement();
     }
 }

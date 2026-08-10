@@ -8,6 +8,7 @@ public class RoomUIManager : BaseUIManager<RoomUIManager>
     [SerializeField] private Text roomNameText;
     [SerializeField] private Button exitButton;
     [SerializeField] private Button actionButton;
+    [SerializeField] private Text actionButtonText;
 
     [Header("하위 컨테이너")]
     [SerializeField] private PlayerSlotContainer playerSlotContainer;
@@ -62,12 +63,8 @@ public class RoomUIManager : BaseUIManager<RoomUIManager>
 
     public void SetActionButtonText(string text) // 게임 준비/시작 버튼 텍스트를 설정하는 함수
     {
-        actionButton.GetComponent<Text>().text = text;
-    }
-
-    public void ResetSlot(int slotIndex) // 특정 플레이어 슬롯 UI를 초기화하는 함수
-    {
-        playerSlotContainer?.ResetSlot(slotIndex);
+        if (actionButtonText != null)
+            actionButtonText.text = text;
     }
 
     public void ResetAllSlots() // 모든 플레이어 슬롯 UI를 초기화하는 함수

@@ -9,7 +9,7 @@ public class UnitStateAttack : IUnitState
     [Header("공격 내부 상태 추적")]
     [SerializeField] private AttackPhase phase;
     [SerializeField] private float currentAnimDuration;
-    [SerializeField] private Collider2D currentTarget;
+    [System.NonSerialized] private Collider2D currentTarget;
     private float phaseTimer;
 
 

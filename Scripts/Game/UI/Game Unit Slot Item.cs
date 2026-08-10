@@ -24,8 +24,7 @@ public class GameUnitSlotItem : MonoBehaviour, IPointerClickHandler
     [SerializeField] private UnitStat assignedUnit;
     [SerializeField] private SlotState currentState = SlotState.Inactive;
 
-    [Header("쿨타임 코루틴")]
-    [SerializeField] private Coroutine coolTimeCoroutine;
+    private Coroutine coolTimeCoroutine;
 
     public bool IsActive => currentState == SlotState.Active;
     public bool IsInCoolTime => currentState == SlotState.CoolTime;
@@ -50,8 +49,8 @@ public class GameUnitSlotItem : MonoBehaviour, IPointerClickHandler
         darkOverlayImage.gameObject.SetActive(hasUnit);
         if(hasUnit)
         {
-            unitIconImage.sprite = stat.unitIcon;
-            unitCostText.text = GameSystem.Cost.GetUnitCostText(stat.spawnCost);
+            unitIconImage.sprite = stat.UnitIcon;
+            unitCostText.text = GameSystem.Cost.GetUnitCostText(stat.SpawnCost);
         }
 
         ChangeState(SlotState.Inactive);  
@@ -89,7 +88,7 @@ public class GameUnitSlotItem : MonoBehaviour, IPointerClickHandler
         ChangeState(SlotState.CoolTime);
 
         float timer = 0f;
-        float coolTime = assignedUnit.spawnCoolTime;
+        float coolTime = assignedUnit.SpawnCoolTime;
         while (timer < coolTime)
         {
             timer += Time.deltaTime;
@@ -109,7 +108,7 @@ public class GameUnitSlotItem : MonoBehaviour, IPointerClickHandler
         if (assignedUnit == null || IsInCoolTime) 
             return;
 
-        bool hasEnergy = currentEnergy >= assignedUnit.spawnCost;
+        bool hasEnergy = currentEnergy >= assignedUnit.SpawnCost;
         ChangeState(hasEnergy ? SlotState.Active : SlotState.Inactive);
     }
 }

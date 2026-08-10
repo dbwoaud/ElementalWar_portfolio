@@ -65,13 +65,13 @@ public class UnitStateMachine : MonoBehaviour
 
     public void ChangeState(IUnitState nextState, bool isSync = false) // 유닛 상태를 변경하는 함수
     {
-        if (currentState == nextState)
+        if (nextState == null || currentState == nextState)
             return;
 
         currentState?.ExitState(unit);
         currentState = nextState;
         currentStateType = nextState.Type;
-        currentState?.EnterState(unit);
+        currentState.EnterState(unit);
 
         if (!isSync)
             OnStateChanged?.Invoke(nextState);

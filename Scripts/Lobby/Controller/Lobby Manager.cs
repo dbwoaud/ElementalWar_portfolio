@@ -153,6 +153,9 @@ public class LobbyManager : BaseSceneController<LobbyManager>
 
     private int CalculateNextNumber(List<int> existing) // 다음 방 번호를 계산하는 함수
     {
+        if (existing == null)
+            return 1;
+
         int num = 1;
         while (existing.Contains(num)) 
             num++;

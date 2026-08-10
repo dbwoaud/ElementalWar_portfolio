@@ -11,6 +11,11 @@ public class PlayFabAuthManager : MonoBehaviour
     public event Action<string> OnRegisterErrorEvent; // 회원가입 오류 이벤트
 
 
+    void Awake()
+    {
+        PlayFabSettings.RequestType = WebRequestType.UnityWebRequest;
+    }
+
     public void PlayFabLogin(string email, string password) // 플레이팹에 로그인하는 함수
     {
         var request = new LoginWithEmailAddressRequest { Email = email, Password = password };

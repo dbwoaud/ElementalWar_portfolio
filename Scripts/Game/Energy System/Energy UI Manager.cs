@@ -6,13 +6,13 @@ public class EnergyUIManager : BaseUIManager<EnergyUIManager>
 {
     [Header("UI 요소")]
     [SerializeField] private Text currentEnergyText;
-    [SerializeField] private string lastEnergy;
+    private string lastEnergy;
     [SerializeField] private Text currentLevelText;
-    [SerializeField] private string lastLevel;
+    private string lastLevel;
     [SerializeField] private Button upgradeButton;
     [SerializeField] private Image upgradeButtonImage;
     [SerializeField] private Text upgradeCostText;
-    [SerializeField] private string lastUpgradeCost;
+    private string lastUpgradeCost;
 
     public event Action OnUpgradeRequested; // 에너지 업그레이드 버튼 클릭 이벤트
 

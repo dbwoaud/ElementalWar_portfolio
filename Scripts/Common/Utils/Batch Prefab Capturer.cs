@@ -1,3 +1,4 @@
+#if UNITY_EDITOR
 using System.Collections.Generic;
 using System.IO;
 using UnityEngine;
@@ -73,9 +74,9 @@ public class BatchPrefabCapturer : MonoBehaviour
 
             Debug.Log($"[저장 완료] {fileName} (Size: {captureCamera.orthographicSize})");
         }
-#if UNITY_EDITOR
+
         AssetDatabase.Refresh();
-#endif
         Debug.Log("모든 프리팹 캡처가 성공적으로 완료되었습니다! (Assets/UnitIcons 폴더 확인)");
     }
 }
+#endif

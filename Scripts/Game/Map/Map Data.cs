@@ -14,7 +14,6 @@ public class MapData : MonoBehaviour
     [SerializeField] private PolygonCollider2D cameraBounds;
     [SerializeField] private BoxCollider2D groundCollider;
 
-    public ElementType MapType => mapType;
     public AudioClip MapBGM => mapBGM;
     public Transform Player1CastlePoint => player1CastlePoint;
     public Transform Player2CastlePoint => player2CastlePoint;

@@ -361,12 +361,12 @@ public class GameManager : BaseSceneController<GameManager>
 
     private bool CheckEnergyToSpawn(UnitStat unitToSpawn) // 유닛의 소환 에너지가 있는지 확인하는 함수
     {
-        return energyManager!= null && energyManager.TryConsumeEnergy(unitToSpawn.spawnCost);
+        return energyManager!= null && energyManager.TryConsumeEnergy(unitToSpawn.SpawnCost);
     }
 
     private void SpawnUnit(UnitStat spawnUnitStat) // 유닛을 소환하는 함수
     {
-        PhotonNetwork.Instantiate(spawnUnitStat.unitPrefab.name, myUnitSpawnPoint.position, Quaternion.identity, 0);
+        PhotonNetwork.Instantiate(spawnUnitStat.UnitPrefab.name, myUnitSpawnPoint.position, Quaternion.identity, 0);
         SoundManager.Instance?.Play(SoundKey.UnitSpawn);
     }
 
@@ -395,8 +395,8 @@ public class GameManager : BaseSceneController<GameManager>
 
         foreach (var unit in unitDatabase.Units)
         {
-            if (unit.unitPrefab != null)
-                NetworkPoolManager.Instance.RegisterNetworkPrefab(unit.unitPrefab);
+            if (unit.UnitPrefab != null)
+                NetworkPoolManager.Instance.RegisterNetworkPrefab(unit.UnitPrefab);
         }
     }
 

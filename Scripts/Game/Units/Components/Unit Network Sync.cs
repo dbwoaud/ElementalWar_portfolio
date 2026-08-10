@@ -8,7 +8,6 @@ using UnityEngine;
 [RequireComponent(typeof(UnitStateMachine))]
 [RequireComponent(typeof(UnitMovement))]
 [RequireComponent(typeof(UnitCombat))]
-[RequireComponent(typeof(IUnitAnimator))]
 public class UnitNetworkSync : MonoBehaviour
 {
     [Header("소유 유닛")]
@@ -18,12 +17,11 @@ public class UnitNetworkSync : MonoBehaviour
     [SerializeField] private UnitStateMachine stateMachine;
     [SerializeField] private UnitMovement movement;
     [SerializeField] private UnitCombat combat;
-    [SerializeField] private IUnitAnimator unitAnimator;
+    private IUnitAnimator unitAnimator;
 
-    [Header("애니메이션 경유 상태 전송 지연")]
     private IUnitState pendingState;
     private float pendingStartTime;
-    private const float pendingInterval = 0.05f;
+    private const float PendingInterval = 0.05f;
 
     public PhotonView PhotonView { get; private set; }
     public bool IsOwnedByLocalPlayer => PhotonView.IsMine;
@@ -47,8 +45,7 @@ public class UnitNetworkSync : MonoBehaviour
         if (combat == null) 
             combat = GetComponent<UnitCombat>();
 
-        if (unitAnimator == null) 
-            unitAnimator = GetComponent<IUnitAnimator>();
+        unitAnimator ??= GetComponent<IUnitAnimator>();
     }
 
     private void OnEnable()
@@ -70,7 +67,7 @@ public class UnitNetworkSync : MonoBehaviour
         if (pendingState == null)
             return;
 
-        if (Time.time - pendingStartTime < pendingInterval)
+        if (Time.time - pendingStartTime < PendingInterval)
             return;
 
         BroadcastStateRpc(pendingState.Type);
@@ -108,12 +105,9 @@ public class UnitNetworkSync : MonoBehaviour
 
     private void SetDirection() // 유닛의 방향을 설정하는 함수
     {
-        bool IsMaster = PhotonView.Owner.IsMasterClient;
-        float dir = IsMaster ? 1f : -1f;
-        bool lookLeft = !IsMaster;
-
-        movement?.SetDirection(dir);
-        unitAnimator?.SetDirection(lookLeft);
+        bool isMaster = PhotonView.Owner?.IsMasterClient ?? PhotonView.IsMine;
+        movement?.SetDirection(isMaster ? 1f : -1f);
+        unitAnimator?.SetDirection(!isMaster);
     }
 
     private void SetLayer() // 유닛의 레이어를 설정하는 함수

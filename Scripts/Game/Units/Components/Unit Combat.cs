@@ -64,6 +64,7 @@ public class UnitCombat : MonoBehaviour
     {
         ProfilingCounters.CountPhysicsQuery();
 
+#if ENABLE_PROFILING
         /* 프로파일링용 before 경로: 호출마다 새 배열을 반환 */
         if (!ProfilingSwitches.UseNonAllocQueries)
         {
@@ -78,7 +79,7 @@ public class UnitCombat : MonoBehaviour
             }
             return null;
         }
-
+#endif
         /* 프로파일링용 after 경로: 호출마다 기존 배열을 재사용 */
         ContactFilter2D filter = new()
         {
@@ -148,6 +149,7 @@ public class UnitCombat : MonoBehaviour
     {
         ProfilingCounters.CountPhysicsQuery();
 
+#if ENABLE_PROFILING
         /* 프로파일링용 before 경로: 호출마다 새 배열을 반환 */
         if (!ProfilingSwitches.UseNonAllocQueries)
         {
@@ -159,7 +161,7 @@ public class UnitCombat : MonoBehaviour
             }
             return;
         }
-
+#endif
         /* 프로파일링용 after 경로: 호출마다 기존 배열을 재사용 */
         ContactFilter2D filter = new ContactFilter2D
         {

@@ -6,21 +6,16 @@ using UnityEngine.UI;
 
 public class Castle : MonoBehaviourPun, IDamagable, IPunInstantiateMagicCallback
 {
-    [Header("IDamagable 인터페이스 변수")]
-    public float MaxHP => maxHP;
-    public float CurrentHP => currentHP;
-    public bool IsAlive => !isDestroyed;
-
     [Header("체력 정보")]
     [SerializeField] private float maxHP = 150000f;
     [SerializeField] private float currentHP;
-    [SerializeField] private string lastHP;
+    private string lastHP;
     [SerializeField] private bool isDestroyed = false;
 
     [Header("UI 요소")]
     [SerializeField] private Transform sprite;
     [SerializeField] private RectTransform canvas;
-    [SerializeField] Text CastleHPText;
+    [SerializeField] private Text castleHPText;
 
     [Header("위치 및 방향 설정")]
     [SerializeField] private BoxCollider2D castleCollider;
@@ -38,8 +33,11 @@ public class Castle : MonoBehaviourPun, IDamagable, IPunInstantiateMagicCallback
 
     private bool IsOwnedByLocalPlayer => photonView.IsMine;
 
+    public float MaxHP => maxHP;
+    public float CurrentHP => currentHP;
+    public bool IsAlive => !isDestroyed;
+
     public static event Action<bool, Vector3> OnAnyCastleDestroyed; // 성 파괴 시 실행되는 이벤트 
-    public event Action<bool, Vector3> OnMyCastleDestroyed; // 내 성 파괴 시 실행되는 이벤트 
 
 
     private void Awake()
@@ -62,7 +60,7 @@ public class Castle : MonoBehaviourPun, IDamagable, IPunInstantiateMagicCallback
     {
         currentHP = maxHP;
         SetHPText();
-        bool isRightCastle = !photonView.Owner.IsMasterClient;
+        bool isRightCastle = !(photonView.Owner?.IsMasterClient ?? photonView.IsMine);
         SetDirection(isRightCastle);
         SetLayer();
         RegisterCastleAttackManager();
@@ -70,7 +68,7 @@ public class Castle : MonoBehaviourPun, IDamagable, IPunInstantiateMagicCallback
 
     private void SetHPText() // 성 HP 텍스트를 설정하는 함수
     {
-        if (CastleHPText == null)
+        if (castleHPText == null)
             return;
 
         string newHP = GameSystem.CastleConstants.GetHPText(currentHP, maxHP);
@@ -78,7 +76,7 @@ public class Castle : MonoBehaviourPun, IDamagable, IPunInstantiateMagicCallback
             return;
 
         lastHP = newHP;
-        CastleHPText.text = newHP;
+        castleHPText.text = newHP;
     }
 
     public void SetDirection(bool isRightCastle) // 성의 방향을 설정하는 함수
@@ -185,6 +183,5 @@ public class Castle : MonoBehaviourPun, IDamagable, IPunInstantiateMagicCallback
         bool localPlayerLost = photonView.IsMine;
         Vector3 castlePosition = transform.position;
         OnAnyCastleDestroyed?.Invoke(localPlayerLost, castlePosition);
-        OnMyCastleDestroyed?.Invoke(localPlayerLost, castlePosition);
     }
 }

@@ -9,8 +9,7 @@ public class RoomListContainer : MonoBehaviour
     [SerializeField] private Transform roomListContent;
     [SerializeField] private GameObject roomListItemPrefab;
 
-    [Header("방 목록 딕셔너리")]
-    [SerializeField] private Dictionary<string, RoomListItem> roomItems = new Dictionary<string, RoomListItem>();
+    private Dictionary<string, RoomListItem> roomItems = new Dictionary<string, RoomListItem>();
 
     public event Action<RoomInfo> OnRoomItemClicked; // 방 버튼 클릭 이벤트
 

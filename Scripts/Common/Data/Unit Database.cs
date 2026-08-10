@@ -24,26 +24,29 @@ public class UnitDatabase : ScriptableObject
 
         foreach (var stat in units)
         {
-            if (stat == null || string.IsNullOrEmpty(stat.unitName))
+            if (stat == null || string.IsNullOrEmpty(stat.UnitName))
                 continue;
 
-            nameData[stat.unitName] = stat;
-            if (!elementData.TryGetValue(stat.elementType, out var statList))
+            nameData[stat.UnitName] = stat;
+            if (!elementData.TryGetValue(stat.ElementType, out var statList))
             {
                 statList = new List<UnitStat>();
-                elementData[stat.elementType] = statList;
+                elementData[stat.ElementType] = statList;
             }
             statList.Add(stat);
         }
 
         foreach (var statList in elementData.Values)
-            statList.Sort((a, b) => a.spawnCost.CompareTo(b.spawnCost));
+            statList.Sort((a, b) => a.SpawnCost.CompareTo(b.SpawnCost));
     }
 
     public UnitStat FindByName(string unitName) // 유닛 이름으로 유닛 정보를 조회하는 함수
     {
-        if (string.IsNullOrEmpty(unitName) || nameData == null)
+        if (string.IsNullOrEmpty(unitName))
             return null;
+
+        if (nameData == null)
+            InitializeDatabase();
 
         return nameData.TryGetValue(unitName, out var stat) ? stat : null;
     }
