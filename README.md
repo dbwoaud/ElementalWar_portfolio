@@ -37,11 +37,19 @@ https://github.com/user-attachments/assets/cb65efce-49bf-4e47-ad4b-02efa7e1b1dd
 - **View**: `BaseUIManager<T>`를 상속한 각 씬의 UI 매니저(`MainMenuUIManager`, `LobbyUIManager`, `RoomUIManager`, `UnitSettingUIManager`, `GameUIManager`)가 화면 출력만 담당하며, 직접적인 로직 처리 없이 이벤트를 발행하여 Controller에 상태를 전달합니다.
 - **Controller**: `BaseSceneController<T>`를 상속한 각 씬의 매니저(`MainMenuManager`, `LobbyManager`, `RoomManager`, `UnitSettingManager`, `GameManager`)가 게임 로직과 상태를 담당합니다.
 
-https://github.com/dbwoaud/ElementalWar_portfolio/blob/2ffeb1072c5449a83ce88f6e002821254c725c4a/Scripts/Common/Abstractions/Base%20Classes/Base%20Scene%20Controller.cs#L3-L45
-https://github.com/dbwoaud/ElementalWar_portfolio/blob/2ffeb1072c5449a83ce88f6e002821254c725c4a/Scripts/Common/Abstractions/Base%20Classes/Base%20UI%20Manager.cs#L4-L43
+https://github.com/dbwoaud/ElementalWar_portfolio/blob/919a2aaf95099df2999314d6bf51433980b8d296/Scripts/Common/Abstractions/Base%20Classes/Base%20Scene%20Controller.cs#L3-L46
+https://github.com/dbwoaud/ElementalWar_portfolio/blob/919a2aaf95099df2999314d6bf51433980b8d296/Scripts/Common/Abstractions/Base%20Classes/Base%20UI%20Manager.cs#L3-L43
+
 - [🔗 **LobbyNetworkManager.cs 코드 보기**](https://github.com/dbwoaud/ElementalWar_portfolio/blob/main/Scripts/Lobby/Network/Lobby%20Network%20Manager.cs)
 - [🔗 **BaseUIManager를 상속한 LobbyUIManager.cs 코드 보기**](https://github.com/dbwoaud/ElementalWar_portfolio/blob/main/Scripts/Lobby/UI/Lobby%20UI%20Manager.cs)
 - [🔗 **BaseSceneController를 상속한 LobbyManager.cs 코드 보기**](https://github.com/dbwoaud/ElementalWar_portfolio/blob/main/Scripts/Lobby/Controller/Lobby%20Manager.cs)
+
+
+> **📌 적용 범위에 대한 부연**
+> `BaseSceneController<T>`는 5개 씬 컨트롤러 외에 Game 씬의 서브시스템(`EnergyManager`, `CastleAttackManager`, `MapManager`)에도 적용했습니다.
+> 이들 역시 **캐싱 → 이벤트 구독 → 초기화 → 해제**라는 동일한 생명주기를 요구하므로 베이스를 재사용하는 편이 누락 위험이 적다고 판단했습니다.
+> 다만 네트워크 콜백과 BGM이 불필요한 클래스는 해당 훅이 빈 구현으로 남아 인터페이스 분리 원칙 관점에서는 아쉬운 지점이며,
+> **생명주기 전용 베이스와 씬 전용 베이스를 분리하는 것이 더 정확한 설계**임을 인지하고 있습니다.
 
 ---
 
@@ -63,8 +71,8 @@ GameUIManager (최상위 조합자)
 - `Container`: 여러 개의 Item을 보유하며 이벤트를 집계하는 클래스로, 상위 매니저는 Container 내부의 구체적인 아이템 개수나 종류를 몰라도 단일 인터페이스를 통해 전체 아이템을 갱신하거나 조작할 수 있습니다.
 - `GameUnitSlotItem`: 실제 UI를 구성하는 최소 단위 클래스로, 한 Item의 관리를 담당하며, 여기서 발생하는 모든 상호작용은 이벤트를 통해 부모 컨테이너로 전달되어 객체 간의 결합도를 낮췄습니다.
 
-https://github.com/dbwoaud/ElementalWar_portfolio/blob/2ffeb1072c5449a83ce88f6e002821254c725c4a/Scripts/Game/UI/Game%20UI%20Manager.cs#L5-L15
-https://github.com/dbwoaud/ElementalWar_portfolio/blob/2ffeb1072c5449a83ce88f6e002821254c725c4a/Scripts/Common/Abstractions/Base%20Classes/UIPanel.cs#L1-L129
+https://github.com/dbwoaud/ElementalWar_portfolio/blob/919a2aaf95099df2999314d6bf51433980b8d296/Scripts/Game/UI/Game%20UI%20Manager.cs#L5-L15
+https://github.com/dbwoaud/ElementalWar_portfolio/blob/919a2aaf95099df2999314d6bf51433980b8d296/Scripts/Common/Abstractions/Base%20Classes/UIPanel.cs#L1-L129
 
 - [🔗 **GameUIManager.cs 전체 코드 보기**](https://github.com/dbwoaud/ElementalWar_portfolio/blob/main/Scripts/Game/UI/Game%20UI%20Manager.cs)
 - [🔗 **UIPanel을 상속한 GameResultPanel.cs 코드 보기**](https://github.com/dbwoaud/ElementalWar_portfolio/blob/main/Scripts/Game/UI/Game%20Result%20Panel.cs)
@@ -83,7 +91,7 @@ https://github.com/dbwoaud/ElementalWar_portfolio/blob/2ffeb1072c5449a83ce88f6e0
 
 **패턴 사용 이유**: Unit 하나에 로직을 모두 넣으면 거대한 God Class가 되어 유지보수가 어려워집니다. 기능별 컴포넌트로 책임을 위임하고 Unit은 퍼사드 역할만 맡겨, 각 기능을 독립적으로 수정과 테스트를 할 수 있게 했습니다.
 
-https://github.com/dbwoaud/ElementalWar_portfolio/blob/2ffeb1072c5449a83ce88f6e002821254c725c4a/Scripts/Game/Units/Unit.cs#L4-L54
+https://github.com/dbwoaud/ElementalWar_portfolio/blob/919a2aaf95099df2999314d6bf51433980b8d296/Scripts/Game/Units/Unit.cs#L4-L41
 
 - [🔗 **Unit.cs 전체 코드 보기**](https://github.com/dbwoaud/ElementalWar_portfolio/blob/main/Scripts/Game/Units/Unit.cs)  
 - [🔗 **UnitStats.cs 코드 보기**](https://github.com/dbwoaud/ElementalWar_portfolio/blob/main/Scripts/Game/Units/Components/Unit%20Stats.cs)  
@@ -101,7 +109,7 @@ https://github.com/dbwoaud/ElementalWar_portfolio/blob/2ffeb1072c5449a83ce88f6e0
 
 **패턴 사용 이유**: 유닛 행동을 if/switch로 처리하면 상태가 추가될 때마다 분기문 전체를 수정해야 합니다. 상태를 독립 클래스로 분리하여 새 상태 추가 시 기존 코드 수정 없이 클래스만 추가하면 되도록 했습니다.
 
-https://github.com/dbwoaud/ElementalWar_portfolio/blob/2ffeb1072c5449a83ce88f6e002821254c725c4a/Scripts/Game/Units/States/IUnitState.cs#L1-L8
+https://github.com/dbwoaud/ElementalWar_portfolio/blob/919a2aaf95099df2999314d6bf51433980b8d296/Scripts/Game/Units/States/IUnitState.cs#L1-L8
 
 - [🔗 **UnitStateIdle.cs 코드 보기**](https://github.com/dbwoaud/ElementalWar_portfolio/blob/main/Scripts/Game/Units/States/Unit%20State%20Idle.cs)  
 - [🔗 **UnitStateMove.cs 코드 보기**](https://github.com/dbwoaud/ElementalWar_portfolio/blob/main/Scripts/Game/Units/States/Unit%20State%20Move.cs)  
@@ -124,6 +132,10 @@ https://github.com/user-attachments/assets/45c84802-b90f-41e6-9571-53c1abbe700c
 `HashSet<Unit>` 기반의 정적 레지스트리를 통해 씬 내 모든 활성 유닛을 O(1)로 등록/해제가 되도록 최적화를 수행하였으며, `IReadOnlyCollection`으로 외부 읽기 전용 노출하여 데이터 무결성을 보장합니다.
 
 **패턴 사용 이유**: 씬의 모든 활성 유닛을 매번 FindObjectsOfType으로 찾으면 유닛이 많아질수록 성능이 급격히 떨어집니다. HashSet 레지스트리로 등록/해제를 O(1)로 처리해 대량 유닛 상황의 조회 비용을 없앴습니다.
+
+정적 컬렉션이므로 **에디터의 Reload Domain 비활성화 환경에서 이전 플레이 세션의 잔여 참조**가 남지 않도록 RuntimeInitializeOnLoadMethod로 초기화 훅을 두었습니다.
+
+https://github.com/dbwoaud/ElementalWar_portfolio/blob/919a2aaf95099df2999314d6bf51433980b8d296/Scripts/Common/Registry/Unit%20Registry.cs#L4-L7
 
 - [🔗 **UnitRegistry.cs 코드 보기**](https://github.com/dbwoaud/ElementalWar_portfolio/blob/main/Scripts/Common/Singletons/Unit%20Registry.cs)
 
@@ -175,8 +187,8 @@ ChatController (Context)
 └─ ChatPanelUI → ScrollRect 기반 채팅창 UI
 ```
 
-https://github.com/dbwoaud/ElementalWar_portfolio/blob/2ffeb1072c5449a83ce88f6e002821254c725c4a/Scripts/Common/Chat/IChatTransport.cs#L1-L13
-https://github.com/dbwoaud/ElementalWar_portfolio/blob/2ffeb1072c5449a83ce88f6e002821254c725c4a/Scripts/Common/Chat/IChatView.cs#L1-L8
+https://github.com/dbwoaud/ElementalWar_portfolio/blob/919a2aaf95099df2999314d6bf51433980b8d296/Scripts/Common/Chat/IChatTransport.cs#L3-L13
+https://github.com/dbwoaud/ElementalWar_portfolio/blob/919a2aaf95099df2999314d6bf51433980b8d296/Scripts/Common/Chat/IChatView.cs#L3-L8
 
 - [🔗 **LobbyChatTransport.cs 코드 보기**](https://github.com/dbwoaud/ElementalWar_portfolio/blob/main/Scripts/Lobby/Chat/Lobby%20Chat%20Transport.cs)  
 - [🔗 **RoomChatTransport.cs 코드 보기**](https://github.com/dbwoaud/ElementalWar_portfolio/blob/main/Scripts/Room/Chat/Room%20Chat%20Transport.cs)
@@ -189,15 +201,15 @@ https://github.com/dbwoaud/ElementalWar_portfolio/blob/2ffeb1072c5449a83ce88f6e0
 
 ### **1. [멀티플레이] Photon PUN2 기반 실시간 네트워크 동기화**
 
-- **네트워크 오브젝트 풀(`NetworkPoolManager`)**: `IPunPrefabPool`을 직접 구현하여 Photon의 `Instantiate` / `Destroy` 사이클을 커스텀 오브젝트 풀로 대체했습니다. 다만 실제 계측 결과 이 프로젝트의 유닛 사망률(초당 약 3회)에서는 유의미한 개선이 없었으며, 그 판단 과정은 아래 「최적화 & 성능 계측 4」에 정리했습니다.
-https://github.com/dbwoaud/ElementalWar_portfolio/blob/2ffeb1072c5449a83ce88f6e002821254c725c4a/Scripts/Game/Network/Network%20Pool%20Manager.cs#L43-L79
+- **네트워크 오브젝트 풀(`NetworkPoolManager`)**: `IPunPrefabPool`을 직접 구현하여 Photon의 `Instantiate` / `Destroy` 사이클을 커스텀 오브젝트 풀로 대체했습니다. 다만 실제 계측 결과 이 프로젝트의 유닛 사망률(초당 약 3회)에서는 유의미한 개선이 없었으며, 그 판단 과정은 아래 「최적화 & 성능 계측 4」에 정리했습니다. 또한, `OnDestroy` 시점에 `PhotonNetwork.PrefabPool`을 기본 구현으로 원복해, 씬 전환 후 PUN이 파괴된 풀 인스턴스를 참조하는 문제를 방지했습니다.
+https://github.com/dbwoaud/ElementalWar_portfolio/blob/919a2aaf95099df2999314d6bf51433980b8d296/Scripts/Game/Network/Network%20Pool%20Manager.cs#L55-L95
 - [🔗 **NetworkPoolManager.cs 코드 보기**](https://github.com/dbwoaud/ElementalWar_portfolio/blob/main/Scripts/Game/Network/Network%20Pool%20Manager.cs)
 
 - **상태 동기화**: 유닛의 상태 전이(State Machine)와 공격 애니메이션을 `PhotonView.RPC`로 상대 클라이언트에 동기화하여, 양측 화면에서 일관된 시각적 표현을 보장합니다.
-https://github.com/dbwoaud/ElementalWar_portfolio/blob/2ffeb1072c5449a83ce88f6e002821254c725c4a/Scripts/Game/Units/Components/Unit%20Network%20Sync.cs#L89-L101
+https://github.com/dbwoaud/ElementalWar_portfolio/blob/919a2aaf95099df2999314d6bf51433980b8d296/Scripts/Game/Units/Components/Unit%20Network%20Sync.cs#L59-L71
 
-- **방 속성(Custom Properties)**: 덱 정보, 준비 상태, 맵 인덱스를 Photon `CustomProperties`에 저장하고, `OnRoomPropertiesUpdate` 콜백으로 처리하여 별도 서버 없이도 두 클라이언트 간 게임 시작 조건을 안전하게 동기화했습니다.
-https://github.com/dbwoaud/ElementalWar_portfolio/blob/2ffeb1072c5449a83ce88f6e002821254c725c4a/Scripts/Lobby/Network/Lobby%20Network%20Manager.cs#L48-L86
+- **방 속성(Custom Properties)**: 덱 정보, 준비 상태, 맵 인덱스를 Photon `CustomProperties`에 저장하고, `OnRoomPropertiesUpdate` 콜백으로 처리하여 별도 서버 없이도 두 클라이언트 간 게임 시작 조건을 안전하게 동기화했습니다. `GameNetworkManager`는 `Start`에서 1프레임 지연 후 방 속성을 조회합니다. 씬 진입 시점에 이미 설정된 맵 인덱스를 놓치지 않으면서, 동시에 `GameManager`의 이벤트 구독보다 먼저 발행되는 경쟁 상황을 피하기 위한 처리입니다.
+https://github.com/dbwoaud/ElementalWar_portfolio/blob/919a2aaf95099df2999314d6bf51433980b8d296/Scripts/Lobby/Network/Lobby%20Network%20Manager.cs#L48-L86
 
 - **설계 한계 및 개선 방향 (권한 모델)**: 본 프로젝트는 학습을 목적으로 한 클라이언트 권위 구조로, 각 클라이언트가 계산한 결과를 `PhotonView.RPC`로 전파합니다. 이 방식은 구현이 간결하지만 클라이언트가 보낸 값을 서버가 검증하지 않아 메모리 조작 등 치팅에 취약합니다. 상용 서비스 수준에서는 서버가 모든 판정을 수행하고 클라이언트는 입력만 전송하는 서버 권위 구조로 전환하여 데미지 및 상태 판정을 서버에서 검증해야 함을 인지하고 있습니다.
 
@@ -207,21 +219,23 @@ https://github.com/dbwoaud/ElementalWar_portfolio/blob/2ffeb1072c5449a83ce88f6e0
 - [🔗 **PlayFabAuthManager.cs 코드 보기**](https://github.com/dbwoaud/ElementalWar_portfolio/blob/main/Scripts/MainMenu/Network/PlayFab%20Auth%20Manager.cs)
   
 - **에러 처리**: `ErrorTranslator`를 통해 PlayFab 및 Photon 에러 코드를 사용자 친화적 메시지로 변환하고, 공통 팝업 UI(`PopupPanelUIManager`)를 통해 출력하여 에러 처리를 일관되게 관리했습니다.
-https://github.com/dbwoaud/ElementalWar_portfolio/blob/2ffeb1072c5449a83ce88f6e002821254c725c4a/Scripts/Common/Constants/Game%20Constants.cs#L180-L238
+https://github.com/dbwoaud/ElementalWar_portfolio/blob/919a2aaf95099df2999314d6bf51433980b8d296/Scripts/Common/Constants/Game%20Constants.cs#L180-L238
 - [🔗 **PopupPanelUIManager.cs 코드 보기**](https://github.com/dbwoaud/ElementalWar_portfolio/blob/main/Scripts/Common/Singletons/Popup%20Panel%20UI%20Manager.cs)
+
+- **설계 한계 및 개선 방향 (비공개 방 비밀번호)**: 비공개 방의 비밀번호를 `CustomRoomPropertiesForLobby`에 포함시켜 클라이언트가 입력값과 직접 비교하는 구조입니다. 구현이 단순하고 별도 서버 로직이 필요 없다는 장점이 있지만, **로비의 모든 클라이언트가 비밀번호 값을 조회할 수 있어 실질적인 접근 제어가 되지 않습니다.** 상용 수준에서는 Photon Custom Authentication이나 서버 측 검증 로직으로 대체해야 함을 인지하고 있습니다.
   
 ### **3. [데이터 주도] ScriptableObject 기반 유닛 데이터 설계**
 
 - `UnitStat`을 `ScriptableObject`로 정의하여 게임 로직과 데이터를 완전히 분리했습니다. 새로운 유닛 추가 시 코드 수정 없이 에셋 파일 생성만으로 시스템에 즉시 반영되는 **OCP**를 실천했습니다.
 - `UnitDatabase`는 `ScriptableObject`에 `Dictionary<string, UnitStat>`와 `Dictionary<ElementType, List<UnitStat>>` 캐시를 구축하여, 이름 조회와 속성 필터링을 모두 O(1)로 처리했습니다.
-- `UnitStat.CalculateDamage()`로 속성 상성 배율(풍>산, 림>풍, 화>림, 산>화)을 데이터 레벨에서 캡슐화하여, 전투 로직이 상성 테이블을 직접 알 필요가 없도록 설계했습니다.  
+- 속성 상성 배율(풍>산, 림>풍, 화>림, 산>화)은 **5×5 정적 배열 테이블**로 정의해 분기문 없이 O(1)로 조회하며, 속성이 추가되어도 테이블 한 행만 늘리면 됩니다.
 - [🔗 **UnitStat.cs 코드 보기**](https://github.com/dbwoaud/ElementalWar_portfolio/blob/main/Scripts/Common/Data/Unit%20Stat.cs)  
 - [🔗 **UnitDatabase.cs 코드 보기**](https://github.com/dbwoaud/ElementalWar_portfolio/blob/main/Scripts/Common/Data/Unit%20Database.cs)
 
 ### **4. [UX] 덱 편성 드래그 앤 드롭 시스템**
 
 - Unity의 `IBeginDragHandler`, `IDragHandler`, `IEndDragHandler`, `IDropHandler` 인터페이스를 각 슬롯 Item(`DeckSlotItem`, `UnitSlotItem`)에 구현하여 직관적인 덱 편성 UX를 제공합니다.
-- 드래그 중 고스트 이미지를 Canvas 최상단에 렌더링하고, 드롭 타겟 감지를 통해 유닛 슬롯→덱 슬롯 할당, 덱 슬롯 간 스왑을 구분 처리합니다.
+- 드래그 중 고스트 이미지를 Canvas 최상단에 렌더링하고, 드롭 타겟 감지를 통해 유닛 슬롯→덱 슬롯 할당, 덱 슬롯 간 교체를 구분 처리합니다.
 - 이벤트는 Item → Container → UIManager → Controller로 버블링되어 실제 덱 데이터(`DeckModel`) 변경은 Controller 계층에서만 이루어집니다.  
 - [🔗 **DeckSlotItem.cs 코드 보기**](https://github.com/dbwoaud/ElementalWar_portfolio/blob/main/Scripts/Unit%20Setting/UI/Deck%20Slot%20Item.cs)  
 - [🔗 **UnitSlotItem.cs 코드 보기**](https://github.com/dbwoaud/ElementalWar_portfolio/blob/main/Scripts/Unit%20Setting/UI/Unit%20Slot%20Item.cs)
@@ -245,7 +259,11 @@ Unity 6000.4.7f1 · IL2CPP · Development Build · VSync Off
 
 > **GC 할당은 "프레임당"이 아니라 "초당"으로 정규화했습니다.** 프레임당 수치는 FPS에 반비례하므로, FPS가 다른 두 실행을 프레임당 지표로 비교하면 개선되지 않은 항목이 개선된 것처럼 보입니다. 실제로 실험 1에서 프레임당 GC 할당은 −1.5%였지만 초당으로 환산하면 −0.6%로 사실상 차이가 없었습니다.
 
+> **계측 코드는 배포 빌드에 남지 않습니다.** `ProfilingSwitches`의 항목은 `ENABLE_PROFILING` 심볼이 없으면 `const`로 컴파일되어 분기 자체가 소거되고, `ProfilingCounters`의 카운트 함수는 `[Conditional]` 특성으로 **호출부까지 제거**됩니다. `NetworkPerformanceLogger`·`ProfilingScenarioRunner`·`FPSOverlay`도 전처리기로 통째로 배제되므로, 계측 인프라가 릴리즈 성능에 영향을 주지 않습니다.
+
 - [🔗 **NetworkPerformanceLogger.cs 코드 보기**](https://github.com/dbwoaud/ElementalWar_portfolio/blob/main/Scripts/Common/Profiling/NetworkPerformanceLogger.cs)
+- [🔗 **ProfilingSwitches.cs 코드 보기**](https://github.com/dbwoaud/ElementalWar_portfolio/blob/main/Scripts/Common/Profiling/ProfilingSwitches.cs)
+- [🔗 **ProfilingCounters.cs 코드 보기**](https://github.com/dbwoaud/ElementalWar_portfolio/blob/main/Scripts/Common/Profiling/ProfilingCounters.cs)
 
 ---
 
@@ -380,8 +398,10 @@ Photon은 SendRate(기본 초당 30회) 주기로 메시지를 묶어 전송합�
 | 상태 전이 | `switch` 분기 | `Dictionary<UnitStateType, IUnitState>` | 조회 *O(1)* |
 | 유닛 이름 조회 | `List` 선형 탐색 | `Dictionary<string, UnitStat>` | *O(1)* |
 | 속성별 유닛 필터링 | 매번 `Where` 순회 | `Dictionary<ElementType, List<UnitStat>>` 캐시 | *O(1)* |
-
-성 체력 UI도 매 피격마다 문자열을 새로 만들지 않고, 직전 문자열과 동일하면 갱신을 건너뛰어 불필요한 문자열 할당과 UI 리빌드를 줄였습니다.
+| 속성 상성 배율 | `if`/`else` 분기 체인 | `float[5,5]` 정적 테이블 | *O(1)* |
+| 애니메이션 클립 길이 | 매 공격마다 `animationClips` 순회 | `Dictionary<string, float>` 캐시 | *O(1)* |
+ 
+성 체력 UI와 에너지 UI도 매 갱신마다 문자열을 새로 만들지 않고, 직전 문자열과 동일하면 갱신을 건너뛰어 불필요한 문자열 할당과 UI 리빌드를 줄였습니다.
 
 ---
 
@@ -401,6 +421,7 @@ Photon은 SendRate(기본 초당 30회) 주기로 메시지를 묶어 전송합�
 HeroEditor 유닛이 죽음 애니메이션과 함께 페이드 아웃 코루틴을 실행할 때, 캐릭터의 얼굴 스프라이트의 마스크 경계가 하얗게 뭉개지는 그래픽 깨짐 현상이 발생했습니다.
 
 **원인 분석**
+
 HeroEditor `Character`는 내부적으로 장비 레이어링을 위해 `SpriteMask`와 커스텀 머티리얼을 사용합니다. 페이드 아웃 중 알파값을 직접 조작하면 커스텀 머티리얼의 렌더링 순서와 마스크 처리가 충돌하여 시각적인 깨짐이 발생했습니다.
 
 **해결 방법**
