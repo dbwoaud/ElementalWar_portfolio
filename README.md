@@ -87,7 +87,7 @@ https://github.com/dbwoaud/ElementalWar_portfolio/blob/919a2aaf95099df2999314d6b
 
 **3-1. Component 패턴: `Unit` + `UnitStats` / `UnitMovement` / `UnitCombat` / `UnitStateMachine` / `UnitNetworkSync` / `IUnitAnimator`**
 
-`Unit` 클래스는 직접 로직을 구현하지 않으며, 기능별로 분리된 컴포넌트들에 책임을 위임하고 외부에 프로퍼티로 노출하는 **퍼사드** 역할만 수행합니다. `[RequireComponent]` attribute를 통해 필수 컴포넌트 누락을 컴파일 타임에 방지하고, `[DisallowMultipleComponent]` attribute를 통해 중복 컴포넌트를 허용하지 않게 했습니다.
+`Unit` 클래스는 직접 로직을 구현하지 않으며, 기능별로 분리된 컴포넌트들에 책임을 위임하고 외부에 프로퍼티로 노출하는 **퍼사드** 역할만 수행합니다. `[RequireComponent]` attribute를 통해 에디터에서 필수 컴포넌트가 자동으로 부착되고 임의 제거가 차단되도록 했고, `[DisallowMultipleComponent]` attribute를 통해 중복 컴포넌트를 허용하지 않게 했습니다.
 
 **패턴 사용 이유**: Unit 하나에 로직을 모두 넣으면 거대한 God Class가 되어 유지보수가 어려워집니다. 기능별 컴포넌트로 책임을 위임하고 Unit은 퍼사드 역할만 맡겨, 각 기능을 독립적으로 수정과 테스트를 할 수 있게 했습니다.
 
@@ -137,7 +137,7 @@ https://github.com/user-attachments/assets/45c84802-b90f-41e6-9571-53c1abbe700c
 
 https://github.com/dbwoaud/ElementalWar_portfolio/blob/919a2aaf95099df2999314d6bf51433980b8d296/Scripts/Common/Registry/Unit%20Registry.cs#L4-L7
 
-- [🔗 **UnitRegistry.cs 코드 보기**](https://github.com/dbwoaud/ElementalWar_portfolio/blob/main/Scripts/Common/Singletons/Unit%20Registry.cs)
+- [🔗 **UnitRegistry.cs 코드 보기**](https://github.com/dbwoaud/ElementalWar_portfolio/blob/main/Scripts/Common/Registry/Unit%20Registry.cs)
 
 ---
 
@@ -161,10 +161,10 @@ IUnitAnimator (Target)
 ```
 
 유닛의 `Unit` 클래스와 `UnitStateMachine`은 `IUnitAnimator` 인터페이스만 바라보기 때문에, 어떤 에셋을 사용하는 유닛이든 코드 수정 없이 동일하게 동작합니다. 새로운 에셋 추가 시에도 Adapter 클래스 하나만 추가하면 됩니다.  
-- [🔗 **BaseUnitAnimator.cs 코드 보기**](https://github.com/dbwoaud/ElementalWar_portfolio/blob/2ffeb1072c5449a83ce88f6e002821254c725c4a/Scripts/Game/Units/Animators/Base%20Unit%20Animator.cs)  
-- [🔗 **HeroEditorAdapter.cs 코드 보기**](https://github.com/dbwoaud/ElementalWar_portfolio/blob/2ffeb1072c5449a83ce88f6e002821254c725c4a/Scripts/Game/Units/Animators/Hero%20Editor%20Adapter.cs)  
-- [🔗 **FantazyMonsterAdapter.cs 코드 보기**](https://github.com/dbwoaud/ElementalWar_portfolio/blob/2ffeb1072c5449a83ce88f6e002821254c725c4a/Scripts/Game/Units/Animators/Fantazy%20Monster%20Adapter.cs)  
-- [🔗 **SpineMonsterAdapter.cs 코드 보기**](https://github.com/dbwoaud/ElementalWar_portfolio/blob/2ffeb1072c5449a83ce88f6e002821254c725c4a/Scripts/Game/Units/Animators/Spine%20Monster%20Adapter.cs)  
+- [🔗 **BaseUnitAnimator.cs 코드 보기**](https://github.com/dbwoaud/ElementalWar_portfolio/blob/main/Scripts/Game/Units/Animators/Base%20Unit%20Animator.cs)  
+- [🔗 **HeroEditorAdapter.cs 코드 보기**](https://github.com/dbwoaud/ElementalWar_portfolio/blob/main/Scripts/Game/Units/Animators/Hero%20Editor%20Adapter.cs)  
+- [🔗 **FantazyMonsterAdapter.cs 코드 보기**](https://github.com/dbwoaud/ElementalWar_portfolio/blob/main/Scripts/Game/Units/Animators/Fantazy%20Monster%20Adapter.cs)  
+- [🔗 **SpineMonsterAdapter.cs 코드 보기**](https://github.com/dbwoaud/ElementalWar_portfolio/blob/main/Scripts/Game/Units/Animators/Spine%20Monster%20Adapter.cs)  
 
 ---
 
@@ -208,8 +208,8 @@ https://github.com/dbwoaud/ElementalWar_portfolio/blob/919a2aaf95099df2999314d6b
 - **상태 동기화**: 유닛의 상태 전이(State Machine)와 공격 애니메이션을 `PhotonView.RPC`로 상대 클라이언트에 동기화하여, 양측 화면에서 일관된 시각적 표현을 보장합니다.
 https://github.com/dbwoaud/ElementalWar_portfolio/blob/919a2aaf95099df2999314d6bf51433980b8d296/Scripts/Game/Units/Components/Unit%20Network%20Sync.cs#L59-L71
 
-- **방 속성(Custom Properties)**: 덱 정보, 준비 상태, 맵 인덱스를 Photon `CustomProperties`에 저장하고, `OnRoomPropertiesUpdate` 콜백으로 처리하여 별도 서버 없이도 두 클라이언트 간 게임 시작 조건을 안전하게 동기화했습니다. `GameNetworkManager`는 `Start`에서 1프레임 지연 후 방 속성을 조회합니다. 씬 진입 시점에 이미 설정된 맵 인덱스를 놓치지 않으면서, 동시에 `GameManager`의 이벤트 구독보다 먼저 발행되는 경쟁 상황을 피하기 위한 처리입니다.
-https://github.com/dbwoaud/ElementalWar_portfolio/blob/919a2aaf95099df2999314d6bf51433980b8d296/Scripts/Lobby/Network/Lobby%20Network%20Manager.cs#L48-L86
+- **방 속성**: 덱 정보, 준비 상태, 맵 인덱스를 Photon `CustomProperties`에 저장하고, `OnRoomPropertiesUpdate` 콜백으로 처리하여 별도 서버 없이도 두 클라이언트 간 게임 시작 조건을 안전하게 동기화했습니다. `GameNetworkManager`는 `Start`에서 1프레임 지연 후 방 속성을 조회합니다. 씬 진입 시점에 이미 설정된 맵 인덱스를 놓치지 않으면서, 동시에 `GameManager`의 이벤트 구독보다 먼저 실행되는 경쟁 상황을 피하도록 구현했습니다.
+https://github.com/dbwoaud/ElementalWar_portfolio/blob/923a0756124eb21cb4fb7882118c922dfc3283da/Scripts/Game/Network/Game%20Network%20Manager.cs#L40-L56
 
 - **설계 한계 및 개선 방향 (권한 모델)**: 본 프로젝트는 학습을 목적으로 한 클라이언트 권위 구조로, 각 클라이언트가 계산한 결과를 `PhotonView.RPC`로 전파합니다. 이 방식은 구현이 간결하지만 클라이언트가 보낸 값을 서버가 검증하지 않아 메모리 조작 등 치팅에 취약합니다. 상용 서비스 수준에서는 서버가 모든 판정을 수행하고 클라이언트는 입력만 전송하는 서버 권위 구조로 전환하여 데미지 및 상태 판정을 서버에서 검증해야 함을 인지하고 있습니다.
 
@@ -315,6 +315,7 @@ https://github.com/user-attachments/assets/80ab5009-1f6e-45a8-9a64-63bfcb0e2272
 | 사거리 스캔 | `Collider2D[16]` | 근접, 원거리 타겟 탐색 |
 | 광역 피해 수집 | `Collider2D[32]` | AOE 반경 내 적 수집 |
 | 피해 적용 대상 | 재사용 `List<Collider2D>` | 프레임당 리스트 재할당 방지 |
+`ContactFilter2D` 역시 질의마다 새로 만들지 않고 **필드로 한 번만 구성해 재사용**합니다. 레이어 마스크가 확정되는 시점에 프로퍼티 setter가 필터를 갱신하므로, 오브젝트 풀에서 재사용된 유닛도 항상 올바른 대상 마스크를 갖습니다.
 
 최대 유닛 60명 규모, 60초 교전 기준입니다.
 
@@ -359,7 +360,8 @@ https://github.com/user-attachments/assets/64f9dc95-73a5-427a-b09c-1b2d7844f963
 
 Photon은 SendRate(기본 초당 30회) 주기로 메시지를 묶어 전송합니다. Idle RPC를 50ms 지연시키면 원래 함께 묶여 나가던 배치를 놓치고 별도 패킷으로 전송되면서 패킷 헤더 비용이 추가됩니다. RPC 1건당 바이트가 136B에서 210B로 늘어난 것이 이를 뒷받침합니다.
 
-재전송 커맨드가 88% 감소한 것은 명확한 이득이지만, 대역폭 손해가 더 크다고 판단해 이 최적화는 채택하지 않았습니다. 다만 baseline에서 60초간 재전송이 564회 발생한 사실 자체가 RPC 버스트로 신뢰성 큐가 포화되고 있다는 신호이므로, 지연 전송이 아닌 전송량 자체를 줄이는 방향을 후속 과제로 남겨두었습니다.
+재전송 커맨드가 88% 감소한 것은 명확한 이득이지만, 대역폭 손해가 더 크다고 판단해 **이 최적화는 채택하지 않았고, 계측 종료 후 관련 코드를 제거했습니다.** 지연 전송을 위해 필요했던 `UnitNetworkSync`의 `Update()`가 함께 사라지면서, 유닛당 `MonoBehaviour.Update()` 콜백이 2개에서 1개로 줄어드는 부수적인 이득도 있었습니다.
+하지만, 다만 baseline에서 60초간 재전송이 564회 발생한 사실 자체가 RPC 버스트로 신뢰성 큐가 포화되고 있다는 신호이므로, 지연 전송이 아닌 전송량 자체를 줄이는 방향을 후속 과제로 남겨두었습니다.
 
 ---
 
@@ -426,7 +428,7 @@ HeroEditor `Character`는 내부적으로 장비 레이어링을 위해 `SpriteM
 
 **해결 방법**
 
-페이드 아웃 진입 시점에 모든 `SpriteRenderer`의 머티리얼을 HeroEditor 커스텀 머티리얼에서 표준 `Sprites/Default` 머티리얼로 교체하는 방식으로 해결했습니다. `HeroEditorAdapter`의 `CacheRenderers()`에서 원본 머티리얼을 `Dictionary<SpriteRenderer, Material>`에 미리 저장해 두고, 페이드 아웃 종료 후 `RestoreOriginalMaterials()`로 복구하여 재사용 시에도 원본 상태가 유지되도록 했습니다.  
+페이드 아웃 진입 시점에 모든 `SpriteRenderer`의 머티리얼을 HeroEditor 커스텀 머티리얼에서 표준 `Sprites/Default` 머티리얼로 교체하는 방식으로 해결했습니다. `HeroEditorAdapter`의 `CacheRenderers()`에서 원본 머티리얼을 `Dictionary<SpriteRenderer, Material>`에 미리 저장해 두고, 오브젝트 풀에서 재사용되는 시점에 RestoreOriginalMaterials()로 복구하여 재사용 시에도 원본 상태가 유지되도록 했습니다.
 - [🔗 **HeroEditorAdapter.cs 코드 보기**](https://github.com/dbwoaud/ElementalWar_portfolio/blob/main/Scripts/Game/Units/Animators/Hero%20Editor%20Adapter.cs)
   
 ---
